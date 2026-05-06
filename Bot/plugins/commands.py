@@ -64,8 +64,6 @@ async def start(client, message):
                     InlineKeyboardButton('ᴀᴊᴏᴜᴛᴇᴢ-ᴍᴏɪ ᴀ ᴠᴏᴛʀᴇ ɢʀᴏᴜᴘᴇ', url=f'http://t.me/{temp.U_NAME}?startgroup=true')
                 ],[
                     InlineKeyboardButton('• ᴄᴏᴍᴍᴀɴᴅᴇꜱ •', callback_data='main'),
-                    InlineKeyboardButton('• ɢᴀɢɴᴇʀ •', callback_data='shortlink_info')
-                ],[
                     InlineKeyboardButton('• ᴘʀᴇᴍɪᴜᴍ •', callback_data='premium_info'),
                     InlineKeyboardButton('• ᴀ ᴘʀᴏᴘᴏꜱ •', callback_data='about')
                   ]]
@@ -130,8 +128,6 @@ async def start(client, message):
                     InlineKeyboardButton('ᴀᴊᴏᴜᴛᴇᴢ-ᴍᴏɪ ᴀ ᴠᴏᴛʀᴇ ɢʀᴏᴜᴘᴇ', url=f'http://t.me/{temp.U_NAME}?startgroup=true')
                 ],[
                     InlineKeyboardButton('• ᴄᴏᴍᴍᴀɴᴅᴇꜱ •', callback_data='main'),
-                    InlineKeyboardButton('• ɢᴀɢɴᴇʀ •', callback_data='shortlink_info')
-                ],[
                     InlineKeyboardButton('• ᴘʀᴇᴍɪᴜᴍ •', callback_data='premium_info'),
                     InlineKeyboardButton('• ᴀ ᴘʀᴏᴘᴏꜱ •', callback_data='about')
                   ]]
@@ -553,7 +549,7 @@ async def start(client, message):
                         InlineKeyboardButton("ᴄᴏᴍᴍᴇɴᴛ ᴠᴇʀɪꜰɪᴇʀ", url=HOW_TO_VERIFY)
                    ]]
                    l = await message.reply_text(
-                       text=f"<blockquote><b>ꜱᴀʟᴜᴛ,\n\n ‼️ ᴠᴏᴜꜱ ɴ'ᴇᴛᴇꜱ ᴘᴀꜱ ᴠᴇʀɪꜰɪᴇ ᴀᴜᴊᴏᴜʀᴅ'ʜᴜɪ ‼️\n\n ›› ᴠᴇᴜɪʟʟᴇᴢ ᴠᴇʀɪꜰɪᴇʀ ᴇᴛ ᴏʙᴛᴇɴɪʀ ᴜɴ ᴀᴄᴄᴇꜱ ɪʟʟɪᴍɪᴛᴇ ᴘᴏᴜʀ {VERIFY_EXPIRE} ʜᴇᴜʀᴇꜱ ✅\n\n ›› ɪғ ʏᴏᴜ ᴡᴀɴᴛ ᴅɪʀᴇᴄᴛ ғɪʟᴇs ᴛʜᴇɴ ʏᴏᴜ ᴄᴀɴ ᴛᴀᴋᴇ ᴘʀᴇᴍɪᴜᴍ sᴇʀᴠɪᴄᴇs.</blockquote></b>",
+                       text=f"<blockquote><b>ꜱᴀʟᴜᴛ,\n\n ‼️ ᴠᴏᴜꜱ ɴ'ᴇᴛᴇꜱ ᴘᴀꜱ ᴠᴇʀɪꜰɪᴇ ᴀᴜᴊᴏᴜʀᴅ'ʜᴜɪ ‼️\n\n ›› ᴠᴇᴜɪʟʟᴇᴢ ᴠᴇʀɪꜰɪᴇʀ ᴇᴛ ᴏʙᴛᴇɴɪʀ ᴜɴ ᴀᴄᴄᴇꜱ ɪʟʟɪᴍɪᴛᴇ ᴘᴏᴜʀ {VERIFY_EXPIRE} ʜᴇᴜʀᴇꜱ ✅\n\n ›› ᴘᴏᴜʀ ᴜɴ ᴀᴄᴄᴇꜱ ᴅɪʀᴇᴄᴛ ᴀᴜx ꜰɪᴄʜɪᴇʀꜱ, ꜱᴏᴜꜱᴄʀɪᴠᴇᴢ ᴀᴜ ᴘʀᴇᴍɪᴜᴍ.</blockquote></b>",
                        protect_content=False,
                        reply_markup=InlineKeyboardMarkup(btn)
                    )
@@ -630,7 +626,7 @@ async def start(client, message):
               InlineKeyboardButton("ᴄᴏᴍᴍᴇɴᴛ ᴠᴇʀɪꜰɪᴇʀ", url=HOW_TO_VERIFY)
            ]]
             l = await message.reply_text(
-                text=f"<blockquote><b>ꜱᴀʟᴜᴛ,\n\n ‼️ ᴠᴏᴜꜱ ɴ'ᴇᴛᴇꜱ ᴘᴀꜱ ᴠᴇʀɪꜰɪᴇ ᴀᴜᴊᴏᴜʀᴅ'ʜᴜɪ ‼️\n\n ›› ᴠᴇᴜɪʟʟᴇᴢ ᴠᴇʀɪꜰɪᴇʀ ᴇᴛ ᴏʙᴛᴇɴɪʀ ᴜɴ ᴀᴄᴄᴇꜱ ɪʟʟɪᴍɪᴛᴇ ᴘᴏᴜʀ {VERIFY_EXPIRE} ʜᴇᴜʀᴇꜱ ✅\n\n ›› ɪғ ʏᴏᴜ ᴡᴀɴᴛ ᴅɪʀᴇᴄᴛ ғɪʟᴇs ᴛʜᴇɴ ʏᴏᴜ ᴄᴀɴ ᴛᴀᴋᴇ ᴘʀᴇᴍɪᴜᴍ sᴇʀᴠɪᴄᴇs.</blockquote></b>",
+                text=f"<blockquote><b>ꜱᴀʟᴜᴛ,\n\n ‼️ ᴠᴏᴜꜱ ɴ'ᴇᴛᴇꜱ ᴘᴀꜱ ᴠᴇʀɪꜰɪᴇ ᴀᴜᴊᴏᴜʀᴅ'ʜᴜɪ ‼️\n\n ›› ᴠᴇᴜɪʟʟᴇᴢ ᴠᴇʀɪꜰɪᴇʀ ᴇᴛ ᴏʙᴛᴇɴɪʀ ᴜɴ ᴀᴄᴄᴇꜱ ɪʟʟɪᴍɪᴛᴇ ᴘᴏᴜʀ {VERIFY_EXPIRE} ʜᴇᴜʀᴇꜱ ✅\n\n ›› ᴘᴏᴜʀ ᴜɴ ᴀᴄᴄᴇꜱ ᴅɪʀᴇᴄᴛ ᴀᴜx ꜰɪᴄʜɪᴇʀꜱ, ꜱᴏᴜꜱᴄʀɪᴠᴇᴢ ᴀᴜ ᴘʀᴇᴍɪᴜᴍ.</blockquote></b>",
                 protect_content=False,
                 reply_markup=InlineKeyboardMarkup(btn)
             )
@@ -857,87 +853,87 @@ async def paramètres(client, message):
         buttons = [        
                 [
                 InlineKeyboardButton(
-                    'ʀᴇꜱᴜʟᴛ ᴘᴀɢᴇ',
+                    'ᴘᴀɢᴇ ᴅᴇ ʀᴇꜱᴜʟᴛᴀᴛꜱ',
                     callback_data=f'setgs#button#{paramètres["button"]}#{grp_id}',
                 ),
                 InlineKeyboardButton(
-                    'ʙᴜᴛᴛᴏɴ' if paramètres["button"] else 'ᴛᴇxᴛ',
+                    'ʙᴏᴜᴛᴏɴ' if paramètres["button"] else 'ᴛᴇxᴛᴇ',
                     callback_data=f'setgs#button#{paramètres["button"]}#{grp_id}',
                 ),
             ],
             [
                 InlineKeyboardButton(
-                    'ꜰɪʟᴇ ꜱᴇɴᴅ ᴍᴏᴅᴇ',
+                    'ᴍᴏᴅᴇ ᴅ\'ᴇɴᴠᴏɪ',
                     callback_data=f'setgs#botpm#{paramètres["botpm"]}#{grp_id}',
                 ),
                 InlineKeyboardButton(
-                    'ꜱᴛᴀʀᴛ' if paramètres["botpm"] else 'ᴀᴜᴛᴏ',
+                    'ᴘʀɪᴠᴇ' if paramètres["botpm"] else 'ᴀᴜᴛᴏ',
                     callback_data=f'setgs#botpm#{paramètres["botpm"]}#{grp_id}',
                 ),
             ],
             [
                 InlineKeyboardButton(
-                    'ꜰɪʟᴇ ꜱᴇᴄᴜʀᴇ',
+                    'ꜱᴇᴄᴜʀɪᴛᴇ ꜰɪᴄʜɪᴇʀ',
                     callback_data=f'setgs#file_secure#{paramètres["file_secure"]}#{grp_id}',
                 ),
                 InlineKeyboardButton(
-                    'ᴇɴᴀʙʟᴇ' if paramètres["file_secure"] else 'ᴅɪꜱᴀʙʟᴇ',
+                    'ᴀᴄᴛɪᴠᴇ' if paramètres["file_secure"] else 'ɪɴᴀᴄᴛɪꜰ',
                     callback_data=f'setgs#file_secure#{paramètres["file_secure"]}#{grp_id}',
                 ),
             ],
             [
                 InlineKeyboardButton(
-                    'ɪᴍᴅʙ ᴘᴏꜱᴛᴇʀ',
+                    'ᴀꜰꜰɪᴄʜᴇ ɪᴍᴅʙ',
                     callback_data=f'setgs#imdb#{paramètres["imdb"]}#{grp_id}',
                 ),
                 InlineKeyboardButton(
-                    'ᴇɴᴀʙʟᴇ' if paramètres["imdb"] else 'ᴅɪꜱᴀʙʟᴇ',
+                    'ᴀᴄᴛɪᴠᴇ' if paramètres["imdb"] else 'ɪɴᴀᴄᴛɪꜰ',
                     callback_data=f'setgs#imdb#{paramètres["imdb"]}#{grp_id}',
                 ),
             ],
             [
                 InlineKeyboardButton(
-                    'ꜱᴘᴇʟʟ ᴄʜᴇᴄᴋ',
+                    'ᴄᴏʀʀᴇᴄᴛɪᴏɴ',
                     callback_data=f'setgs#spell_check#{paramètres["spell_check"]}#{grp_id}',
                 ),
                 InlineKeyboardButton(
-                    'ᴇɴᴀʙʟᴇ' if paramètres["spell_check"] else 'ᴅɪꜱᴀʙʟᴇ',
+                    'ᴀᴄᴛɪᴠᴇ' if paramètres["spell_check"] else 'ɪɴᴀᴄᴛɪꜰ',
                     callback_data=f'setgs#spell_check#{paramètres["spell_check"]}#{grp_id}',
                 ),
             ],
             [
                 InlineKeyboardButton(
-                    'ᴡᴇʟᴄᴏᴍᴇ ᴍꜱɢ',
+                    'ᴍꜱɢ ᴀᴄᴄᴜᴇɪʟ',
                     callback_data=f'setgs#welcome#{paramètres["welcome"]}#{grp_id}',
                 ),
                 InlineKeyboardButton(
-                    'ᴇɴᴀʙʟᴇ' if paramètres["welcome"] else 'ᴅɪꜱᴀʙʟᴇ',
+                    'ᴀᴄᴛɪᴠᴇ' if paramètres["welcome"] else 'ɪɴᴀᴄᴛɪꜰ',
                     callback_data=f'setgs#welcome#{paramètres["welcome"]}#{grp_id}',
                 ),
             ],
             [
                 InlineKeyboardButton(
-                    'ᴀᴜᴛᴏ ᴅᴇʟᴇᴛᴇ',
+                    'ꜱᴜᴘᴘʀᴇꜱꜱɪᴏɴ ᴀᴜᴛᴏ',
                     callback_data=f'setgs#auto_delete#{paramètres["auto_delete"]}#{grp_id}',
                 ),
                 InlineKeyboardButton(
-                    'ᴇɴᴀʙʟᴇ' if paramètres["auto_delete"] else 'ᴅɪꜱᴀʙʟᴇ',
+                    'ᴀᴄᴛɪᴠᴇ' if paramètres["auto_delete"] else 'ɪɴᴀᴄᴛɪꜰ',
                     callback_data=f'setgs#auto_delete#{paramètres["auto_delete"]}#{grp_id}',
                 ),
             ],
             [
                 InlineKeyboardButton(
-                    'ᴀᴜᴛᴏ ꜰɪʟᴛᴇʀ',
+                    'ꜰɪʟᴛʀᴇ ᴀᴜᴛᴏ',
                     callback_data=f'setgs#auto_ffilter#{paramètres["auto_ffilter"]}#{grp_id}',
                 ),
                 InlineKeyboardButton(
-                    'ᴇɴᴀʙʟᴇ' if paramètres["auto_ffilter"] else 'ᴅɪꜱᴀʙʟᴇ',
+                    'ᴀᴄᴛɪᴠᴇ' if paramètres["auto_ffilter"] else 'ɪɴᴀᴄᴛɪꜰ',
                     callback_data=f'setgs#auto_ffilter#{paramètres["auto_ffilter"]}#{grp_id}',
                 ),
             ],
             [
                 InlineKeyboardButton(
-                    'ᴍᴀx ʙᴜᴛᴛᴏɴꜱ',
+                    'ᴍᴀx ʙᴏᴜᴛᴏɴꜱ',
                     callback_data=f'setgs#max_btn#{paramètres["max_btn"]}#{grp_id}',
                 ),
                 InlineKeyboardButton(
@@ -951,7 +947,7 @@ async def paramètres(client, message):
                     callback_data=f'setgs#is_shortlink#{paramètres["is_shortlink"]}#{grp_id}',
                 ),
                 InlineKeyboardButton(
-                    'ᴇɴᴀʙʟᴇ' if paramètres["is_shortlink"] else 'ᴅɪꜱᴀʙʟᴇ',
+                    'ᴀᴄᴛɪᴠᴇ' if paramètres["is_shortlink"] else 'ɪɴᴀᴄᴛɪꜰ',
                     callback_data=f'setgs#is_shortlink#{paramètres["is_shortlink"]}#{grp_id}',
                 ),
             ],
@@ -1045,18 +1041,18 @@ async def requests(bot, message):
         try:
             if REQST_CHANNEL is not None:
                 btn = [[
-                        InlineKeyboardButton('ᴠɪᴇᴡ ʀᴇǫᴜᴇꜱᴛ', url=f"{message.reply_to_message.link}"),
+                        InlineKeyboardButton('ᴠᴏɪʀ ʟᴀ ᴅᴇᴍᴀɴᴅᴇ', url=f"{message.reply_to_message.link}"),
                         InlineKeyboardButton('ᴀꜰꜰɪᴄʜᴇʀ ʟᴇꜱ ᴏᴘᴛɪᴏɴꜱ', callback_data=f'show_option#{reporter}')
                       ]]
-                reported_post = await bot.send_message(chat_id=REQST_CHANNEL, text=f"<b>📝 ʀᴇǫᴜᴇꜱᴛ : <u>{content}</u>\n\n📚 ʀᴇᴘᴏʀᴛᴇᴅ ʙʏ : {mention}\n📖 ʀᴇᴘᴏʀᴛᴇʀ ɪᴅ : {reporter}\n\n</b>", reply_markup=InlineKeyboardMarkup(btn))
+                reported_post = await bot.send_message(chat_id=REQST_CHANNEL, text=f"<b>📝 ʀᴇǫᴜᴇꜱᴛ : <u>{content}</u>\n\n📚 ᴇɴᴠᴏʏᴇ ᴘᴀʀ : {mention}\n📖 ɪᴅ ᴇxᴘᴇᴅɪᴛᴇᴜʀ : {reporter}\n\n</b>", reply_markup=InlineKeyboardMarkup(btn))
                 success = True
             elif len(content) >= 3:
                 for admin in ADMINS:
                     btn = [[
-                        InlineKeyboardButton('ᴠɪᴇᴡ ʀᴇǫᴜᴇꜱᴛ', url=f"{message.reply_to_message.link}"),
+                        InlineKeyboardButton('ᴠᴏɪʀ ʟᴀ ᴅᴇᴍᴀɴᴅᴇ', url=f"{message.reply_to_message.link}"),
                         InlineKeyboardButton('ᴀꜰꜰɪᴄʜᴇʀ ʟᴇꜱ ᴏᴘᴛɪᴏɴꜱ', callback_data=f'show_option#{reporter}')
                       ]]
-                    reported_post = await bot.send_message(chat_id=admin, text=f"<b>📝 ʀᴇǫᴜᴇꜱᴛ : <u>{content}</u>\n\n📚 ʀᴇᴘᴏʀᴛᴇᴅ ʙʏ : {mention}\n📖 ʀᴇᴘᴏʀᴛᴇʀ ɪᴅ : {reporter}\n\n</b>", reply_markup=InlineKeyboardMarkup(btn))
+                    reported_post = await bot.send_message(chat_id=admin, text=f"<b>📝 ʀᴇǫᴜᴇꜱᴛ : <u>{content}</u>\n\n📚 ᴇɴᴠᴏʏᴇ ᴘᴀʀ : {mention}\n📖 ɪᴅ ᴇxᴘᴇᴅɪᴛᴇᴜʀ : {reporter}\n\n</b>", reply_markup=InlineKeyboardMarkup(btn))
                     success = True
             else:
                 if len(content) < 3:
@@ -1080,18 +1076,18 @@ async def requests(bot, message):
         try:
             if REQST_CHANNEL is not None and len(content) >= 3:
                 btn = [[
-                        InlineKeyboardButton('ᴠɪᴇᴡ ʀᴇǫᴜᴇꜱᴛ', url=f"{message.link}"),
+                        InlineKeyboardButton('ᴠᴏɪʀ ʟᴀ ᴅᴇᴍᴀɴᴅᴇ', url=f"{message.link}"),
                         InlineKeyboardButton('ᴀꜰꜰɪᴄʜᴇʀ ʟᴇꜱ ᴏᴘᴛɪᴏɴꜱ', callback_data=f'show_option#{reporter}')
                       ]]
-                reported_post = await bot.send_message(chat_id=REQST_CHANNEL, text=f"<b>📝 ʀᴇǫᴜᴇꜱᴛ : <u>{content}</u>\n\n📚 ʀᴇᴘᴏʀᴛᴇᴅ ʙʏ : {mention}\n📖 ʀᴇᴘᴏʀᴛᴇʀ ɪᴅ : {reporter}\n\n</b>", reply_markup=InlineKeyboardMarkup(btn))
+                reported_post = await bot.send_message(chat_id=REQST_CHANNEL, text=f"<b>📝 ʀᴇǫᴜᴇꜱᴛ : <u>{content}</u>\n\n📚 ᴇɴᴠᴏʏᴇ ᴘᴀʀ : {mention}\n📖 ɪᴅ ᴇxᴘᴇᴅɪᴛᴇᴜʀ : {reporter}\n\n</b>", reply_markup=InlineKeyboardMarkup(btn))
                 success = True
             elif len(content) >= 3:
                 for admin in ADMINS:
                     btn = [[
-                        InlineKeyboardButton('ᴠɪᴇᴡ ʀᴇǫᴜᴇꜱᴛ', url=f"{message.link}"),
+                        InlineKeyboardButton('ᴠᴏɪʀ ʟᴀ ᴅᴇᴍᴀɴᴅᴇ', url=f"{message.link}"),
                         InlineKeyboardButton('ᴀꜰꜰɪᴄʜᴇʀ ʟᴇꜱ ᴏᴘᴛɪᴏɴꜱ', callback_data=f'show_option#{reporter}')
                       ]]
-                    reported_post = await bot.send_message(chat_id=admin, text=f"<b>📝 ʀᴇǫᴜᴇꜱᴛ : <u>{content}</u>\n\n📚 ʀᴇᴘᴏʀᴛᴇᴅ ʙʏ : {mention}\n📖 ʀᴇᴘᴏʀᴛᴇʀ ɪᴅ : {reporter}\n\n</b>", reply_markup=InlineKeyboardMarkup(btn))
+                    reported_post = await bot.send_message(chat_id=admin, text=f"<b>📝 ʀᴇǫᴜᴇꜱᴛ : <u>{content}</u>\n\n📚 ᴇɴᴠᴏʏᴇ ᴘᴀʀ : {mention}\n📖 ɪᴅ ᴇxᴘᴇᴅɪᴛᴇᴜʀ : {reporter}\n\n</b>", reply_markup=InlineKeyboardMarkup(btn))
                     success = True
             else:
                 if len(content) < 3:
@@ -1115,18 +1111,18 @@ async def requests(bot, message):
         try:
             if REQST_CHANNEL is not None and len(content) >= 3:
                 btn = [[
-                        InlineKeyboardButton('ᴠɪᴇᴡ ʀᴇǫᴜᴇꜱᴛ', url=f"{message.link}"),
+                        InlineKeyboardButton('ᴠᴏɪʀ ʟᴀ ᴅᴇᴍᴀɴᴅᴇ', url=f"{message.link}"),
                         InlineKeyboardButton('ᴀꜰꜰɪᴄʜᴇʀ ʟᴇꜱ ᴏᴘᴛɪᴏɴꜱ', callback_data=f'show_option#{reporter}')
                       ]]
-                reported_post = await bot.send_message(chat_id=REQST_CHANNEL, text=f"<b>📝 ʀᴇǫᴜᴇꜱᴛ : <u>{content}</u>\n\n📚 ʀᴇᴘᴏʀᴛᴇᴅ ʙʏ : {mention}\n📖 ʀᴇᴘᴏʀᴛᴇʀ ɪᴅ : {reporter}\n\n</b>", reply_markup=InlineKeyboardMarkup(btn))
+                reported_post = await bot.send_message(chat_id=REQST_CHANNEL, text=f"<b>📝 ʀᴇǫᴜᴇꜱᴛ : <u>{content}</u>\n\n📚 ᴇɴᴠᴏʏᴇ ᴘᴀʀ : {mention}\n📖 ɪᴅ ᴇxᴘᴇᴅɪᴛᴇᴜʀ : {reporter}\n\n</b>", reply_markup=InlineKeyboardMarkup(btn))
                 success = True
             elif len(content) >= 3:
                 for admin in ADMINS:
                     btn = [[
-                        InlineKeyboardButton('ᴠɪᴇᴡ ʀᴇǫᴜᴇꜱᴛ', url=f"{message.link}"),
+                        InlineKeyboardButton('ᴠᴏɪʀ ʟᴀ ᴅᴇᴍᴀɴᴅᴇ', url=f"{message.link}"),
                         InlineKeyboardButton('ᴀꜰꜰɪᴄʜᴇʀ ʟᴇꜱ ᴏᴘᴛɪᴏɴꜱ', callback_data=f'show_option#{reporter}')
                       ]]
-                    reported_post = await bot.send_message(chat_id=admin, text=f"<b>📝 ʀᴇǫᴜᴇꜱᴛ : <u>{content}</u>\n\n📚 ʀᴇᴘᴏʀᴛᴇᴅ ʙʏ : {mention}\n📖 ʀᴇᴘᴏʀᴛᴇʀ ɪᴅ : {reporter}\n\n</b>", reply_markup=InlineKeyboardMarkup(btn))
+                    reported_post = await bot.send_message(chat_id=admin, text=f"<b>📝 ʀᴇǫᴜᴇꜱᴛ : <u>{content}</u>\n\n📚 ᴇɴᴠᴏʏᴇ ᴘᴀʀ : {mention}\n📖 ɪᴅ ᴇxᴘᴇᴅɪᴛᴇᴜʀ : {reporter}\n\n</b>", reply_markup=InlineKeyboardMarkup(btn))
                     success = True
             else:
                 if len(content) < 3:
@@ -1151,9 +1147,9 @@ async def requests(bot, message):
         link = await bot.create_chat_invite_link(int(REQST_CHANNEL))
         btn = [[
                 InlineKeyboardButton('ʀᴇᴊᴏɪɴᴅʀᴇ ʟᴇ ᴄᴀɴᴀʟ', url=link.invite_link),
-                InlineKeyboardButton('ᴠɪᴇᴡ ʀᴇǫᴜᴇꜱᴛ', url=f"{reported_post.link}")
+                InlineKeyboardButton('ᴠᴏɪʀ ʟᴀ ᴅᴇᴍᴀɴᴅᴇ', url=f"{reported_post.link}")
               ]]
-        await message.reply_text("<b>ʏᴏᴜʀ ʀᴇǫᴜᴇꜱᴛ ʜᴀꜱ ʙᴇᴇɴ ᴀᴅᴅᴇᴅ! ᴘʟᴇᴀꜱᴇ ᴡᴀɪᴛ ꜰᴏʀ ꜱᴏᴍᴇ ᴛɪᴍᴇ.\n\nᴊᴏɪɴ ᴄʜᴀɴɴᴇʟ ꜰɪʀꜱᴛ & ᴠɪᴇᴡ ʀᴇǫᴜᴇꜱᴛ.</b>", reply_markup=InlineKeyboardMarkup(btn))
+        await message.reply_text("<b>ᴠᴏᴛʀᴇ ᴅᴇᴍᴀɴᴅᴇ ᴀ ᴇᴛᴇ ᴇɴʀᴇɢɪꜱᴛʀᴇᴇ ! ᴠᴇᴜɪʟʟᴇᴢ ᴘᴀᴛɪᴇɴᴛᴇʀ.\n\nʀᴇᴊᴏɪɢɴᴇᴢ ʟᴇ ᴄᴀɴᴀʟ & ꜱᴜɪᴠᴇᴢ ᴠᴏᴛʀᴇ ᴅᴇᴍᴀɴᴅᴇ.</b>", reply_markup=InlineKeyboardMarkup(btn))
     
 @Client.on_message(filters.command("send") & filters.user(ADMINS))
 async def send_msg(bot, message):
@@ -1198,9 +1194,9 @@ async def deletemultiplefiles(bot, message):
     #await k.edit_text(f"<b>Found {total} files for your query {keyword} !\n\nFile deletion process will start in 5 seconds !</b>")
     #await asyncio.sleep(5)
     btn = [[
-       InlineKeyboardButton("⚠️ Yes, Continue ! ⚠️", callback_data=f"killfilesdq#{keyword}")
+       InlineKeyboardButton("⚠️ ᴏᴜɪ, ᴄᴏɴᴛɪɴᴜᴇʀ ! ⚠️", callback_data=f"killfilesdq#{keyword}")
        ],[
-       InlineKeyboardButton("❌ No, Abort operation ! ❌", callback_data="close_data")
+       InlineKeyboardButton("❌ ɴᴏɴ, ᴀɴɴᴜʟᴇʀ ! ❌", callback_data="close_data")
     ]]
     await message.reply_text(
         text=f"<b>Found {total} files for your query {keyword} !\n\nDo you want to delete?</b>",
@@ -1252,7 +1248,7 @@ async def offshortlink(bot, message):
         return
     await save_group_paramètres(grpid, 'is_shortlink', False)
     ENABLE_SHORTLINK = False
-    return await message.reply_text("ꜱʜᴏʀᴛʟɪɴᴋ ꜱᴜᴄᴄᴇꜱꜱꜰᴜʟʟʏ ᴅɪꜱᴀʙʟᴇᴅ.")
+    return await message.reply_text("ꜱʜᴏʀᴛʟɪɴᴋ ᴅᴇꜱᴀᴄᴛɪᴠᴇ ᴀᴠᴇᴄ ꜱᴜᴄᴄᴇꜱ.")
     
 @Client.on_message(filters.command("setshortlinkon") & filters.user(ADMINS))
 async def onshortlink(bot, message):
@@ -1266,7 +1262,7 @@ async def onshortlink(bot, message):
         return
     await save_group_paramètres(grpid, 'is_shortlink', True)
     ENABLE_SHORTLINK = True
-    return await message.reply_text("ꜱʜᴏʀᴛʟɪɴᴋ ꜱᴜᴄᴄᴇꜱꜱꜰᴜʟʟʏ ᴇɴᴀʙʟᴇᴅ.")
+    return await message.reply_text("ꜱʜᴏʀᴛʟɪɴᴋ ᴀᴄᴛɪᴠᴇ ᴀᴠᴇᴄ ꜱᴜᴄᴄᴇꜱ.")
 
 
 @Client.on_message(filters.command("shortlink_info"))
@@ -1469,8 +1465,8 @@ async def set_pm_search(client, message):
     try:
         await db.update_pm_search_status(bot_id, enable_status)
         response_text = (
-            "<b> ᴘᴍ ʀᴇᴄʜᴇʀᴄʜᴇ ᴇɴᴀʙʟᴇᴅ ✅</b>" if enable_status 
-            else "<b> ᴘᴍ ʀᴇᴄʜᴇʀᴄʜᴇ ᴅɪꜱᴀʙʟᴇᴅ ❌</b>"
+            "<b>ʀᴇᴄʜᴇʀᴄʜᴇ ᴇɴ ᴍᴘ ᴀᴄᴛɪᴠᴇᴇ ✅</b>" if enable_status 
+            else "<b>ʀᴇᴄʜᴇʀᴄʜᴇ ᴇɴ ᴍᴘ ᴅᴇꜱᴀᴄᴛɪᴠᴇᴇ ❌</b>"
         )
         await message.reply_text(response_text)
     except Exception as e:
@@ -1489,8 +1485,8 @@ async def set_movie_update_notification(client, message):
     try:
         await db.update_movie_update_status(bot_id, enable_status)
         response_text = (
-            "<b>ᴍᴏᴠɪᴇ ᴜᴘᴅᴀᴛᴇ ɴᴏᴛɪꜰɪᴄᴀᴛɪᴏɴ ᴇɴᴀʙʟᴇᴅ ✅</b>" if enable_status 
-            else "<b>ᴍᴏᴠɪᴇ ᴜᴘᴅᴀᴛᴇ ɴᴏᴛɪꜰɪᴄᴀᴛɪᴏɴ ᴅɪꜱᴀʙʟᴇᴅ ❌</b>"
+            "<b>ɴᴏᴛɪꜰɪᴄᴀᴛɪᴏɴ ᴍɪꜱᴇ ᴀ ᴊᴏᴜʀ ᴀᴄᴛɪᴠᴇᴇ ✅</b>" if enable_status 
+            else "<b>ɴᴏᴛɪꜰɪᴄᴀᴛɪᴏɴ ᴍɪꜱᴇ ᴀ ᴊᴏᴜʀ ᴅᴇꜱᴀᴄᴛɪᴠᴇᴇ ❌</b>"
         )
         await message.reply_text(response_text)
     except Exception as e:
@@ -1509,7 +1505,7 @@ async def log_error(client, error_message):
     try:
         await client.send_message(
             chat_id=LOG_CHANNEL, 
-            text=f"<b>⚠️ Error Log:</b>\n<code>{error_message}</code>"
+            text=f"<b>⚠️ ᴊᴏᴜʀɴᴀʟ ᴅᴇꜱ ᴇʀʀᴇᴜʀꜱ :</b>\n<code>{error_message}</code>"
         )
     except Exception as e:
         print(f"Failed to log error: {e}")
@@ -1518,8 +1514,8 @@ async def log_error(client, error_message):
 async def del_msg(client, message):
     user_id = message.from_user.id
     confirm_markup = InlineKeyboardMarkup([
-        [InlineKeyboardButton("Yes", callback_data="confirm_del_yes"),
-         InlineKeyboardButton("No", callback_data="confirm_del_no")]
+        [InlineKeyboardButton("ᴏᴜɪ", callback_data="confirm_del_yes"),
+         InlineKeyboardButton("ɴᴏɴ", callback_data="confirm_del_no")]
     ])
     sent_message = await message.reply_text(
         "⚠️ Aʀᴇ ʏᴏᴜ sᴜʀᴇ ʏᴏᴜ ᴡᴀɴᴛ ᴛᴏ ᴄʟᴇᴀʀ ᴛʜᴇ ᴜᴘᴅᴀᴛᴇs ᴄʜᴀɴɴᴇʟ ʟɪsᴛ ?\n\n ᴅᴏ ʏᴏᴜ ꜱᴛɪʟʟ ᴡᴀɴᴛ ᴛᴏ ᴄᴏɴᴛɪɴᴜᴇ ?",

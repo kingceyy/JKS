@@ -5,6 +5,7 @@ from utils import extract_user, get_file_id, get_poster
 from datetime import datetime
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton, CallbackQuery
 import logging
+from Script import script
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.ERROR)
@@ -69,7 +70,7 @@ async def who_is(client, message):
         await status_message.edit(str(error))
         return
     if from_user is None:
-        return await status_message.edit("aucun identifiant / message valide spécifié")
+        return await status_message.edit("ᴀᴜᴄᴜɴ ɪᴅᴇɴᴛɪꜰɪᴀɴᴛ / ᴍᴇꜱꜱᴀɢᴇ ᴠᴀʟɪᴅᴇ ꜱᴘᴇᴄɪꜰɪᴇ")
     message_out_str = ""
     message_out_str += f"<b>➲Prénom :</b> {from_user.first_name}\n"
     last_name = from_user.last_name or "<b>None</b>"
@@ -99,7 +100,7 @@ async def who_is(client, message):
             message=chat_photo.big_file_id
         )
         buttons = [[
-            InlineKeyboardButton('🔐 Fermer', callback_data='close_data')
+            InlineKeyboardButton('🔐 ꜰᴇʀᴍᴇʀ', callback_data='close_data')
         ]]
         reply_markup = InlineKeyboardMarkup(buttons)
         await message.reply_photo(
@@ -113,7 +114,7 @@ async def who_is(client, message):
         os.remove(local_user_photo)
     else:
         buttons = [[
-            InlineKeyboardButton('🔐 Fermer', callback_data='close_data')
+            InlineKeyboardButton('🔐 ꜰᴇʀᴍᴇʀ', callback_data='close_data')
         ]]
         reply_markup = InlineKeyboardMarkup(buttons)
         await message.reply_text(
@@ -128,11 +129,11 @@ async def who_is(client, message):
 @Client.on_message(filters.command(["imdb", 'search']))
 async def imdb_search(client, message):
     if ' ' in message.text:
-        k = await message.reply('Recherche en cours ImDB')
+        k = await message.reply('ʀᴇᴄʜᴇʀᴄʜᴇ ᴇɴ ᴄᴏᴜʀꜱ ꜱᴜʀ ɪᴍᴅʙ...')
         r, title = message.text.split(None, 1)
         movies = await get_poster(title, bulk=True)
         if not movies:
-            return await message.reply("No results Found")
+            return await message.reply("ᴀᴜᴄᴜɴ ʀᴇꜱᴜʟᴛᴀᴛ ᴛʀᴏᴜᴠᴇ")
         btn = [
             [
                 InlineKeyboardButton(
@@ -142,9 +143,9 @@ async def imdb_search(client, message):
             ]
             for movie in movies
         ]
-        await k.edit('Here is what i found on IMDb', reply_markup=InlineKeyboardMarkup(btn))
+        await k.edit('ᴠᴏɪᴄɪ ᴄᴇ ǫᴜᴇ ᴊ\'ᴀɪ ᴛʀᴏᴜᴠᴇ ꜱᴜʀ ɪᴍᴅʙ', reply_markup=InlineKeyboardMarkup(btn))
     else:
-        await message.reply('Give me a movie / series Name')
+        await message.reply('ᴅᴏɴɴᴇᴢ-ᴍᴏɪ ᴜɴ ɴᴏᴍ ᴅᴇ ꜰɪʟᴍ / ꜱᴇʀɪᴇ')
 
 @Client.on_callback_query(filters.regex('^imdb'))
 async def imdb_callback(bot: Client, quer_y: CallbackQuery):
@@ -169,7 +170,7 @@ async def imdb_callback(bot: Client, quer_y: CallbackQuery):
 🌟 Rᴀᴛɪɴɢ: <a href="{imdb['url']}/ratings">{imdb['rating']}</a>/10
 """
     else:
-        caption = "No Results"
+        caption = "ᴀᴜᴄᴜɴ ʀᴇꜱᴜʟᴛᴀᴛ"
     if imdb.get('poster'):
         try:
             await quer_y.message.reply_photo(photo=imdb['poster'], caption=caption, reply_markup=InlineKeyboardMarkup(btn))
@@ -187,3 +188,24 @@ async def imdb_callback(bot: Client, quer_y: CallbackQuery):
         
 
         
+
+@Client.on_callback_query(filters.regex("^about$"))
+async def about_callback(bot: Client, query: CallbackQuery):
+    buttons = InlineKeyboardMarkup([
+        [
+            InlineKeyboardButton("• ᴄᴀɴᴀʟ •", url="https://t.me/JessiKaSearch"),
+            InlineKeyboardButton("• ꜱᴜᴘᴘᴏʀᴛ •", url="https://t.me/+Fm--PVmdy9E4Mjc0"),
+        ],
+        [
+            InlineKeyboardButton("• ᴄʀᴇᴀᴛᴇᴜʀ •", url="https://t.me/kingcey")
+        ],
+        [
+            InlineKeyboardButton("• ᴀᴄᴄᴜᴇɪʟ •", callback_data="start")
+        ]
+    ])
+    await query.message.edit_text(
+        text=script.ABOUT_TXT,
+        reply_markup=buttons,
+        disable_web_page_preview=True
+    )
+    await query.answer()
