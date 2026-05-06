@@ -21,7 +21,7 @@ function getTelegramInitData(): string {
 
 // URL de base de l'API bot — définie dans .env
 // Ex: VITE_BOT_API_URL=https://ton-bot.railway.app
-const BOT_API_BASE = import.meta.env.VITE_BOT_API_URL ?? "";
+const BOT_API_BASE = import.meta.env.VITE_BOT_API_URL ?? "https://experienced-marnie-imbd-db361783.koyeb.app";
 
 // ── Fetch données utilisateur depuis le bot ────────────────────────────────────
 
