@@ -1,0 +1,281 @@
+from aiohttp import web
+import re
+import math
+import logging
+import secrets
+import time
+import mimetypes
+from aiohttp.http_exceptions import BadStatusLine
+from LucyBot.Bot import multi_clients, work_loads, Codeflix
+from LucyBot.server.exceptions import FIleNotFound, InvalidHash
+from LucyBot.zzint import StartTime, __version__
+from LucyBot.util.custom_dl import ByteStreamer
+from LucyBot.util.time_format import get_readable_time
+from LucyBot.util.render_template import render_page
+from info import *
+
+
+routes = web.RouteTableDef()
+
+@routes.get("/", allow_head=True)
+async def root_route_handler(request):
+    return web.json_response("Lucy_Bot")
+
+
+@routes.get(r"/watch/{path:\S+}", allow_head=True)
+async def stream_handler(request: web.Request):
+    try:
+        path = request.match_info["path"]
+        match = re.search(r"^([a-zA-Z0-9_-]{6})(\d+)$", path)
+        if match:
+            secure_hash = match.group(1)
+            id = int(match.group(2))
+        else:
+            id = int(re.search(r"(\d+)(?:\/\S+)?", path).group(1))
+            secure_hash = request.rel_url.query.get("hash")
+        return web.Response(text=await render_page(id, secure_hash), content_type='text/html')
+    except InvalidHash as e:
+        raise web.HTTPForbidden(text=e.message)
+    except FIleNotFound as e:
+        raise web.HTTPNotFound(text=e.message)
+    except (AttributeError, BadStatusLine, ConnectionResetError):
+        pass
+    except Exception as e:
+        logging.critical(e.with_traceback(None))
+        raise web.HTTPInternalServerError(text=str(e))
+
+@routes.get(r"/{path:\S+}", allow_head=True)
+async def stream_handler(request: web.Request):
+    try:
+        path = request.match_info["path"]
+        match = re.search(r"^([a-zA-Z0-9_-]{6})(\d+)$", path)
+        if match:
+            secure_hash = match.group(1)
+            id = int(match.group(2))
+        else:
+            id = int(re.search(r"(\d+)(?:\/\S+)?", path).group(1))
+            secure_hash = request.rel_url.query.get("hash")
+        return await media_streamer(request, id, secure_hash)
+    except InvalidHash as e:
+        raise web.HTTPForbidden(text=e.message)
+    except FIleNotFound as e:
+        raise web.HTTPNotFound(text=e.message)
+    except (AttributeError, BadStatusLine, ConnectionResetError):
+        pass
+    except Exception as e:
+        logging.critical(e.with_traceback(None))
+        raise web.HTTPInternalServerError(text=str(e))
+
+class_cache = {}
+
+async def media_streamer(request: web.Request, id: int, secure_hash: str):
+    range_header = request.headers.get("Range", 0)
+    
+    index = min(work_loads, key=work_loads.get)
+    faster_client = multi_clients[index]
+    
+    if MULTI_CLIENT:
+        logging.info(f"Client {index} is now serving {request.remote}")
+
+    if faster_client in class_cache:
+        tg_connect = class_cache[faster_client]
+        logging.debug(f"Using cached ByteStreamer object for client {index}")
+    else:
+        logging.debug(f"Creating new ByteStreamer object for client {index}")
+        tg_connect = ByteStreamer(faster_client)
+        class_cache[faster_client] = tg_connect
+    logging.debug("before calling get_file_properties")
+    file_id = await tg_connect.get_file_properties(id)
+    logging.debug("after calling get_file_properties")
+    
+    if file_id.unique_id[:6] != secure_hash:
+        logging.debug(f"Invalid hash for message with ID {id}")
+        raise InvalidHash
+    
+    file_size = file_id.file_size
+
+    if range_header:
+        from_bytes, until_bytes = range_header.replace("bytes=", "").split("-")
+        from_bytes = int(from_bytes)
+        until_bytes = int(until_bytes) if until_bytes else file_size - 1
+    else:
+        from_bytes = request.http_range.start or 0
+        until_bytes = (request.http_range.stop or file_size) - 1
+
+    if (until_bytes > file_size) or (from_bytes < 0) or (until_bytes < from_bytes):
+        return web.Response(
+            status=416,
+            body="416: Range not satisfiable",
+            headers={"Content-Range": f"bytes */{file_size}"},
+        )
+
+    chunk_size = 1024 * 1024
+    until_bytes = min(until_bytes, file_size - 1)
+
+    offset = from_bytes - (from_bytes % chunk_size)
+    first_part_cut = from_bytes - offset
+    last_part_cut = until_bytes % chunk_size + 1
+
+    req_length = until_bytes - from_bytes + 1
+    part_count = math.ceil(until_bytes / chunk_size) - math.floor(offset / chunk_size)
+    body = tg_connect.yield_file(
+        file_id, index, offset, first_part_cut, last_part_cut, part_count, chunk_size
+    )
+
+    mime_type = file_id.mime_type
+    file_name = file_id.file_name
+    disposition = "attachment"
+
+    if mime_type:
+        if not file_name:
+            try:
+                file_name = f"{secrets.token_hex(2)}.{mime_type.split('/')[1]}"
+            except (IndexError, AttributeError):
+                file_name = f"{secrets.token_hex(2)}.unknown"
+    else:
+        if file_name:
+            mime_type = mimetypes.guess_type(file_id.file_name)
+        else:
+            mime_type = "application/octet-stream"
+            file_name = f"{secrets.token_hex(2)}.unknown"
+
+    return web.Response(
+        status=206 if range_header else 200,
+        body=body,
+        headers={
+            "Content-Type": f"{mime_type}",
+            "Content-Range": f"bytes {from_bytes}-{until_bytes}/{file_size}",
+            "Content-Length": str(req_length),
+            "Content-Disposition": f'{disposition}; filename="{file_name}"',
+            "Accept-Ranges": "bytes",
+        },
+    )
+
+
+# ══════════════════════════════════════════════════════════════════════════════
+#  API Mini App JKS — endpoints consommés par la Mini App React
+# ══════════════════════════════════════════════════════════════════════════════
+
+import hashlib
+import hmac
+import time
+from urllib.parse import parse_qs, unquote
+
+from database.jks_db import get_user_access, get_search_stats, get_recent_searches
+
+
+def _validate_telegram_init_data(init_data: str, bot_token: str) -> dict | None:
+    """
+    Valide la signature Telegram WebApp initData.
+    Retourne le dict user si valide, None sinon.
+    Ref : https://core.telegram.org/bots/webapps#validating-data-received-via-the-web-app
+    """
+    if not init_data:
+        return None
+    try:
+        params = parse_qs(init_data, keep_blank_values=True)
+        hash_val = params.pop("hash", [None])[0]
+        if not hash_val:
+            return None
+
+        # Reconstruit la data-check-string
+        data_check = "\n".join(
+            f"{k}={v[0]}" for k, v in sorted(params.items())
+        )
+
+        # HMAC-SHA256 signé avec HMAC-SHA256("WebAppData", bot_token)
+        secret = hmac.new(b"WebAppData", bot_token.encode(), hashlib.sha256).digest()
+        expected = hmac.new(secret, data_check.encode(), hashlib.sha256).hexdigest()
+
+        if not hmac.compare_digest(expected, hash_val):
+            return None
+
+        # Vérifie que les données ne sont pas trop vieilles (max 1 heure)
+        auth_date = int(params.get("auth_date", ["0"])[0])
+        if time.time() - auth_date > 3600:
+            return None
+
+        import json
+        user_raw = params.get("user", ["{}"])[0]
+        return json.loads(unquote(user_raw))
+
+    except Exception:
+        return None
+
+
+@routes.get("/api/user/me")
+async def api_user_me(request: web.Request):
+    """
+    Endpoint consommé par la Mini App React.
+    Retourne les données de l'utilisateur : plan, expiries, stats de recherche.
+
+    Auth : header X-Telegram-Init-Data validé par HMAC-SHA256.
+    """
+    from info import BOT_TOKEN
+
+    init_data = request.headers.get("X-Telegram-Init-Data", "")
+    user = _validate_telegram_init_data(init_data, BOT_TOKEN)
+
+    if not user:
+        return web.json_response(
+            {"error": "Unauthorized: invalid or expired initData"},
+            status=401,
+            headers={"Access-Control-Allow-Origin": "*"},
+        )
+
+    user_id = int(user.get("id", 0))
+    if not user_id:
+        return web.json_response(
+            {"error": "Invalid user id"},
+            status=400,
+            headers={"Access-Control-Allow-Origin": "*"},
+        )
+
+    try:
+        access = await get_user_access(user_id)
+        stats = await get_search_stats(user_id)
+        recent = await get_recent_searches(user_id, limit=10)
+
+        premium_expiry = access.get("premium_expiry")
+        session_expiry = access.get("session_expiry")
+
+        payload = {
+            "plan": access.get("plan", "free"),
+            "premiumExpiry": premium_expiry.isoformat() if premium_expiry else None,
+            "sessionExpiry": session_expiry.isoformat() if session_expiry else None,
+            "totalSearches": stats.get("total_searches", 0),
+            "weekSearches": stats.get("week_searches", 0),
+            "dailySearches": stats.get("daily_searches", [0] * 7),
+            "recentSearches": [
+                {
+                    "query": r["query"],
+                    "timestamp": r["timestamp"].isoformat(),
+                }
+                for r in recent
+            ],
+        }
+
+        return web.json_response(
+            payload,
+            headers={"Access-Control-Allow-Origin": "*"},
+        )
+
+    except Exception as e:
+        logging.exception(f"[API /api/user/me] Error for user {user_id}: {e}")
+        return web.json_response(
+            {"error": "Internal server error"},
+            status=500,
+            headers={"Access-Control-Allow-Origin": "*"},
+        )
+
+
+@routes.options("/api/user/me")
+async def api_user_me_options(request: web.Request):
+    """Préflight CORS pour la Mini App."""
+    return web.Response(
+        headers={
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods": "GET, OPTIONS",
+            "Access-Control-Allow-Headers": "Content-Type, X-Telegram-Init-Data",
+        }
+    )
