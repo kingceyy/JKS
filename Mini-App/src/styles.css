@@ -1,0 +1,127 @@
+@import "tailwindcss" source(none);
+@source "../src";
+@import "tw-animate-css";
+
+@theme inline {
+  --color-bg-primary: var(--bg-primary);
+  --color-bg-secondary: var(--bg-secondary);
+  --color-bg-card: var(--bg-card);
+  --color-bg-card-hover: var(--bg-card-hover);
+  --color-border-subtle: var(--border-subtle);
+  --color-border-medium: var(--border-medium);
+  --color-text-primary: var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
+  --color-text-muted: var(--text-muted);
+  --color-accent: var(--accent);
+  --color-accent-light: var(--accent-light);
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+  --color-error: var(--error);
+  --color-gold: var(--gold);
+  --color-bronze: var(--bronze-color);
+  --color-silver: var(--silver-color);
+  --color-platinum: var(--platinum-color);
+  --color-diamond: var(--diamond-color);
+  --color-adamantide: var(--adamantide-color);
+  --color-background: var(--bg-primary);
+  --color-foreground: var(--text-primary);
+  --color-border: var(--border-subtle);
+  --color-ring: var(--accent);
+}
+
+:root {
+  --bg-primary: #0f0f1a;
+  --bg-secondary: #161625;
+  --bg-card: rgba(255, 255, 255, 0.04);
+  --bg-card-hover: rgba(255, 255, 255, 0.07);
+  --border-subtle: rgba(255, 255, 255, 0.06);
+  --border-medium: rgba(255, 255, 255, 0.10);
+  --text-primary: #e8e8f0;
+  --text-secondary: #8a8a9a;
+  --text-muted: #5a5a6a;
+  --accent: #6c5ce7;
+  --accent-light: #a29bfe;
+  --accent-glow: rgba(108, 92, 231, 0.35);
+  --success: #00b894;
+  --success-glow: rgba(0, 184, 148, 0.25);
+  --warning: #fdcb6e;
+  --error: #e17055;
+  --gold: #f9ca24;
+  --bronze-color: #cd7f32;
+  --silver-color: #c0c0c0;
+  --platinum-color: #e5e4e2;
+  --diamond-color: #b9f2ff;
+  --adamantide-color: #ff6b6b;
+}
+
+@layer base {
+  html, body {
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  * { border-color: var(--border-subtle); }
+}
+
+.glass {
+  background: var(--bg-card);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--border-subtle);
+}
+.glass-strong {
+  background: rgba(255,255,255,0.07);
+  backdrop-filter: blur(30px);
+  -webkit-backdrop-filter: blur(30px);
+  border-top: 1px solid var(--border-subtle);
+}
+
+@keyframes pulse-ring {
+  0%, 100% { transform: scale(0.85); opacity: 0.7; }
+  50% { transform: scale(1.1); opacity: 0.3; }
+}
+.animate-pulse-ring { animation: pulse-ring 2s ease-in-out infinite; }
+
+@keyframes glow-pulse {
+  0%, 100% { box-shadow: 0 0 20px var(--accent-glow); }
+  50% { box-shadow: 0 0 40px var(--accent-glow); }
+}
+.animate-glow-pulse { animation: glow-pulse 2s ease-in-out infinite; }
+
+@keyframes glow-pulse-multi {
+  0%, 100% { box-shadow: 0 0 20px rgba(108,92,231,0.4), 0 0 30px rgba(0,184,148,0.2); }
+  50% { box-shadow: 0 0 40px rgba(108,92,231,0.5), 0 0 50px rgba(0,184,148,0.3); }
+}
+.animate-glow-multi { animation: glow-pulse-multi 2.5s ease-in-out infinite; }
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+.skeleton {
+  background: linear-gradient(90deg, rgba(255,255,255,0.03) 25%, rgba(255,255,255,0.08) 50%, rgba(255,255,255,0.03) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 8px;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+.animate-spin-slow { animation: spin 1s linear infinite; }
+
+@keyframes dot-pulse {
+  0%, 100% { transform: scale(0.85); opacity: 1; }
+  50% { transform: scale(1.15); opacity: 0.7; }
+}
+.animate-dot-pulse { animation: dot-pulse 1.4s ease-in-out infinite; }
+
+.scrollbar-hide::-webkit-scrollbar { display: none; }
+.scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+
+.text-gradient {
+  background: linear-gradient(135deg, var(--accent-light), var(--success));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
