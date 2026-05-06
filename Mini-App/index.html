@@ -5,11 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <title>JessiKaSearch</title>
     <meta name="description" content="JKS Mini App - Recherche de fichiers" />
+
+    <!-- Telegram WebApp SDK (doit être en premier) -->
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
+
+    <!-- AdsGram SDK -->
+    <script src="https://sad.adsgram.ai/js/sad.min.js"></script>
+
+    <!-- Monetag SDK (Rewarded Interstitial — zone 10971920) -->
+    <!-- expose window.show_10971920() -->
+    <script src="//libtl.com/sdk.js" data-zone="10971920" data-sdk="show_10971920"></script>
   </head>
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
-    <script src='//libtl.com/sdk.js' data-zone='10971920' data-sdk='show_10971920'></script>
   </body>
 </html>

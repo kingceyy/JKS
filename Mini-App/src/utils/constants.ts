@@ -1,4 +1,4 @@
-export const ADSGRAM_BLOCK_ID = "YOUR_ADSGRAM_BLOCK_ID";
+export const ADSGRAM_BLOCK_ID = "29594";
 export const MONETAG_ZONE_ID = "10971920";
 export const USDT_WALLET = "TTaDZGdMoZJtqrj1sxGEkd8wqfDVQXXt14";
 export const SUPPORT_TG = "https://t.me/JessiKaSearchBot";

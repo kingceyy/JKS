@@ -2,12 +2,19 @@
 declare global {
   interface Window {
     Telegram?: { WebApp?: any };
-    show_interstitial?: (zone: string) => Promise<void>;
-    Adsgram?: { init: (opts: { blockId: string }) => { show: () => Promise<void> } };
+    // Monetag — le nom de la fonction dépend de la zone, ex: show_10971920
+    show_10971920?: () => Promise<void>;
+    Adsgram?: {
+      init: (opts: { blockId: string; debug?: boolean }) => {
+        show: () => Promise<any>;
+        destroy: () => void;
+      };
+    };
   }
 }
 
-const tg = () => (typeof window !== "undefined" ? window.Telegram?.WebApp : undefined);
+const tg = () =>
+  typeof window !== "undefined" ? window.Telegram?.WebApp : undefined;
 
 export function initTelegram() {
   const w = tg();
@@ -42,6 +49,7 @@ export function getTelegramUser(): TgUser {
       languageCode: u.language_code,
     };
   }
+  // Fallback pour dev hors Telegram
   return {
     id: 123456789,
     firstName: "Utilisateur",
@@ -52,7 +60,10 @@ export function getTelegramUser(): TgUser {
   };
 }
 
-export function hapticFeedback(type: "impact" | "notification" | "selection", style?: string) {
+export function hapticFeedback(
+  type: "impact" | "notification" | "selection",
+  style?: string
+) {
   const hf = tg()?.HapticFeedback;
   if (!hf) return;
   try {
@@ -62,12 +73,17 @@ export function hapticFeedback(type: "impact" | "notification" | "selection", st
   } catch {}
 }
 
-export function sendData(data: unknown) {
-  try { tg()?.sendData?.(JSON.stringify(data)); } catch {}
-}
+// ⚠️ sendData() a été RETIRÉ intentionnellement :
+// window.Telegram.WebApp.sendData() ferme automatiquement la Mini-App.
+// La session est maintenant activée via un appel API REST dans useUserData.ts.
 
 export function openTelegramLink(url: string) {
   const w = tg();
-  if (w?.openTelegramLink) { try { w.openTelegramLink(url); return; } catch {} }
+  if (w?.openTelegramLink) {
+    try {
+      w.openTelegramLink(url);
+      return;
+    } catch {}
+  }
   if (typeof window !== "undefined") window.open(url, "_blank");
 }
