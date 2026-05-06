@@ -5,7 +5,7 @@ class script(object):
     
     HELP_TXT = """» ᴏᴜ ᴠᴏᴜʟᴇᴢ-ᴠᴏᴜꜱ ᴏᴜᴠʀɪʀ ʟᴇ ᴍᴇɴᴜ ᴅᴇꜱ ᴘᴀʀᴀᴍᴇᴛʀᴇꜱ ?"""
 
-    ABOUT_TXT = """<blockquote><b>❍ ᴍᴏɴ ɴᴏᴍ : <a href="https://t.me/JessiKaSearch">JessiKa - Search</a>
+    ABOUT_TXT = """<blockquote><b>❍ ᴍᴏɴ ɴᴏᴍ : <a href="https://t.me/JessiKaSearch">JessiKa - Search</b></a>
 ❍ ᴄʀᴇᴀᴛᴇᴜʀ : <a href="https://t.me/kingcey">ᴋɪɴɢᴄᴇʏ</a>
 ❍ ʙɪʙʟɪᴏᴛʜᴇǫᴜᴇ : <a href="https://pyrogram.org/">ᴘʏʀᴏɢʀᴀᴍ</a>
 ❍ ʟᴀɴɢᴀɢᴇ : <a href="https://www.python.org/">ᴘʏᴛʜᴏɴ</a>
@@ -13,7 +13,7 @@ class script(object):
 ❍ ʜᴇʙᴇʀɢᴇ ꜱᴜʀ : <a href="https://t.me/JessiKaDev">ᴠᴘꜱ</a>
 ❍ ᴠᴇʀꜱɪᴏɴ : v1.2 [ᴀᴠᴀɴᴄᴇ]</blockquote>
 
-➻ ᴄʟɪǫᴜᴇᴢ ꜱᴜʀ ʟᴇꜱ ʙᴏᴜᴛᴏɴꜱ ᴄɪ-ᴅᴇꜱꜱᴏᴜꜱ ᴘᴏᴜʀ ᴏʙᴛᴇɴɪʀ ᴅᴇ ʟ'ᴀɪᴅᴇ ᴇᴛ ᴅᴇꜱ ɪɴꜰᴏꜱ ꜱᴜʀ ᴍᴏɪ.</b>"""
+<b>➻ ᴄʟɪǫᴜᴇᴢ ꜱᴜʀ ʟᴇꜱ ʙᴏᴜᴛᴏɴꜱ ᴄɪ-ᴅᴇꜱꜱᴏᴜꜱ ᴘᴏᴜʀ ᴏʙᴛᴇɴɪʀ ᴅᴇ ʟ'ᴀɪᴅᴇ ᴇᴛ ᴅᴇꜱ ɪɴꜰᴏꜱ ꜱᴜʀ ᴍᴏɪ.</b>"""
         
     MAIN_TXT = """
 ᴠᴏɪᴄɪ ʟᴇ ᴍᴇɴᴜ ᴅ'ᴀɪᴅᴇ
@@ -274,7 +274,7 @@ class script(object):
 
 ᴍᴇꜱꜱᴀɢᴇ : <b>{}</b>"""
     
-    CAPTION = """<b><a href="https://t.me/JessiKaSearch">{file_name}</a></b>\n\n<b><blockquote><i>ᴠᴇᴜɪʟʟᴇᴢ ᴛʀᴀɴꜱꜰᴇʀᴇʀ ᴄᴇ ꜰɪᴄʜɪᴇʀ ᴅᴀɴꜱ ʟᴇꜱ ᴍᴇꜱꜱᴀɢᴇꜱ ᴇɴʀᴇɢɪꜱᴛʀᴇꜱ ᴇᴛ ꜰᴇʀᴍᴇᴢ ᴄᴇ ᴍᴇꜱꜱᴀɢᴇ</i></blockquote></b>"""
+    CAPTION = """<b>{file_name}</b>\n\n<b><blockquote>ᴠᴇᴜɪʟʟᴇᴢ ᴛʀᴀɴꜱꜰᴇʀᴇʀ ᴄᴇ ꜰɪᴄʜɪᴇʀ ᴅᴀɴꜱ ʟᴇꜱ ᴍᴇꜱꜱᴀɢᴇꜱ ᴇɴʀᴇɢɪꜱᴛʀᴇꜱ ᴇᴛ ꜰᴇʀᴍᴇᴢ ᴄᴇ ᴍᴇꜱꜱᴀɢᴇ</blockquote></b>"""
 
     IMDB_TEMPLATE_TXT = """
 <b>‣ ᴛɪᴛʀᴇ : <a href={url}>{title}</a>
