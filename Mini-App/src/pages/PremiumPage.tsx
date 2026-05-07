@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   TonConnectButton,
@@ -6,7 +6,7 @@ import {
   useTonWallet,
 } from "@tonconnect/ui-react";
 import { Icon } from "@/components/Icons";
-import { useUserData, formatRemaining } from "@/hooks/useUserData";
+import { useUserData, formatRemaining, notifyBot } from "@/hooks/useUserData";
 import { useTonPrice } from "@/hooks/useTonPrice";
 import {
   PLAN_COLORS,
@@ -16,12 +16,10 @@ import {
   SUPPORT_TG,
   type PremiumPlan,
 } from "@/utils/constants";
-import { openTelegramLink, hapticFeedback, sendData } from "@/utils/telegram";
+import { openTelegramLink, hapticFeedback } from "@/utils/telegram";
 import { Faq } from "./AccessPage";
 
 // ── Adresse TON qui reçoit les paiements ──────────────────────────────────────
-// Même adresse que USDT_WALLET (format TON friendly address)
-// Remplacer par l'adresse réelle dans constants.ts → TON_WALLET
 const TON_WALLET_ADDRESS = import.meta.env.VITE_TON_WALLET ?? USDT_WALLET;
 
 // ── BottomSheet ────────────────────────────────────────────────────────────────
@@ -81,8 +79,16 @@ function TonPaymentSheet({
 }) {
   const [tonConnectUI] = useTonConnectUI();
   const wallet = useTonWallet();
-  const { price, loading: priceLoading, error: priceError, usdToTon, usdToNanoton } = useTonPrice();
-  const [status, setStatus] = useState<"idle" | "pending" | "success" | "error">("idle");
+  const {
+    price,
+    loading: priceLoading,
+    error: priceError,
+    usdToTon,
+    usdToNanoton,
+  } = useTonPrice();
+  const [status, setStatus] = useState<
+    "idle" | "pending" | "success" | "error"
+  >("idle");
   const [txHash, setTxHash] = useState<string | null>(null);
 
   const tonAmount = usdToTon(plan.usd);
@@ -90,7 +96,6 @@ function TonPaymentSheet({
 
   const handlePay = async () => {
     if (!wallet) {
-      // Pas encore connecté — ouvrir le modal de connexion
       await tonConnectUI.openModal();
       return;
     }
@@ -100,7 +105,6 @@ function TonPaymentSheet({
     hapticFeedback("impact", "medium");
 
     try {
-      // Payload encodé en base64 : identifie le plan acheté côté bot
       const payloadStr = JSON.stringify({
         action: "premium_purchase",
         plan: plan.key,
@@ -109,24 +113,23 @@ function TonPaymentSheet({
       const payloadB64 = btoa(payloadStr);
 
       const result = await tonConnectUI.sendTransaction({
-        validUntil: Math.floor(Date.now() / 1000) + 300, // 5 min
+        validUntil: Math.floor(Date.now() / 1000) + 300,
         messages: [
           {
             address: TON_WALLET_ADDRESS,
             amount: nanoAmount.toString(),
-            // payload optionnel : commentaire lisible dans l'explorateur
             payload: payloadB64,
           },
         ],
       });
 
-      const hash = result.boc; // boc = identifiant de la transaction
+      const hash = result.boc;
       setTxHash(hash);
       setStatus("success");
       hapticFeedback("notification", "success");
 
-      // Notifier le bot via WebApp.sendData pour activation immédiate
-      sendData({
+      // ✅ notifyBot() au lieu de sendData() — ne ferme PAS la Mini-App
+      await notifyBot({
         action: "ton_payment",
         plan: plan.key,
         days: plan.days,
@@ -137,7 +140,6 @@ function TonPaymentSheet({
     } catch (e) {
       const msg = e instanceof Error ? e.message : String(e);
       console.error("[TonPay] error:", msg);
-      // Annulation par l'utilisateur → ne pas afficher erreur
       if (msg.includes("User rejects") || msg.includes("cancel")) {
         setStatus("idle");
       } else {
@@ -181,7 +183,6 @@ function TonPaymentSheet({
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <h3 className="text-lg font-bold">Payer avec TON</h3>
-        {/* Bouton natif TON Connect (affiche avatar + adresse si connecté) */}
         <TonConnectButton />
       </div>
 
@@ -190,10 +191,7 @@ function TonPaymentSheet({
         {[
           ["Plan", <span style={{ color }}>{PLAN_LABELS[plan.key]}</span>],
           ["Durée", plan.duration],
-          [
-            "Prix USD",
-            <span className="font-bold">{plan.usd.toFixed(2)} $</span>,
-          ],
+          ["Prix USD", <span className="font-bold">{plan.usd.toFixed(2)} $</span>],
           [
             "Montant TON",
             priceLoading ? (
@@ -225,7 +223,6 @@ function TonPaymentSheet({
         ))}
       </div>
 
-      {/* Avertissement si taux indisponible */}
       {priceError && (
         <div
           className="text-xs p-3 rounded-xl"
@@ -236,7 +233,6 @@ function TonPaymentSheet({
         </div>
       )}
 
-      {/* Info wallet */}
       {!wallet && (
         <div
           className="text-xs p-3 rounded-xl text-center"
@@ -291,7 +287,6 @@ export function PremiumPage() {
   const [tonPlan, setTonPlan] = useState<PremiumPlan | null>(null);
   const [usdtPlan, setUsdtPlan] = useState<PremiumPlan | null>(null);
 
-  // Prefetch le taux TON dès l'ouverture de la page
   const { price: tonPrice, usdToTon } = useTonPrice();
 
   if (!data) return null;
@@ -442,7 +437,6 @@ export function PremiumPage() {
                 >
                   {p.usd.toFixed(2)} $
                 </span>
-                {/* Prix TON live */}
                 {tonAmt !== null && (
                   <span
                     className="px-2.5 py-1 rounded-full text-xs font-semibold"
@@ -572,18 +566,9 @@ export function PremiumPage() {
         </div>
         <div className="space-y-3">
           {[
-            [
-              Icon.ShieldCheck,
-              "Paiement 100% sécurisé via la blockchain TON",
-            ],
-            [
-              Icon.Refresh,
-              "Activation instantanée après confirmation du paiement",
-            ],
-            [
-              Icon.Headset,
-              "Support disponible 7 jours sur 7 pour toute question",
-            ],
+            [Icon.ShieldCheck, "Paiement 100% sécurisé via la blockchain TON"],
+            [Icon.Refresh, "Activation instantanée après confirmation du paiement"],
+            [Icon.Headset, "Support disponible 7 jours sur 7 pour toute question"],
           ].map(([I, t], i) => {
             const C = I as typeof Icon.Star;
             return (
@@ -641,10 +626,7 @@ export function PremiumPage() {
             <h3 className="text-lg font-bold text-center">Paiement USDT</h3>
             <div className="text-center">
               <div className="text-xs opacity-50">Envoyez exactement</div>
-              <div
-                className="text-2xl font-bold"
-                style={{ color: "#26a17b" }}
-              >
+              <div className="text-2xl font-bold" style={{ color: "#26a17b" }}>
                 {usdtPlan.usd.toFixed(2)} USDT
               </div>
               <div className="text-xs opacity-50 mt-1">

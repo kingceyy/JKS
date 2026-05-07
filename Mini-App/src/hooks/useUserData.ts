@@ -20,13 +20,20 @@ function getTelegramInitData(): string {
 }
 
 // URL de base de l'API bot — définie dans .env
-// Ex: VITE_BOT_API_URL=https://ton-bot.railway.app
-const BOT_API_BASE = import.meta.env.VITE_BOT_API_URL ?? "https://experienced-marnie-imbd-db361783.koyeb.app";
+// Ex: VITE_BOT_API_URL=https://ton-bot.koyeb.app
+const BOT_API_BASE =
+  import.meta.env.VITE_BOT_API_URL ??
+  "https://experienced-marnie-imbd-db361783.koyeb.app";
 
 // ── Fetch données utilisateur depuis le bot ────────────────────────────────────
 
 async function fetchUserData(): Promise<UserData> {
   const initData = getTelegramInitData();
+  if (!initData) {
+    throw new Error(
+      "initData Telegram manquant — ouvrez la Mini-App depuis Telegram"
+    );
+  }
   const res = await fetch(`${BOT_API_BASE}/api/user/me`, {
     method: "GET",
     headers: {
@@ -35,10 +42,47 @@ async function fetchUserData(): Promise<UserData> {
     },
   });
   if (!res.ok) {
-    const err = await res.text().catch(() => "Unknown error");
+    const err = await res.text().catch(() => "Erreur inconnue");
     throw new Error(`API error ${res.status}: ${err}`);
   }
   return (await res.json()) as UserData;
+}
+
+// ── Activer session côté bot après pub visionnée ──────────────────────────────
+
+async function activateSessionOnBot(): Promise<void> {
+  const initData = getTelegramInitData();
+  if (!initData) return;
+  const res = await fetch(`${BOT_API_BASE}/api/session/activate`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "X-Telegram-Init-Data": initData,
+    },
+  });
+  if (!res.ok) {
+    const err = await res.text().catch(() => "");
+    throw new Error(`Session activate error ${res.status}: ${err}`);
+  }
+}
+
+// ── Notifier le bot (paiements, actions) sans fermer la Mini-App ──────────────
+
+export async function notifyBot(payload: unknown): Promise<void> {
+  const initData = getTelegramInitData();
+  if (!initData) return;
+  try {
+    await fetch(`${BOT_API_BASE}/api/notify`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-Telegram-Init-Data": initData,
+      },
+      body: JSON.stringify(payload),
+    });
+  } catch (e) {
+    console.error("[notifyBot] failed:", e);
+  }
 }
 
 // ── Hook principal ─────────────────────────────────────────────────────────────
@@ -63,17 +107,33 @@ export function useUserData() {
     }
   }, []);
 
-  useEffect(() => { load(); }, [load]);
+  useEffect(() => {
+    load();
+  }, [load]);
 
-  /** Optimistic update après pub visionnée */
-  const activateSession = useCallback(() => {
-    setData((d) =>
-      d ? { ...d, sessionExpiry: new Date(Date.now() + 3_600_000).toISOString() } : d
-    );
-  }, []);
+  /**
+   * Appelle le bot pour enregistrer la session + mise à jour optimiste locale.
+   * NE ferme PAS la Mini-App.
+   */
+  const activateSession = useCallback(async () => {
+    // Mise à jour optimiste immédiate pour l'UI
+    const expiry = new Date(Date.now() + 3_600_000).toISOString();
+    setData((d) => (d ? { ...d, sessionExpiry: expiry } : d));
+
+    // Appel API bot en arrière-plan
+    try {
+      await activateSessionOnBot();
+    } catch (e) {
+      console.error("[activateSession] failed to notify bot:", e);
+      // On recharge pour synchroniser l'état réel
+      load();
+    }
+  }, [load]);
 
   /** Recharge depuis le bot */
-  const refresh = useCallback(() => { load(); }, [load]);
+  const refresh = useCallback(() => {
+    load();
+  }, [load]);
 
   return { data, loading, error, activateSession, refresh, setData };
 }

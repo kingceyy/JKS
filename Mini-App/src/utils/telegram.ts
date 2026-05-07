@@ -73,9 +73,12 @@ export function hapticFeedback(
   } catch {}
 }
 
-// ⚠️ sendData() a été RETIRÉ intentionnellement :
-// window.Telegram.WebApp.sendData() ferme automatiquement la Mini-App.
-// La session est maintenant activée via un appel API REST dans useUserData.ts.
+// ⚠️ sendData() — WebApp.sendData() ferme automatiquement la Mini-App.
+// Elle est conservée pour la compatibilité des imports mais ne fait RIEN.
+// Utilisez notifyBot() depuis useUserData.ts pour notifier le bot.
+export function sendData(_data: unknown) {
+  // Intentionnellement vide — voir notifyBot() dans useUserData.ts
+}
 
 export function openTelegramLink(url: string) {
   const w = tg();
