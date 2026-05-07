@@ -84,7 +84,7 @@ CAPTION_LANGUAGES = ["fr", "French", "VF", "Vostfr", "Vo", "Français", "Vost", 
 # ============================
 # Verification Settings
 # ============================
-VERIFY = bool(environ.get('VERIFY', True))
+VERIFY = bool(environ.get('VERIFY', False))
 VERIFY_EXPIRE = int(environ.get('VERIFY_EXPIRE', 24))
 VERIFIED_LOG = int(environ.get('VERIFIED_LOG', '-1003340962000'))
 HOW_TO_VERIFY = environ.get('HOW_TO_VERIFY', 'https://t.me/JessiKaSearch/50')
