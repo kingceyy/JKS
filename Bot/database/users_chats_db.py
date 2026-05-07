@@ -203,15 +203,34 @@ class Database:
         await self.users.update_one({"id": user_data["id"]}, {"$set": user_data}, upsert=True)
 
     async def has_premium_access(self, user_id):
+        """
+        Vérifie si l'utilisateur a un accès actif.
+        Ordre : session_expiry (pub Mini App) > premium_expiry (plan payant) > expiry_time (ancien système)
+        """
         user_data = await self.get_user(user_id)
-        if user_data:
-            expiry_time = user_data.get("expiry_time")
-            if expiry_time is None:
-                return False
-            elif isinstance(expiry_time, datetime.datetime) and datetime.datetime.now() <= expiry_time:
+        if not user_data:
+            return False
+
+        now = datetime.datetime.utcnow()
+
+        # 1. Session gratuite (pub regardée via Mini App)
+        session_expiry = user_data.get("session_expiry")
+        if isinstance(session_expiry, datetime.datetime) and session_expiry > now:
+            return True
+
+        # 2. Plan premium payant (TON / admin)
+        premium_expiry = user_data.get("premium_expiry")
+        if isinstance(premium_expiry, datetime.datetime) and premium_expiry > now:
+            return True
+
+        # 3. Ancien champ expiry_time (rétrocompatibilité)
+        expiry_time = user_data.get("expiry_time")
+        if isinstance(expiry_time, datetime.datetime):
+            if datetime.datetime.now() <= expiry_time:
                 return True
             else:
                 await self.users.update_one({"id": user_id}, {"$set": {"expiry_time": None}})
+
         return False
         
     async def update_user(self, user_data):
