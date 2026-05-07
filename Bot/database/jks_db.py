@@ -24,12 +24,14 @@ PLAN_LABELS = {
 }
 
 PLAN_PRICES = {
-    "bronze":     {"fcfa": 520,    "cdf": 2500,   "usd": 0.94},
-    "argent":     {"fcfa": 2100,   "cdf": 8800,   "usd": 3.80},
-    "or":         {"fcfa": 4200,   "cdf": 17600,  "usd": 7.50},
-    "platine":    {"fcfa": 6300,   "cdf": 26400,  "usd": 11.00},
-    "diamant":    {"fcfa": 12600,  "cdf": 52800,  "usd": 22.00},
-    "adamantide": {"fcfa": 25200,  "cdf": 105500, "usd": 45.20},
+    # stars : prix en Telegram Stars (XTR) — 1 XTR ≈ 0.013 $
+    # Contact support pour payer en Stars
+    "bronze":     {"fcfa": 520,    "cdf": 2500,   "usd": 0.94,  "stars": 50},
+    "argent":     {"fcfa": 2100,   "cdf": 8800,   "usd": 3.80,  "stars": 200},
+    "or":         {"fcfa": 4200,   "cdf": 17600,  "usd": 7.50,  "stars": 400},
+    "platine":    {"fcfa": 6300,   "cdf": 26400,  "usd": 11.00, "stars": 600},
+    "diamant":    {"fcfa": 12600,  "cdf": 52800,  "usd": 22.00, "stars": 1200},
+    "adamantide": {"fcfa": 25200,  "cdf": 105500, "usd": 45.20, "stars": 2500},
 }
 
 FREE_SESSION_HOURS = 1

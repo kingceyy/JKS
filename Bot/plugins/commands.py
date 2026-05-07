@@ -35,7 +35,7 @@ async def start(client, message):
         await message.react(emoji=random.choice(REACTIONS), big=True) 
     if message.chat.type in [enums.ChatType.GROUP, enums.ChatType.SUPERGROUP]:
         buttons = [[
-                    InlineKeyboardButton('• ᴀᴊᴏᴜᴛᴇᴢ-ᴍᴏɪ ᴀ ᴠᴏᴛʀᴇ ᴄʜᴀᴛ •', url=f'http://t.me/{temp.U_NAME}?startgroup=true')
+                    InlineKeyboardButton('• ᴀᴊᴏᴜᴛᴇᴢ-ᴍᴏɪ ᴀ ᴠᴏᴛʀᴇ ᴄʜᴀᴛ •', url=f'https://t.me/JessiKaPay')
                 ],[
                     InlineKeyboardButton('• ᴘʀᴏᴘʀɪᴇᴛᴀɪʀᴇ •', url="https://t.me/cosmic_freak"),
                     InlineKeyboardButton('• ꜱᴜᴘᴘᴏʀᴛ •', url='https://t.me/codeflixsupport')
@@ -61,7 +61,7 @@ async def start(client, message):
                     InlineKeyboardButton(text="💸", callback_data="shortlink_info"),
                     InlineKeyboardButton(text="🖥", callback_data="main"),
                 ],[
-                    InlineKeyboardButton('ᴀᴊᴏᴜᴛᴇᴢ-ᴍᴏɪ ᴀ ᴠᴏᴛʀᴇ ɢʀᴏᴜᴘᴇ', url=f'http://t.me/{temp.U_NAME}?startgroup=true')
+                    InlineKeyboardButton('JessiKaPay', url=f'https://t.me/JessiKaPay')
                 ],[
                     InlineKeyboardButton('• ᴄᴏᴍᴍᴀɴᴅᴇꜱ •', callback_data='main'),
                     InlineKeyboardButton('• ᴘʀᴇᴍɪᴜᴍ •', callback_data='premium_info'),
@@ -125,7 +125,7 @@ async def start(client, message):
                     InlineKeyboardButton(text="💸", callback_data="shortlink_info"),
                     InlineKeyboardButton(text="🖥", callback_data="main"),
                 ],[
-                    InlineKeyboardButton('ᴀᴊᴏᴜᴛᴇᴢ-ᴍᴏɪ ᴀ ᴠᴏᴛʀᴇ ɢʀᴏᴜᴘᴇ', url=f'http://t.me/{temp.U_NAME}?startgroup=true')
+                    InlineKeyboardButton('JessiKaPay', url=f'https://t.me/JessiKaPay')
                 ],[
                     InlineKeyboardButton('• ᴄᴏᴍᴍᴀɴᴅᴇꜱ •', callback_data='main'),
                     InlineKeyboardButton('• ᴘʀᴇᴍɪᴜᴍ •', callback_data='premium_info'),
@@ -462,18 +462,25 @@ async def start(client, message):
             if await db.has_premium_access(message.from_user.id):
                 pass  
             else:
-                if not await check_verification(client, message.from_user.id) and VERIFY == True:
+                if not await db.has_premium_access(message.from_user.id):
+                    from info import MINI_APP_URL
                     btn = [[
-                       InlineKeyboardButton("ᴄʟɪǫᴜᴇᴢ ɪᴄɪ ᴘᴏᴜʀ ᴠᴇʀɪꜰɪᴇʀ", url=await get_token(client, message.from_user.id, f"https://telegram.me/{temp.U_NAME}?start=", file_id))
-                       ],[
-                       InlineKeyboardButton("ᴄᴏᴍᴍᴇɴᴛ ᴠᴇʀɪꜰɪᴇʀ", url=HOW_TO_VERIFY)
-                   ]]
+                        InlineKeyboardButton("📺 ꜱᴇꜱꜱɪᴏɴ ɢʀᴀᴛᴜɪᴛᴇ — 2 ᴘᴜʙꜱ ᴘᴏᴜʀ 1ʜ ᴅ'ᴀᴄᴄᴇꜱ", web_app={"url": f"{MINI_APP_URL}?tab=access"})
+                    ],[
+                        InlineKeyboardButton("💎 ꜱᴏᴜꜱᴄʀɪʀᴇ ᴀᴜ ᴘʀᴇᴍɪᴜᴍ", web_app={"url": f"{MINI_APP_URL}?tab=premium"})
+                    ]]
                     l = await message.reply_text(
-                        text=f"<blockquote><b>ꜱᴀʟᴜᴛ,\n\n ‼️ ᴠᴏᴜꜱ ɴ'ᴇᴛᴇꜱ ᴘᴀꜱ ᴠᴇʀɪꜰɪᴇ ᴀᴜᴊᴏᴜʀᴅ'ʜᴜɪ ‼️\n\n ›› ᴠᴇᴜɪʟʟᴇᴢ ᴠᴇʀɪꜰɪᴇʀ ᴇᴛ ᴏʙᴛᴇɴɪʀ ᴜɴ ᴀᴄᴄᴇꜱ ɪʟʟɪᴍɪᴛᴇ ᴘᴏᴜʀ {VERIFY_EXPIRE} ʜᴇᴜʀᴇꜱ ✅</blockquote></b>",
+                        text=(
+                            "<blockquote><b>⚠️ ᴀᴄᴄᴇꜱ ʀᴇǫᴜɪꜱ</b></blockquote>\n\n"
+                            "ᴠᴏᴜꜱ ꜱᴏᴜʜᴀɪᴛᴇᴢ ʀᴇᴄᴜᴘᴇʀᴇʀ ᴜɴ ꜰɪᴄʜɪᴇʀ, ᴍᴀɪꜱ ᴠᴏᴜꜱ ɴ'ᴀᴠᴇᴢ ᴘᴀꜱ ᴅᴇ ꜱᴇꜱꜱɪᴏɴ ᴀᴄᴛɪᴠᴇ.\n\n"
+                            "ᴄʜᴏɪꜱɪꜱꜱᴇᴢ ᴜɴᴇ ᴏᴘᴛɪᴏɴ :\n\n"
+                            "📺 <b>ꜱᴇꜱꜱɪᴏɴ ɢʀᴀᴛᴜɪᴛᴇ</b> — ʀᴇɢᴀʀᴅᴇᴢ ᴅᴇᴜx ᴘᴜʙʟɪᴄɪᴛᴇꜱ ᴇᴛ ᴏʙᴛᴇɴᴇᴢ <b>1ʜ ᴅ'ᴀᴄᴄᴇꜱ</b> ᴀ ᴛᴏᴜꜱ ʟᴇꜱ ꜰɪᴄʜɪᴇʀꜱ.\n\n"
+                            "💎 <b>ᴘʀᴇᴍɪᴜᴍ</b> — ᴀᴄᴄᴇꜱ ɪʟʟɪᴍɪᴛᴇ ꜱᴀɴꜱ ᴘᴜʙʟɪᴄɪᴛᴇ, ᴅᴇ 7 ᴊᴏᴜʀꜱ ᴀ 1 ᴀɴ."
+                        ),
                         protect_content=False,
                         reply_markup=InlineKeyboardMarkup(btn)
                     )
-                    await asyncio.sleep(180)
+                    await asyncio.sleep(300)
                     await l.delete()
                     return
             if STREAM_MODE:
@@ -542,18 +549,25 @@ async def start(client, message):
             if await db.has_premium_access(message.from_user.id): 
                 pass 
             else:
-               if not await check_verification(client, message.from_user.id) and VERIFY == True:
+               if not await db.has_premium_access(message.from_user.id):
+                   from info import MINI_APP_URL
                    btn = [[
-                       InlineKeyboardButton("ᴄʟɪǫᴜᴇᴢ ɪᴄɪ ᴘᴏᴜʀ ᴠᴇʀɪꜰɪᴇʀ", url=await get_token(client, message.from_user.id, f"https://telegram.me/{temp.U_NAME}?start=", file_id))
+                       InlineKeyboardButton("📺 ꜱᴇꜱꜱɪᴏɴ ɢʀᴀᴛᴜɪᴛᴇ — 2 ᴘᴜʙꜱ ᴘᴏᴜʀ 1ʜ ᴅ'ᴀᴄᴄᴇꜱ", web_app={"url": f"{MINI_APP_URL}?tab=access"})
                    ],[
-                        InlineKeyboardButton("ᴄᴏᴍᴍᴇɴᴛ ᴠᴇʀɪꜰɪᴇʀ", url=HOW_TO_VERIFY)
+                       InlineKeyboardButton("💎 ꜱᴏᴜꜱᴄʀɪʀᴇ ᴀᴜ ᴘʀᴇᴍɪᴜᴍ", web_app={"url": f"{MINI_APP_URL}?tab=premium"})
                    ]]
                    l = await message.reply_text(
-                       text=f"<blockquote><b>ꜱᴀʟᴜᴛ,\n\n ‼️ ᴠᴏᴜꜱ ɴ'ᴇᴛᴇꜱ ᴘᴀꜱ ᴠᴇʀɪꜰɪᴇ ᴀᴜᴊᴏᴜʀᴅ'ʜᴜɪ ‼️\n\n ›› ᴠᴇᴜɪʟʟᴇᴢ ᴠᴇʀɪꜰɪᴇʀ ᴇᴛ ᴏʙᴛᴇɴɪʀ ᴜɴ ᴀᴄᴄᴇꜱ ɪʟʟɪᴍɪᴛᴇ ᴘᴏᴜʀ {VERIFY_EXPIRE} ʜᴇᴜʀᴇꜱ ✅\n\n ›› ᴘᴏᴜʀ ᴜɴ ᴀᴄᴄᴇꜱ ᴅɪʀᴇᴄᴛ ᴀᴜx ꜰɪᴄʜɪᴇʀꜱ, ꜱᴏᴜꜱᴄʀɪᴠᴇᴢ ᴀᴜ ᴘʀᴇᴍɪᴜᴍ.</blockquote></b>",
+                       text=(
+                           "<blockquote><b>⚠️ ᴀᴄᴄᴇꜱ ʀᴇǫᴜɪꜱ</b></blockquote>\n\n"
+                           "ᴠᴏᴜꜱ ꜱᴏᴜʜᴀɪᴛᴇᴢ ʀᴇᴄᴜᴘᴇʀᴇʀ ᴜɴ ꜰɪᴄʜɪᴇʀ, ᴍᴀɪꜱ ᴠᴏᴜꜱ ɴ'ᴀᴠᴇᴢ ᴘᴀꜱ ᴅᴇ ꜱᴇꜱꜱɪᴏɴ ᴀᴄᴛɪᴠᴇ.\n\n"
+                           "ᴄʜᴏɪꜱɪꜱꜱᴇᴢ ᴜɴᴇ ᴏᴘᴛɪᴏɴ :\n\n"
+                           "📺 <b>ꜱᴇꜱꜱɪᴏɴ ɢʀᴀᴛᴜɪᴛᴇ</b> — ʀᴇɢᴀʀᴅᴇᴢ ᴅᴇᴜx ᴘᴜʙʟɪᴄɪᴛᴇꜱ ᴇᴛ ᴏʙᴛᴇɴᴇᴢ <b>1ʜ ᴅ'ᴀᴄᴄᴇꜱ</b> ᴀ ᴛᴏᴜꜱ ʟᴇꜱ ꜰɪᴄʜɪᴇʀꜱ.\n\n"
+                           "💎 <b>ᴘʀᴇᴍɪᴜᴍ</b> — ᴀᴄᴄᴇꜱ ɪʟʟɪᴍɪᴛᴇ ꜱᴀɴꜱ ᴘᴜʙʟɪᴄɪᴛᴇ, ᴅᴇ 7 ᴊᴏᴜʀꜱ ᴀ 1 ᴀɴ."
+                       ),
                        protect_content=False,
                        reply_markup=InlineKeyboardMarkup(btn)
                    )
-                   await asyncio.sleep(180)
+                   await asyncio.sleep(300)
                    await l.delete()
                    return
             if STREAM_MODE:
@@ -584,10 +598,10 @@ async def start(client, message):
                     return
             await msg.edit_caption(f_caption)
             btn = [[
-                InlineKeyboardButton("❗ ɢᴇᴛ ꜰɪʟᴇ ᴀɢᴀɪɴ ❗", callback_data=f'delfile#{file_id}')
+                InlineKeyboardButton("❗ ʀᴇᴏʙᴛᴇɴɪʀ ʟᴇ ꜰɪᴄʜɪᴇʀ ❗", callback_data=f'delfile#{file_id}')
             ]]
             k = await msg.reply(
-                f"<b><u>❗️❗️❗️IMPORTANT❗️️❗️❗️</u></b>\n\n"
+                f"<b><u>⚠️ ɪɴꜰᴏʀᴍᴀᴛɪᴏɴ ɪᴍᴘᴏʀᴛᴀɴᴛᴇ ⚠️</u></b>\n\n"
                 f"ᴄᴇ ꜰɪᴄʜɪᴇʀ/ᴠɪᴅᴇᴏ ꜱᴇʀᴀ ꜱᴜᴘᴘʀɪᴍᴇ ᴅᴀɴꜱ <b><u><code>{get_time(DELETE_TIME)}</code></u> 🫥 <i></b>"
                 "(ᴘᴏᴜʀ ᴅᴇꜱ ʀᴀɪꜱᴏɴꜱ ᴅᴇ ᴅʀᴏɪᴛꜱ ᴅ'ᴀᴜᴛᴇᴜʀ)</i>.\n\n"
                 "<b><i>ᴠᴇᴜɪʟʟᴇᴢ ᴛʀᴀɴꜱꜰᴇʀᴇʀ ᴄᴇ ꜰɪᴄʜɪᴇʀ ᴀɪʟʟᴇᴜʀꜱ ᴇᴛ ᴛᴇʟᴇᴄʜᴀʀɢᴇᴢ-ʟᴇ ʟᴀ-ʙᴀꜱ</i></b>",
@@ -595,11 +609,11 @@ async def start(client, message):
             )
             await asyncio.sleep(DELETE_TIME)
             await msg.delete()
-            await k.edit_text("<b>ʏᴏᴜʀ ᴠɪᴅᴇᴏ / ꜰɪʟᴇ ɪꜱ ꜱᴜᴄᴄᴇꜱꜱꜰᴜʟʟʏ ᴅᴇʟᴇᴛᴇᴅ !!</b>")
+            await k.edit_text("<b>ᴠᴏᴛʀᴇ ꜰɪᴄʜɪᴇʀ / ᴠɪᴅᴇᴏ ᴀ ᴇᴛᴇ ꜱᴜᴘᴘʀɪᴍᴇ !</b>")
             return
         except:
             pass
-        return await message.reply('ɴᴏ ꜱᴜᴄʜ ꜰɪʟᴇ ᴇxɪꜱᴛꜱ !')
+        return await message.reply('<b>ᴄᴇ ꜰɪᴄʜɪᴇʀ ɴ\'ᴇxɪꜱᴛᴇ ᴘᴀꜱ !</b>')
     
     files = files_[0]
     title = ' '.join(filter(lambda x: not x.startswith('[') and not x.startswith('@') and not x.startswith('www.'), files.file_name.split()))
@@ -619,18 +633,25 @@ async def start(client, message):
     if await db.has_premium_access(message.from_user.id):
         pass
     else:
-        if not await check_verification(client, message.from_user.id) and VERIFY == True:
+        if not await db.has_premium_access(message.from_user.id):
+            from info import MINI_APP_URL
             btn = [[
-              InlineKeyboardButton("ᴄʟɪǫᴜᴇᴢ ɪᴄɪ ᴘᴏᴜʀ ᴠᴇʀɪꜰɪᴇʀ", url=await get_token(client, message.from_user.id, f"https://telegram.me/{temp.U_NAME}?start=", file_id))
-           ],[
-              InlineKeyboardButton("ᴄᴏᴍᴍᴇɴᴛ ᴠᴇʀɪꜰɪᴇʀ", url=HOW_TO_VERIFY)
-           ]]
+                InlineKeyboardButton("📺 ꜱᴇꜱꜱɪᴏɴ ɢʀᴀᴛᴜɪᴛᴇ — 2 ᴘᴜʙꜱ ᴘᴏᴜʀ 1ʜ ᴅ'ᴀᴄᴄᴇꜱ", web_app={"url": f"{MINI_APP_URL}?tab=access"})
+            ],[
+                InlineKeyboardButton("💎 ꜱᴏᴜꜱᴄʀɪʀᴇ ᴀᴜ ᴘʀᴇᴍɪᴜᴍ", web_app={"url": f"{MINI_APP_URL}?tab=premium"})
+            ]]
             l = await message.reply_text(
-                text=f"<blockquote><b>ꜱᴀʟᴜᴛ,\n\n ‼️ ᴠᴏᴜꜱ ɴ'ᴇᴛᴇꜱ ᴘᴀꜱ ᴠᴇʀɪꜰɪᴇ ᴀᴜᴊᴏᴜʀᴅ'ʜᴜɪ ‼️\n\n ›› ᴠᴇᴜɪʟʟᴇᴢ ᴠᴇʀɪꜰɪᴇʀ ᴇᴛ ᴏʙᴛᴇɴɪʀ ᴜɴ ᴀᴄᴄᴇꜱ ɪʟʟɪᴍɪᴛᴇ ᴘᴏᴜʀ {VERIFY_EXPIRE} ʜᴇᴜʀᴇꜱ ✅\n\n ›› ᴘᴏᴜʀ ᴜɴ ᴀᴄᴄᴇꜱ ᴅɪʀᴇᴄᴛ ᴀᴜx ꜰɪᴄʜɪᴇʀꜱ, ꜱᴏᴜꜱᴄʀɪᴠᴇᴢ ᴀᴜ ᴘʀᴇᴍɪᴜᴍ.</blockquote></b>",
+                text=(
+                    "<blockquote><b>⚠️ ᴀᴄᴄᴇꜱ ʀᴇǫᴜɪꜱ</b></blockquote>\n\n"
+                    "ᴠᴏᴜꜱ ꜱᴏᴜʜᴀɪᴛᴇᴢ ʀᴇᴄᴜᴘᴇʀᴇʀ ᴜɴ ꜰɪᴄʜɪᴇʀ, ᴍᴀɪꜱ ᴠᴏᴜꜱ ɴ'ᴀᴠᴇᴢ ᴘᴀꜱ ᴅᴇ ꜱᴇꜱꜱɪᴏɴ ᴀᴄᴛɪᴠᴇ.\n\n"
+                    "ᴄʜᴏɪꜱɪꜱꜱᴇᴢ ᴜɴᴇ ᴏᴘᴛɪᴏɴ :\n\n"
+                    "📺 <b>ꜱᴇꜱꜱɪᴏɴ ɢʀᴀᴛᴜɪᴛᴇ</b> — ʀᴇɢᴀʀᴅᴇᴢ ᴅᴇᴜx ᴘᴜʙʟɪᴄɪᴛᴇꜱ ᴇᴛ ᴏʙᴛᴇɴᴇᴢ <b>1ʜ ᴅ'ᴀᴄᴄᴇꜱ</b> ᴀ ᴛᴏᴜꜱ ʟᴇꜱ ꜰɪᴄʜɪᴇʀꜱ.\n\n"
+                    "💎 <b>ᴘʀᴇᴍɪᴜᴍ</b> — ᴀᴄᴄᴇꜱ ɪʟʟɪᴍɪᴛᴇ ꜱᴀɴꜱ ᴘᴜʙʟɪᴄɪᴛᴇ, ᴅᴇ 7 ᴊᴏᴜʀꜱ ᴀ 1 ᴀɴ."
+                ),
                 protect_content=False,
                 reply_markup=InlineKeyboardMarkup(btn)
             )
-            await asyncio.sleep(180)
+            await asyncio.sleep(300)
             await l.delete()
             return
     if STREAM_MODE:
@@ -650,10 +671,10 @@ async def start(client, message):
         reply_markup=InlineKeyboardMarkup(btn)
     )
     btn = [[
-            InlineKeyboardButton("❗ ɢᴇᴛ ꜰɪʟᴇ ᴀɢᴀɪɴ ❗", callback_data=f'delfile#{file_id}')
+            InlineKeyboardButton("❗ ʀᴇᴏʙᴛᴇɴɪʀ ʟᴇ ꜰɪᴄʜɪᴇʀ ❗", callback_data=f'delfile#{file_id}')
         ]]
     k = await msg.reply(
-        f"<b><u>❗️❗️❗️IMPORTANT❗️️❗️❗️</u></b>\n\n"
+        f"<b><u>⚠️ ɪɴꜰᴏʀᴍᴀᴛɪᴏɴ ɪᴍᴘᴏʀᴛᴀɴᴛᴇ ⚠️</u></b>\n\n"
         f"ᴄᴇ ꜰɪᴄʜɪᴇʀ/ᴠɪᴅᴇᴏ ꜱᴇʀᴀ ꜱᴜᴘᴘʀɪᴍᴇ ᴅᴀɴꜱ <b><u><code>{get_time(DELETE_TIME)}</code></u> 🫥 <i></b>"
         "(ᴘᴏᴜʀ ᴅᴇꜱ ʀᴀɪꜱᴏɴꜱ ᴅᴇ ᴅʀᴏɪᴛꜱ ᴅ'ᴀᴜᴛᴇᴜʀ)</i>.\n\n"
         "<b><i>ᴠᴇᴜɪʟʟᴇᴢ ᴛʀᴀɴꜱꜰᴇʀᴇʀ ᴄᴇ ꜰɪᴄʜɪᴇʀ ᴀɪʟʟᴇᴜʀꜱ ᴇᴛ ᴛᴇʟᴇᴄʜᴀʀɢᴇᴢ-ʟᴇ ʟᴀ-ʙᴀꜱ</i></b>",
@@ -661,7 +682,7 @@ async def start(client, message):
     )     
     await asyncio.sleep(DELETE_TIME)
     await msg.delete()
-    await k.edit_text("<b>ʏᴏᴜʀ ᴠɪᴅᴇᴏ / ꜰɪʟᴇ ɪꜱ ꜱᴜᴄᴄᴇꜱꜱꜰᴜʟʟʏ ᴅᴇʟᴇᴛᴇᴅ !!</b>")
+    await k.edit_text("<b>ᴠᴏᴛʀᴇ ꜰɪᴄʜɪᴇʀ / ᴠɪᴅᴇᴏ ᴀ ᴇᴛᴇ ꜱᴜᴘᴘʀɪᴍᴇ !</b>")
     return
 
 
@@ -674,9 +695,9 @@ async def channel_info(bot, message):
     elif isinstance(CHANNELS, list):
         channels = CHANNELS
     else:
-        raise ValueError("ᴜɴᴇxᴘᴇᴄᴛᴇᴅ ᴛʏᴘᴇ ᴏꜰ ᴄʜᴀɴɴᴇʟꜱ.")
+        raise ValueError("ᴛʏᴘᴇ ᴅᴇ ᴄᴀɴᴀʟ ɪɴᴄᴏɴɴᴜ.")
 
-    text = '📑 **ɪɴᴅᴇxᴇᴅ ᴄʜᴀɴɴᴇʟꜱ / ɢʀᴏᴜᴘꜱ ʟɪꜱᴛ :**\n'
+    text = '📑 **ꜱᴇʀᴠᴇᴜʀꜱ ᴇᴛ ɢʀᴏᴜᴘᴇꜱ ɪɴᴅᴇxᴇꜱ :**\n'
     for channel in channels:
         chat = await bot.get_chat(channel)
         if chat.username:
@@ -1060,7 +1081,7 @@ async def requests(bot, message):
             if len(content) < 3:
                 success = False
         except Exception as e:
-            await message.reply_text(f"Error: {e}")
+            await message.reply_text(f"<b>ᴇʀʀᴇᴜʀ : {e}</b>")
             pass
         
     elif SUPPORT_CHAT_ID == message.chat.id:
@@ -1095,7 +1116,7 @@ async def requests(bot, message):
             if len(content) < 3:
                 success = False
         except Exception as e:
-            await message.reply_text(f"Error: {e}")
+            await message.reply_text(f"<b>ᴇʀʀᴇᴜʀ : {e}</b>")
             pass
      
     elif SUPPORT_CHAT_ID == message.chat.id:
@@ -1130,7 +1151,7 @@ async def requests(bot, message):
             if len(content) < 3:
                 success = False
         except Exception as e:
-            await message.reply_text(f"Error: {e}")
+            await message.reply_text(f"<b>ᴇʀʀᴇᴜʀ : {e}</b>")
             pass
 
     else:
@@ -1173,7 +1194,7 @@ async def send_msg(bot, message):
             else:
                 await message.reply_text("<b>ᴄᴇᴛ ᴜᴛɪʟɪꜱᴀᴛᴇᴜʀ ɴ'ᴀ ᴘᴀꜱ ᴇɴᴄᴏʀᴇ ᴅᴇᴍᴀʀʀᴇ ᴄᴇ ʙᴏᴛ !</b>")
         except Exception as e:
-            await message.reply_text(f"<b>Error: {e}</b>")
+            await message.reply_text(f"<b>ᴇʀʀᴇᴜʀ : {e}</b>")
     else:
         await message.reply_text("<b>ᴜꜱᴇ ᴛʜɪꜱ ᴄᴏᴍᴍᴀɴᴅ ᴀꜱ ᴀ ʀᴇᴘʟʏ ᴛᴏ ᴀɴʏ ᴍᴇꜱꜱᴀɢᴇ ᴜꜱɪɴɢ ᴛʜᴇ ᴛᴀʀɢᴇᴛ ᴄʜᴀᴛ ɪᴅ. ꜰᴏʀ ᴇɢ:  /send ᴜꜱᴇʀɪᴅ</b>")
 

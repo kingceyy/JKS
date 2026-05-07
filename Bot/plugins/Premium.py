@@ -103,26 +103,26 @@ async def premium_command(client: Client, message: Message):
             "<b>Vous n'avez pas de session active.</b>\n\n"
         )
 
-    plans_text = "<b>Plans disponibles :</b>\n\n"
+    plans_text = "<b>ᴘʟᴀɴꜱ ᴅɪꜱᴘᴏɴɪʙʟᴇꜱ :</b>\n\n"
     for plan in PLAN_ORDER:
         label = PLAN_LABELS[plan]
         prices = PLAN_PRICES[plan]
         plans_text += (
             f"<b>{label}</b>\n"
-            f"   {prices['fcfa']} FCFA  |  {prices['cdf']} CDF  |  {prices['usd']} $\n\n"
+            f"   {prices['fcfa']} ꜰᴄꜰᴀ  |  {prices['cdf']} ᴄᴅꜰ  |  {prices['usd']} $  |  ⭐ {prices['stars']} Stars\n\n"
         )
 
     footer = (
-        "Ouvrez la Mini App pour acheter un plan via <b>TON Connect</b>\n"
-        "ou regardez une pub pour obtenir <b>1 heure d'accès gratuit</b>.\n\n"
-        "Pour payer par Mobile Money, contactez le support directement."
+        "ᴏᴜᴠʀᴇᴢ ʟᴀ ᴍɪɴɪ ᴀᴘᴘ ᴘᴏᴜʀ ᴀᴄʜᴇᴛᴇʀ ᴜɴ ᴘʟᴀɴ ᴠɪᴀ <b>ᴛᴏɴ ᴄᴏɴɴᴇᴄᴛ</b>\n"
+        "ᴏᴜ ʀᴇɢᴀʀᴅᴇᴢ ᴜɴᴇ ᴘᴜʙ ᴘᴏᴜʀ ᴏʙᴛᴇɴɪʀ <b>1 ʜᴇᴜʀᴇ ᴅ'ᴀᴄᴄᴇꜱ ɢʀᴀᴛᴜɪᴛ</b>.\n\n"
+        "ᴘᴏᴜʀ ᴘᴀʏᴇʀ ᴇɴ <b>ᴛᴇʟᴇɢʀᴀᴍ Stars ⭐</b>, ᴇɴ <b>ᴍᴏʙɪʟᴇ ᴍᴏɴᴇʏ</b> ᴏᴜ ᴇɴ <b>ᴜꜱᴅᴛ</b>, ᴄᴏɴᴛᴀᴄᴛᴇᴢ ʟᴇ ꜱᴜᴘᴘᴏʀᴛ."
     )
 
     await message.reply_text(
         header + plans_text + footer,
         reply_markup=InlineKeyboardMarkup([[
             InlineKeyboardButton(
-                "Ouvrir JKS Mini App",
+                "ᴏᴜᴠʀɪʀ ᴊᴇꜱꜱɪᴋᴀ ꜱᴇᴀʀᴄʜ",
                 web_app={"url": MINI_APP_URL}
             )
         ]]),
@@ -267,7 +267,7 @@ def _build_admin_buttons(target_id: int) -> list:
         ])
     buttons.append([
         InlineKeyboardButton(
-            "Retirer le premium",
+            "ʀᴇᴛɪʀᴇʀ ʟᴇ ᴘʀᴇᴍɪᴜᴍ",
             callback_data=f"jksprem_revoke_{target_id}"
         )
     ])

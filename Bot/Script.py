@@ -274,7 +274,7 @@ class script(object):
 
 ᴍᴇꜱꜱᴀɢᴇ : <b>{}</b>"""
     
-    CAPTION = """<b>{file_name}</b>\n\n<b><blockquote>ᴠᴇᴜɪʟʟᴇᴢ ᴛʀᴀɴꜱꜰᴇʀᴇʀ ᴄᴇ ꜰɪᴄʜɪᴇʀ ᴅᴀɴꜱ ʟᴇꜱ ᴍᴇꜱꜱᴀɢᴇꜱ ᴇɴʀᴇɢɪꜱᴛʀᴇꜱ ᴇᴛ ꜰᴇʀᴍᴇᴢ ᴄᴇ ᴍᴇꜱꜱᴀɢᴇ</blockquote></b>"""
+    CAPTION = """<b>[@JessiKaSearch] {file_name}</b>\n\n<b><blockquote>ᴠᴇᴜɪʟʟᴇᴢ ᴛʀᴀɴꜱꜰᴇʀᴇʀ ᴄᴇ ꜰɪᴄʜɪᴇʀ ᴅᴀɴꜱ ʟᴇꜱ ᴍᴇꜱꜱᴀɢᴇꜱ ᴇɴʀᴇɢɪꜱᴛʀᴇꜱ ᴇᴛ ꜰᴇʀᴍᴇᴢ ᴄᴇ ᴍᴇꜱꜱᴀɢᴇ</blockquote></b>"""
 
     IMDB_TEMPLATE_TXT = """
 <b>‣ ᴛɪᴛʀᴇ : <a href={url}>{title}</a>

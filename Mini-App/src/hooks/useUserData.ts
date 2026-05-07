@@ -116,17 +116,19 @@ export function useUserData() {
    * NE ferme PAS la Mini-App.
    */
   const activateSession = useCallback(async () => {
-    // Mise à jour optimiste immédiate pour l'UI
+    // 1. Mise à jour optimiste IMMÉDIATE — l'UI bascule sur "session active" instantanément
     const expiry = new Date(Date.now() + 3_600_000).toISOString();
     setData((d) => (d ? { ...d, sessionExpiry: expiry } : d));
 
-    // Appel API bot en arrière-plan
+    // 2. Appel API bot en arrière-plan pour persister en base
     try {
       await activateSessionOnBot();
+      // ✅ Succès — NE PAS appeler load() ici : ça écraserait l'optimistic update
+      // si le bot répond avec sessionExpiry null (délai réseau, etc.)
     } catch (e) {
       console.error("[activateSession] failed to notify bot:", e);
-      // On recharge pour synchroniser l'état réel
-      load();
+      // En cas d'erreur réseau, on recharge après 5s pour synchroniser
+      setTimeout(() => load(), 5000);
     }
   }, [load]);
 
