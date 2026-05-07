@@ -105,15 +105,21 @@ function TonPaymentSheet({
     hapticFeedback("impact", "medium");
 
     try {
-      // ⚠️ Le payload TON doit être une cellule BOC encodée en base64.
-      // On encode un commentaire texte simple au format TL-B (op=0 + texte UTF-8)
-      // C'est le seul format que tous les wallets TON acceptent sans erreur.
+      // ⚠️ Encodage du commentaire au format TL-B TON (op=0 + texte UTF-8).
+      // On utilise une approche compatible avec tous les wallets TON.
+      // btoa(String.fromCharCode(...array)) plante sur les grands arrays,
+      // on utilise donc une boucle sûre.
       const comment = `JKS:${plan.key}:${plan.days}j`;
       const commentBytes = new TextEncoder().encode(comment);
       // Préfixe op=0 (4 octets) requis par TON pour un simple commentaire
       const cell = new Uint8Array(4 + commentBytes.length);
       cell.set(commentBytes, 4);
-      const payloadB64 = btoa(String.fromCharCode(...cell));
+      // Encodage base64 sûr sans dépasser la limite de stack
+      let binary = "";
+      for (let i = 0; i < cell.length; i++) {
+        binary += String.fromCharCode(cell[i]);
+      }
+      const payloadB64 = btoa(binary);
 
       const result = await tonConnectUI.sendTransaction({
         validUntil: Math.floor(Date.now() / 1000) + 600,

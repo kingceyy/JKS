@@ -279,3 +279,164 @@ async def api_user_me_options(request: web.Request):
             "Access-Control-Allow-Headers": "Content-Type, X-Telegram-Init-Data",
         }
     )
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+#  POST /api/session/activate  — accordé après pub vue dans la Mini App
+# ─────────────────────────────────────────────────────────────────────────────
+
+from database.jks_db import grant_free_session
+
+CORS_HEADERS = {
+    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Methods": "POST, OPTIONS",
+    "Access-Control-Allow-Headers": "Content-Type, X-Telegram-Init-Data",
+}
+
+
+@routes.options("/api/session/activate")
+async def api_session_activate_options(request: web.Request):
+    return web.Response(headers=CORS_HEADERS)
+
+
+@routes.post("/api/session/activate")
+async def api_session_activate(request: web.Request):
+    """
+    Appelé par la Mini App après que l'utilisateur a regardé les 2 pubs.
+    Accorde une session gratuite de 1 heure et la persiste en base.
+    """
+    from info import BOT_TOKEN
+
+    init_data = request.headers.get("X-Telegram-Init-Data", "")
+    user = _validate_telegram_init_data(init_data, BOT_TOKEN)
+
+    if not user:
+        return web.json_response(
+            {"error": "Unauthorized: invalid or expired initData"},
+            status=401,
+            headers=CORS_HEADERS,
+        )
+
+    user_id = int(user.get("id", 0))
+    if not user_id:
+        return web.json_response({"error": "Invalid user id"}, status=400, headers=CORS_HEADERS)
+
+    try:
+        expiry = await grant_free_session(user_id)
+        return web.json_response(
+            {
+                "ok": True,
+                "sessionExpiry": expiry.isoformat(),
+            },
+            headers=CORS_HEADERS,
+        )
+    except Exception as e:
+        logging.exception(f"[API /api/session/activate] Error for user {user_id}: {e}")
+        return web.json_response({"error": "Internal server error"}, status=500, headers=CORS_HEADERS)
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+#  POST /api/notify  — notifications générales depuis la Mini App (paiement TON etc.)
+# ─────────────────────────────────────────────────────────────────────────────
+
+from database.jks_db import grant_premium_plan, PLAN_LABELS as JKS_PLAN_LABELS
+
+NOTIFY_CORS = {
+    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Methods": "POST, OPTIONS",
+    "Access-Control-Allow-Headers": "Content-Type, X-Telegram-Init-Data",
+}
+
+VALID_PLANS = {"bronze", "argent", "or", "platine", "diamant", "adamantide"}
+
+
+@routes.options("/api/notify")
+async def api_notify_options(request: web.Request):
+    return web.Response(headers=NOTIFY_CORS)
+
+
+@routes.post("/api/notify")
+async def api_notify(request: web.Request):
+    """
+    Reçoit les notifications de la Mini App sans fermer la webapp.
+    Action supportée : ton_payment — active le plan premium après paiement TON.
+    """
+    from info import BOT_TOKEN, LOG_CHANNEL
+    from LucyBot.Bot import Codeflix
+
+    init_data = request.headers.get("X-Telegram-Init-Data", "")
+    user = _validate_telegram_init_data(init_data, BOT_TOKEN)
+
+    if not user:
+        return web.json_response(
+            {"error": "Unauthorized"},
+            status=401,
+            headers=NOTIFY_CORS,
+        )
+
+    user_id = int(user.get("id", 0))
+    user_first_name = user.get("first_name", str(user_id))
+
+    try:
+        payload = await request.json()
+    except Exception:
+        return web.json_response({"error": "Invalid JSON"}, status=400, headers=NOTIFY_CORS)
+
+    action = payload.get("action")
+
+    # ── Paiement TON ──────────────────────────────────────────────────────────
+    if action == "ton_payment":
+        plan_key = payload.get("plan")
+        days = payload.get("days")
+        tx_boc = payload.get("tx_boc", "N/A")
+        amount_ton = payload.get("amount_ton", "?")
+
+        if plan_key not in VALID_PLANS:
+            return web.json_response({"error": f"Unknown plan: {plan_key}"}, status=400, headers=NOTIFY_CORS)
+
+        try:
+            # TODO production : vérification on-chain via TonCenter avant d'activer
+            expiry = await grant_premium_plan(user_id, plan_key)
+            plan_label = JKS_PLAN_LABELS.get(plan_key, plan_key)
+
+            try:
+                await Codeflix.send_message(
+                    chat_id=LOG_CHANNEL,
+                    text=(
+                        "<b>#PAIEMENT_TON</b>\n\n"
+                        f"Utilisateur : <a href='tg://user?id={user_id}'>{user_first_name}</a>\n"
+                        f"ID : <code>{user_id}</code>\n"
+                        f"Plan : <b>{plan_label}</b> ({days} jours)\n"
+                        f"Montant : <code>{amount_ton} TON</code>\n"
+                        f"TX BOC : <code>{str(tx_boc)[:60]}…</code>\n"
+                        f"Expiration : <code>{expiry.strftime('%d %b %Y à %H:%M UTC')}</code>"
+                    ),
+                    parse_mode="html",
+                )
+            except Exception:
+                pass
+
+            try:
+                await Codeflix.send_message(
+                    chat_id=user_id,
+                    text=(
+                        f"<b>✅ Plan {plan_label} activé !</b>\n\n"
+                        f"Durée : <b>{days} jours</b>\n"
+                        f"Expiration : <code>{expiry.strftime('%d %b %Y à %H:%M UTC')}</code>\n\n"
+                        "Vous bénéficiez maintenant d'un accès illimité sans publicité. 🎉"
+                    ),
+                    parse_mode="html",
+                )
+            except Exception:
+                pass
+
+            return web.json_response(
+                {"ok": True, "premiumExpiry": expiry.isoformat()},
+                headers=NOTIFY_CORS,
+            )
+        except Exception as e:
+            logging.exception(f"[API /api/notify] ton_payment error for {user_id}: {e}")
+            return web.json_response({"error": "Internal server error"}, status=500, headers=NOTIFY_CORS)
+
+    # Action inconnue — on répond OK pour ne pas bloquer la Mini App
+    return web.json_response({"ok": True, "action": action}, headers=NOTIFY_CORS)

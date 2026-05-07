@@ -50,9 +50,9 @@ async function fetchUserData(): Promise<UserData> {
 
 // ── Activer session côté bot après pub visionnée ──────────────────────────────
 
-async function activateSessionOnBot(): Promise<void> {
+async function activateSessionOnBot(): Promise<string | null> {
   const initData = getTelegramInitData();
-  if (!initData) return;
+  if (!initData) return null;
   const res = await fetch(`${BOT_API_BASE}/api/session/activate`, {
     method: "POST",
     headers: {
@@ -64,6 +64,8 @@ async function activateSessionOnBot(): Promise<void> {
     const err = await res.text().catch(() => "");
     throw new Error(`Session activate error ${res.status}: ${err}`);
   }
+  const data = await res.json();
+  return data.sessionExpiry ?? null;
 }
 
 // ── Notifier le bot (paiements, actions) sans fermer la Mini-App ──────────────
@@ -112,25 +114,28 @@ export function useUserData() {
   }, [load]);
 
   /**
-   * Appelle le bot pour enregistrer la session + mise à jour optimiste locale.
+   * Appelle le bot pour enregistrer la session + mise à jour depuis la réponse serveur.
    * NE ferme PAS la Mini-App.
    */
   const activateSession = useCallback(async () => {
     // 1. Mise à jour optimiste IMMÉDIATE — l'UI bascule sur "session active" instantanément
-    const expiry = new Date(Date.now() + 3_600_000).toISOString();
-    setData((d) => (d ? { ...d, sessionExpiry: expiry } : d));
+    const optimisticExpiry = new Date(Date.now() + 3_600_000).toISOString();
+    setData((d) => (d ? { ...d, sessionExpiry: optimisticExpiry } : d));
 
     // 2. Appel API bot en arrière-plan pour persister en base
     try {
-      await activateSessionOnBot();
-      // ✅ Succès — NE PAS appeler load() ici : ça écraserait l'optimistic update
-      // si le bot répond avec sessionExpiry null (délai réseau, etc.)
+      const expiry = await activateSessionOnBot();
+      // ✅ Si le serveur retourne une expiry, on met à jour avec la valeur réelle
+      if (expiry) {
+        setData((d) => (d ? { ...d, sessionExpiry: expiry } : d));
+      }
+      // ✅ PAS de load() ici — on garde la session active dans l'UI
     } catch (e) {
       console.error("[activateSession] failed to notify bot:", e);
-      // En cas d'erreur réseau, on recharge après 5s pour synchroniser
-      setTimeout(() => load(), 5000);
+      // En cas d'erreur réseau, on garde l'optimistic update sans recharger
+      // pour éviter d'écraser la session affichée à l'utilisateur.
     }
-  }, [load]);
+  }, []);
 
   /** Recharge depuis le bot */
   const refresh = useCallback(() => {
