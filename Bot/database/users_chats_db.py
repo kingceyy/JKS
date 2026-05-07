@@ -205,31 +205,34 @@ class Database:
     async def has_premium_access(self, user_id):
         """
         Vérifie si l'utilisateur a un accès actif.
-        Ordre : session_expiry (pub Mini App) > premium_expiry (plan payant) > expiry_time (ancien système)
+        Lit dans self.col (collection "users") — la même que jks_db —
+        pour voir session_expiry et premium_expiry écrits par grant_free_session().
+        Ordre : session_expiry > premium_expiry > expiry_time (rétrocompat)
         """
-        user_data = await self.get_user(user_id)
-        if not user_data:
-            return False
-
         now = datetime.datetime.utcnow()
 
-        # 1. Session gratuite (pub regardée via Mini App)
-        session_expiry = user_data.get("session_expiry")
-        if isinstance(session_expiry, datetime.datetime) and session_expiry > now:
-            return True
-
-        # 2. Plan premium payant (TON / admin)
-        premium_expiry = user_data.get("premium_expiry")
-        if isinstance(premium_expiry, datetime.datetime) and premium_expiry > now:
-            return True
-
-        # 3. Ancien champ expiry_time (rétrocompatibilité)
-        expiry_time = user_data.get("expiry_time")
-        if isinstance(expiry_time, datetime.datetime):
-            if datetime.datetime.now() <= expiry_time:
+        # Lit dans self.col = collection "users" (même que jks_db.grant_free_session)
+        user_data = await self.col.find_one({"id": int(user_id)})
+        if user_data:
+            # 1. Session gratuite (pub regardée via Mini App)
+            session_expiry = user_data.get("session_expiry")
+            if isinstance(session_expiry, datetime.datetime) and session_expiry > now:
                 return True
-            else:
-                await self.users.update_one({"id": user_id}, {"$set": {"expiry_time": None}})
+
+            # 2. Plan premium payant (TON / admin)
+            premium_expiry = user_data.get("premium_expiry")
+            if isinstance(premium_expiry, datetime.datetime) and premium_expiry > now:
+                return True
+
+        # Fallback : ancienne collection "uersz" avec champ expiry_time
+        old_data = await self.users.find_one({"id": int(user_id)})
+        if old_data:
+            expiry_time = old_data.get("expiry_time")
+            if isinstance(expiry_time, datetime.datetime):
+                if datetime.datetime.now() <= expiry_time:
+                    return True
+                else:
+                    await self.users.update_one({"id": int(user_id)}, {"$set": {"expiry_time": None}})
 
         return False
         
