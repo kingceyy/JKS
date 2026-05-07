@@ -64,21 +64,6 @@ def generate_random_alphanumeric():
     random_chars = ''.join(random.choice(characters) for _ in range(8))
     return random_chars
   
-def get_shortlink_sync(url):
-    try:
-        rget = requests.get(f"https://{STREAM_SITE}/api?api={STREAM_API}&url={url}&alias={generate_random_alphanumeric()}")
-        rjson = rget.json()
-        if rjson["status"] == "success" or rget.status_code == 200:
-            return rjson["shortenedUrl"]
-        else:
-            return url
-    except Exception as e:
-        print(f"Error in get_shortlink_sync: {e}")
-        return url
-
-async def get_shortlink(url):
-    loop = asyncio.get_event_loop()
-    return await loop.run_in_executor(None, get_shortlink_sync, url)
 
 @Client.on_message(filters.group & filters.text & filters.incoming)
 async def give_filter(client, message):
@@ -1135,19 +1120,11 @@ async def cb_handler(client: Client, query: CallbackQuery):
             f_caption = f"{files.file_name}"
 
         try:
-            if paramètres['is_shortlink'] and not pre_user:
-                if clicked == query.from_user.id:
-                    temp.SHORT[clicked] = query.message.chat.id
-                    await query.answer(url=f"https://telegram.me/{temp.U_NAME}?start=short_{file_id}")
-                    return
-                else:
-                    await query.answer(f"Hᴇʏ {query.from_user.first_name},\nTʜɪs Is Nᴏᴛ Yᴏᴜʀ Mᴏᴠɪᴇ Rᴇǫᴜᴇsᴛ.\nRᴇǫᴜᴇsᴛ Yᴏᴜʀ's !", show_alert=True)
+            if clicked == query.from_user.id:
+                await query.answer(url=f"https://telegram.me/{temp.U_NAME}?start={ident}_{file_id}")
+                return
             else:
-                if clicked == query.from_user.id:
-                    await query.answer(url=f"https://telegram.me/{temp.U_NAME}?start={ident}_{file_id}")
-                    return
-                else:
-                    await query.answer(f"Hᴇʏ {query.from_user.first_name},\nTʜɪs Is Nᴏᴛ Yᴏᴜʀ Mᴏᴠɪᴇ Rᴇǫᴜᴇsᴛ.\nRᴇǫᴜᴇsᴛ Yᴏᴜʀ's !", show_alert=True)
+                await query.answer(f"Hᴇʏ {query.from_user.first_name},\nTʜɪs Is Nᴏᴛ Yᴏᴜʀ Mᴏᴠɪᴇ Rᴇǫᴜᴇsᴛ.\nRᴇǫᴜᴇsᴛ Yᴏᴜʀ's !", show_alert=True)
         except UserIsBlocked:
             await query.answer('Uɴʙʟᴏᴄᴋ ᴛʜᴇ ʙᴏᴛ ᴍᴀʜɴ !', show_alert=True)
         except PeerIdInvalid:
@@ -1162,12 +1139,8 @@ async def cb_handler(client: Client, query: CallbackQuery):
         pre_user = access["has_access"]
         paramètres = await get_paramètres(query.message.chat.id)
         try:
-            if paramètres.get('is_shortlink') and not pre_user:
-                await query.answer(url=f"https://telegram.me/{temp.U_NAME}?start=sendfiles1_{key}")
-                return
-            else:
-                await query.answer(url=f"https://telegram.me/{temp.U_NAME}?start=allfiles_{key}")
-                return
+            await query.answer(url=f"https://telegram.me/{temp.U_NAME}?start=allfiles_{key}")
+            return
         except UserIsBlocked:
             await query.answer('Uɴʙʟᴏᴄᴋ ᴛʜᴇ ʙᴏᴛ ᴍᴀʜɴ !', show_alert=True)
         except PeerIdInvalid:
@@ -1346,12 +1319,6 @@ async def cb_handler(client: Client, query: CallbackQuery):
                                          callback_data=f'setgs#max_btn#{paramètres["max_btn"]}#{str(grp_id)}')
                 ],
                 [
-                    InlineKeyboardButton('ꜱʜᴏʀᴛʟɪɴᴋ',
-                                         callback_data=f'setgs#is_shortlink#{paramètres["is_shortlink"]}#{str(grp_id)}'),
-                    InlineKeyboardButton('ᴇɴᴀʙʟᴇ' if paramètres["is_shortlink"] else 'ᴅɪꜱᴀʙʟᴇ',
-                                         callback_data=f'setgs#is_shortlink#{paramètres["is_shortlink"]}#{str(grp_id)}')
-                ],
-                [
                     InlineKeyboardButton('⇋ ᴄʟᴏꜱᴇ ᴘᴀʀᴀᴍᴇᴛʀᴇꜱ ᴍᴇɴᴜ ⇋', 
                                          callback_data='close_data'
                                          )
@@ -1436,12 +1403,6 @@ async def cb_handler(client: Client, query: CallbackQuery):
                                          callback_data=f'setgs#max_btn#{paramètres["max_btn"]}#{str(grp_id)}'),
                     InlineKeyboardButton('10' if paramètres["max_btn"] else f'{MAX_B_TN}',
                                          callback_data=f'setgs#max_btn#{paramètres["max_btn"]}#{str(grp_id)}')
-                ],
-                [
-                    InlineKeyboardButton('ꜱʜᴏʀᴛʟɪɴᴋ',
-                                         callback_data=f'setgs#is_shortlink#{paramètres["is_shortlink"]}#{str(grp_id)}'),
-                    InlineKeyboardButton('ᴇɴᴀʙʟᴇ' if paramètres["is_shortlink"] else 'ᴅɪꜱᴀʙʟᴇ',
-                                         callback_data=f'setgs#is_shortlink#{paramètres["is_shortlink"]}#{str(grp_id)}')
                 ],
                 [
                     InlineKeyboardButton('⇋ ᴄʟᴏꜱᴇ ᴘᴀʀᴀᴍᴇᴛʀᴇꜱ ᴍᴇɴᴜ ⇋', 
@@ -1712,14 +1673,11 @@ async def cb_handler(client: Client, query: CallbackQuery):
                     InlineKeyboardButton(text="🏡", callback_data="start"),
                     InlineKeyboardButton(text="🛡", callback_data="group_info"),
                     InlineKeyboardButton(text="💳", callback_data="about"),
-                    InlineKeyboardButton(text="💸", callback_data="shortlink_info"),
                     InlineKeyboardButton(text="🖥", callback_data="main"),
                 ],[
                     InlineKeyboardButton('JessiKaPay', url=f'https://t.me/JessiKaPay')
                 ],[
                     InlineKeyboardButton('• ᴄᴏᴍᴍᴀɴᴅᴇꜱ •', callback_data='main'),
-                    InlineKeyboardButton('• ɢᴀɢɴᴇʀ •', callback_data='shortlink_info')
-                ],[
                     InlineKeyboardButton('• ᴘʀᴇᴍɪᴜᴍ •', callback_data='premium_info'),
                     InlineKeyboardButton('• ᴀ ᴘʀᴏᴘᴏꜱ •', callback_data='about')
                   ]]
@@ -2612,47 +2570,6 @@ async def cb_handler(client: Client, query: CallbackQuery):
         await query.answer(f'You Have: {referdb.get_refer_points(query.from_user.id)} Refferal points.', show_alert=True)
     
    
-    elif query.data == "shortlink_info":
-            btn = [[
-            InlineKeyboardButton("1 / 3", callback_data="pagesn1"),
-            InlineKeyboardButton("ɴᴇxᴛ ⋟", callback_data="shortlink_info2")
-            ],[
-            InlineKeyboardButton('⇋ ʙᴀᴄᴋ ᴛᴏ ʜᴏᴍᴇ ⇋', callback_data='start')
-            ]]
-            reply_markup = InlineKeyboardMarkup(btn)
-            await query.message.edit_text(
-                text=(script.SHORTLINK_INFO),
-                reply_markup=reply_markup,
-                parse_mode=enums.ParseMode.HTML
-            )   
-    elif query.data == "shortlink_info2":
-            btn = [[
-            InlineKeyboardButton("⋞ ʙᴀᴄᴋ", callback_data="shortlink_info"),
-            InlineKeyboardButton("2 / 3", callback_data="pagesn1"),
-            InlineKeyboardButton("ɴᴇxᴛ ⋟", callback_data="shortlink_info3")
-            ],[
-            InlineKeyboardButton('⇋ ʙᴀᴄᴋ ᴛᴏ ʜᴏᴍᴇ ⇋', callback_data='start')
-            ]]
-            reply_markup = InlineKeyboardMarkup(btn)
-            await query.message.edit_text(
-                text=(script.SHORTLINK_INFO2),
-                reply_markup=reply_markup,
-                parse_mode=enums.ParseMode.HTML
-            )
-    elif query.data == "shortlink_info3":
-            btn = [[
-            InlineKeyboardButton("⋞ ʙᴀᴄᴋ", callback_data="shortlink_info2"),
-            InlineKeyboardButton("3 / 3", callback_data="pagesn1")
-            ],[
-            InlineKeyboardButton('⇋ ʙᴀᴄᴋ ᴛᴏ ʜᴏᴍᴇ ⇋', callback_data='start')
-            ]]
-            reply_markup = InlineKeyboardMarkup(btn)
-            await query.message.edit_text(
-                text=(script.SHORTLINK_INFO3),
-                reply_markup=reply_markup,
-                parse_mode=enums.ParseMode.HTML
-            )   
-    
     elif query.data == "disclaimer":
             btn = [[
                     InlineKeyboardButton("⇋ ʙᴀᴄᴋ ⇋", callback_data="about")
@@ -2670,9 +2587,6 @@ async def cb_handler(client: Client, query: CallbackQuery):
         if str(grp_id) != str(grpid):
             await query.message.edit("Yᴏᴜʀ Aᴄᴛɪᴠᴇ Cᴏɴɴᴇᴄᴛɪᴏɴ Hᴀs Bᴇᴇɴ Cʜᴀɴɢᴇᴅ. Gᴏ Tᴏ /connections ᴀɴᴅ ᴄʜᴀɴɢᴇ ʏᴏᴜʀ ᴀᴄᴛɪᴠᴇ ᴄᴏɴɴᴇᴄᴛɪᴏɴ.")
             return await query.answer(MSG_ALRT)
-
-        if set_type == 'is_shortlink' and query.from_user.id not in ADMINS:
-            return await query.answer(text=f"Salut {query.from_user.first_name}, vous ne pouvez pas modifier les paramètres de shortlink pour votre groupe !\n\nC'est un paramètre réservé aux admins !", show_alert=True)
 
         if status == "True":
             await save_group_paramètres(grpid, set_type, False)
@@ -2733,12 +2647,6 @@ async def cb_handler(client: Client, query: CallbackQuery):
                                          callback_data=f'setgs#max_btn#{paramètres["max_btn"]}#{str(grp_id)}'),
                     InlineKeyboardButton('10' if paramètres["max_btn"] else f'{MAX_B_TN}',
                                          callback_data=f'setgs#max_btn#{paramètres["max_btn"]}#{str(grp_id)}')
-                ],
-                [
-                    InlineKeyboardButton('ꜱʜᴏʀᴛʟɪɴᴋ',
-                                         callback_data=f'setgs#is_shortlink#{paramètres["is_shortlink"]}#{str(grp_id)}'),
-                    InlineKeyboardButton('ᴇɴᴀʙʟᴇ' if paramètres["is_shortlink"] else 'ᴅɪꜱᴀʙʟᴇ',
-                                         callback_data=f'setgs#is_shortlink#{paramètres["is_shortlink"]}#{str(grp_id)}')
                 ],
                 [
                     InlineKeyboardButton('⇋ ᴄʟᴏꜱᴇ ᴘᴀʀᴀᴍᴇᴛʀᴇꜱ ᴍᴇɴᴜ ⇋', 
