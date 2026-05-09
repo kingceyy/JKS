@@ -1104,7 +1104,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
                         )],
                         [InlineKeyboardButton(
                             "Comment faire ?",
-                            url="https://t.me/JessiKaSearch/70"
+                            url="https://t.me/JessiKaSearch/73"
                         )]
                     ]),
                     parse_mode=enums.ParseMode.HTML
