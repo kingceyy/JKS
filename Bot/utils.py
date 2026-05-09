@@ -796,7 +796,7 @@ async def get_cap(paramètres, remaining_seconds, files, query, total_results, s
                 cap += f"<b><a href='https://telegram.me/{temp.U_NAME}?start=files_{file.file_id}'>📁 [{get_size(file.file_size)}] {' '.join(filter(lambda x: not x.startswith('[') and not x.startswith('@') and not x.startswith('www.'), file.file_name.split()))}\n\n</a></b>"
         else:
             # FIX: IMDB poster forcé — indépendant du toggle admin /paramètres
-                imdb = await get_poster(search, file=(files[0]).file_name)
+            imdb = await get_poster(search, file=(files[0]).file_name)
             if imdb:
                 TEMPLATE = script.IMDB_TEMPLATE_TXT
                 cap = TEMPLATE.format(
