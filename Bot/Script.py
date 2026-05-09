@@ -286,7 +286,7 @@ class script(object):
 ‣ ᴅᴜʀᴇᴇ : {runtime} ᴍɪɴᴜᴛᴇꜱ</a>
 
 » ʀᴇꜱᴜʟᴛᴀᴛ ᴀꜰꜰɪᴄʜᴇ ᴇɴ: {remaining_seconds} <i>ꜱᴇᴄᴏɴᴅᴇꜱ</i>
-» ᴅᴇᴍᴀɴᴅᴇ ᴘᴀʀ : {message.from_user.mention}</b>"""
+» ᴅᴇᴍᴀɴᴅᴇ ᴘᴀʀ : {user_mention}</b>"""
     
 
     RESTART_TXT = """

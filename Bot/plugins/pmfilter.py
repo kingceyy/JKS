@@ -337,7 +337,7 @@ async def advantage_spoll_choker(bot, query):
                 
                 # Create the button for contacting admin
                 contact_admin_button = InlineKeyboardMarkup(
-                    [[InlineKeyboardButton("Cʟɪᴄᴋ ʜᴇʀᴇ & ʀᴇǫᴜᴇsᴛ ᴛᴏ ᴀᴅᴍɪɴ", url=OWNER_LNK)]]
+                    [[InlineKeyboardButton("Cliquer ici & demander a l'admin", url=OWNER_LNK)]]
                 )
                 
                 k = await query.message.edit(script.MVE_NT_FND, reply_markup=contact_admin_button)
@@ -1085,25 +1085,38 @@ async def cb_handler(client: Client, query: CallbackQuery):
 
         if not pre_user:
             await query.answer(
-                "Votre session a expiré. Ouvrez la Mini App pour obtenir un accès.",
+                "Votre session a expiré. Ouvrez le bot et la Mini App pour obtenir un accès gratuit\n\nIci: @JessiKaSearchBot",
                 show_alert=True
             )
+            user_mention = query.from_user.mention
+            # Message uniquement dans le groupe
             try:
-                await query.message.reply_text(
-                    "<b>Accès refusé.</b>\n\n"
-                    "Vous n'avez pas de session active pour récupérer des fichiers.\n\n"
-                    "Deux options :\n"
-                    "• Regardez une publicité pour obtenir <b>1 heure d'accès gratuit</b>\n"
-                    "• Souscrivez à un plan premium pour un accès illimité\n\n"
-                    "Tapez /premium pour voir les plans.",
-                    reply_markup=InlineKeyboardMarkup([[
-                        InlineKeyboardButton(
+                grp_msg = await query.message.reply_text(
+                    f"{user_mention}\n\n"
+                    "<b>Vous n'avez pas de session active.</b>\n\n"
+                    "Regardez une publicite pour obtenir <b>1 heure d'acces gratuit</b>, "
+                    "ou souscrivez a un plan premium.\n\n"
+                    "Cliquez sur le bouton ci-dessous, puis suivez le tutoriel si besoin.",
+                    reply_markup=InlineKeyboardMarkup([
+                        [InlineKeyboardButton(
                             "Ouvrir JKS Mini App",
-                            web_app={"url": MINI_APP_URL}
-                        )
-                    ]]),
-                    parse_mode="html"
+                            url=f"https://t.me/{temp.U_NAME}/app"
+                        )],
+                        [InlineKeyboardButton(
+                            "Comment faire ?",
+                            url="https://t.me/JessiKaSearch/70"
+                        )]
+                    ]),
+                    parse_mode=enums.ParseMode.HTML
                 )
+                # Supprimer le message du groupe apres 30 minutes
+                async def _delete_later(msg):
+                    await asyncio.sleep(1800)
+                    try:
+                        await msg.delete()
+                    except Exception:
+                        pass
+                asyncio.create_task(_delete_later(grp_msg))
             except Exception:
                 pass
             return
@@ -1126,7 +1139,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
             else:
                 await query.answer(f"Hᴇʏ {query.from_user.first_name},\nTʜɪs Is Nᴏᴛ Yᴏᴜʀ Mᴏᴠɪᴇ Rᴇǫᴜᴇsᴛ.\nRᴇǫᴜᴇsᴛ Yᴏᴜʀ's !", show_alert=True)
         except UserIsBlocked:
-            await query.answer('Uɴʙʟᴏᴄᴋ ᴛʜᴇ ʙᴏᴛ ᴍᴀʜɴ !', show_alert=True)
+            await query.answer('Veuillez debloquer le bot pour recevoir vos fichiers !', show_alert=True)
         except PeerIdInvalid:
             await query.answer(url=f"https://telegram.me/{temp.U_NAME}?start={ident}_{file_id}")
         except Exception as e:
@@ -1142,7 +1155,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
             await query.answer(url=f"https://telegram.me/{temp.U_NAME}?start=allfiles_{key}")
             return
         except UserIsBlocked:
-            await query.answer('Uɴʙʟᴏᴄᴋ ᴛʜᴇ ʙᴏᴛ ᴍᴀʜɴ !', show_alert=True)
+            await query.answer('Veuillez debloquer le bot pour recevoir vos fichiers !', show_alert=True)
         except PeerIdInvalid:
             await query.answer(url=f"https://telegram.me/{temp.U_NAME}?start=sendfiles3_{key}")
         except Exception as e:
@@ -1248,7 +1261,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
                         await query.message.edit_text(f"<b>ᴘʀᴏᴄᴇꜱꜱᴜꜱ ᴅᴇ ꜱᴜᴘᴘʀᴇꜱꜱɪᴏɴ ᴅᴇꜱ ꜰɪᴄʜɪᴇʀꜱ ᴅᴇ ʟᴀ ʙᴅ ᴅᴇᴍᴀʀʀᴇ. ꜱᴜᴘᴘʀɪᴍᴇ ᴀᴠᴇᴄ ꜱᴜᴄᴄᴇꜱ {str(deleted)} ꜰɪᴄʜɪᴇʀꜱ ᴅᴇ ʟᴀ ʙᴅ ᴘᴏᴜʀ ᴠᴏᴛʀᴇ ʀᴇᴄʜᴇʀᴄʜᴇ {keyword} !\n\nᴠᴇᴜɪʟʟᴇᴢ ᴘᴀᴛɪᴇɴᴛᴇʀ...</b>")
             except Exception as e:
                 logger.exception(e)
-                await query.message.edit_text(f'Error: {e}')
+                await query.message.edit_text(f'Erreur : {e}')
             else:
                 await query.message.edit_text(f"<b>ᴘʀᴏᴄᴇꜱꜱ ᴄᴏᴍᴘʟᴇᴛᴇᴅ ꜰᴏʀ ꜰɪʟᴇ ᴅᴇʟᴇᴛᴀᴛɪᴏɴ !\n\nꜱᴜᴄᴄᴇꜱꜱꜰᴜʟʟʏ ᴅᴇʟᴇᴛᴇᴅ {str(deleted)} ꜰɪᴄʜɪᴇʀꜱ ᴅᴇ ʟᴀ ʙᴅ ᴘᴏᴜʀ ᴠᴏᴛʀᴇ ʀᴇᴄʜᴇʀᴄʜᴇ {keyword}.</b>")
     
@@ -1428,10 +1441,10 @@ async def cb_handler(client: Client, query: CallbackQuery):
              ],[
                 InlineKeyboardButton("ᴀʟʀᴇᴀᴅʏ ᴀᴠᴀɪʟᴀʙʟᴇ", callback_data=f"already_available#{from_user}")
              ],[
-                InlineKeyboardButton("Not Released", callback_data=f"Not_Released#{from_user}"),
-                InlineKeyboardButton("Type Correct Spelling", callback_data=f"Type_Correct_Spelling#{from_user}")
+                InlineKeyboardButton("Pas encore sorti", callback_data=f"Not_Released#{from_user}"),
+                InlineKeyboardButton("Verifier l'orthographe", callback_data=f"Type_Correct_Spelling#{from_user}")
              ],[
-                InlineKeyboardButton("Not Available In The Hindi", callback_data=f"Not_Available_In_The_Hindi#{from_user}")
+                InlineKeyboardButton("Indisponible dans cette langue", callback_data=f"Not_Available_In_The_Hindi#{from_user}")
              ]]
         btn2 = [[
                  InlineKeyboardButton("ᴠᴏɪʀ ʟᴇ ꜱᴛᴀᴛᴜᴛ", url=f"{query.message.link}")
@@ -1516,7 +1529,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
     elif query.data.startswith("Not_Available_In_The_Hindi"):
         ident, from_user = query.data.split("#")
         btn = [[
-                InlineKeyboardButton("⚜️ Not Available In The Hindi ⚜️", callback_data=f"unalert#{from_user}")
+                InlineKeyboardButton("⚜️ Indisponible dans cette langue ⚜️", callback_data=f"unalert#{from_user}")
               ]]
         btn2 = [[
                  InlineKeyboardButton('ʀᴇᴊᴏɪɴᴅʀᴇ ʟᴇ ᴄᴀɴᴀʟ', url=link.invite_link),
@@ -1528,11 +1541,11 @@ async def cb_handler(client: Client, query: CallbackQuery):
             content = query.message.text
             await query.message.edit_text(f"<b><strike>{content}</strike></b>")
             await query.message.edit_reply_markup(reply_markup)
-            await query.answer("Sᴇᴛ ᴛᴏ Not Available In The Hindi  !")
+            await query.answer("Defini sur : Indisponible dans cette langue !")
             try:
-                await client.send_message(chat_id=int(from_user), text=f"<u>{content}</u>\n\n<b>Hᴇʏ {user.mention}, Your request is not available in the Hindi language. Sᴏ ᴏᴜʀ ᴍᴏᴅᴇʀᴀᴛᴏʀs ᴄᴀɴ'ᴛ ᴜᴘʟᴏᴀᴅ ɪᴛ.</b>", reply_markup=InlineKeyboardMarkup(btn2))
+                await client.send_message(chat_id=int(from_user), text=f"<u>{content}</u>\n\n<b>Hᴇʏ {user.mention}, votre demande n'est pas disponible dans cette langue. Nos moderateurs ne peuvent pas la telecharger.</b>", reply_markup=InlineKeyboardMarkup(btn2))
             except UserIsBlocked:
-                await client.send_message(chat_id=int(SUPPORT_CHAT_ID), text=f"<u>{content}</u>\n\n<b>Hᴇʏ {user.mention}, Your request is not available in the Hindi language. Sᴏ ᴏᴜʀ ᴍᴏᴅᴇʀᴀᴛᴏʀs ᴄᴀɴ'ᴛ ᴜᴘʟᴏᴀᴅ ɪᴛ.\n\nɴᴏᴛᴇ : ᴄᴇ ᴍᴇꜱꜱᴀɢᴇ ᴇꜱᴛ ᴇɴᴠᴏʏᴇ ᴅᴀɴꜱ ᴄᴇ ɢʀᴏᴜᴘᴇ ᴄᴀʀ ᴠᴏᴜꜱ ᴀᴠᴇᴢ ʙʟᴏǫᴜᴇ ʟᴇ ʙᴏᴛ. ᴘᴏᴜʀ ʀᴇᴄᴇᴠᴏɪʀ ᴇɴ ᴍᴘ, ᴅᴇʙʟᴏǫᴜᴇᴢ ʟᴇ ʙᴏᴛ.</b>", reply_markup=InlineKeyboardMarkup(btn2))
+                await client.send_message(chat_id=int(SUPPORT_CHAT_ID), text=f"<u>{content}</u>\n\n<b>Hᴇʏ {user.mention}, votre demande n'est pas disponible dans cette langue. Nos moderateurs ne peuvent pas la telecharger.\n\nɴᴏᴛᴇ : ᴄᴇ ᴍᴇꜱꜱᴀɢᴇ ᴇꜱᴛ ᴇɴᴠᴏʏᴇ ᴅᴀɴꜱ ᴄᴇ ɢʀᴏᴜᴘᴇ ᴄᴀʀ ᴠᴏᴜꜱ ᴀᴠᴇᴢ ʙʟᴏǫᴜᴇ ʟᴇ ʙᴏᴛ. ᴘᴏᴜʀ ʀᴇᴄᴇᴠᴏɪʀ ᴇɴ ᴍᴘ, ᴅᴇʙʟᴏǫᴜᴇᴢ ʟᴇ ʙᴏᴛ.</b>", reply_markup=InlineKeyboardMarkup(btn2))
         else:
             await query.answer("ᴠᴏᴜꜱ ɴ'ᴀᴠᴇᴢ ᴘᴀꜱ ʟᴇꜱ ᴅʀᴏɪᴛꜱ ꜱᴜꜰꜰɪꜱᴀɴᴛꜱ ᴘᴏᴜʀ ꜰᴀɪʀᴇ ᴄᴇʟᴀ !", show_alert=True)
 
@@ -1738,7 +1751,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
         await client.edit_message_media(
             query.message.chat.id, 
             query.message.id, 
-            InputMediaPhoto("https://graph.org/file/7519d226226bec1090db7.jpg")
+            InputMediaPhoto("https://i.ibb.co/fYkRGkg5/2cfd9e570c2a.jpg")
         )
         await query.message.edit_text(
             text=script.PURCHASE_TXT.format(query.from_user.mention),
@@ -1785,7 +1798,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
         await client.edit_message_media(
             query.message.chat.id, 
             query.message.id, 
-            InputMediaPhoto("https://graph.org/file/7519d226226bec1090db7.jpg")
+            InputMediaPhoto("https://i.ibb.co/fYkRGkg5/2cfd9e570c2a.jpg")
         )
         await query.message.edit_text(
             text=script.UPI_TXT.format(query.from_user.mention, OWNER_UPI_ID),
@@ -1803,7 +1816,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
         await client.edit_message_media(
             query.message.chat.id, 
             query.message.id, 
-            InputMediaPhoto("https://graph.org/file/7519d226226bec1090db7.jpg")
+            InputMediaPhoto("https://i.ibb.co/fYkRGkg5/2cfd9e570c2a.jpg")
         )
         await query.message.edit_text(
             text=script.QR_TXT.format(query.from_user.mention, QR_CODE),
@@ -1874,7 +1887,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
         await client.edit_message_media(
             query.message.chat.id, 
             query.message.id, 
-            InputMediaPhoto("https://graph.org/file/7519d226226bec1090db7.jpg")
+            InputMediaPhoto("https://i.ibb.co/fYkRGkg5/2cfd9e570c2a.jpg")
         )
         await query.message.edit_text(
             text=script.PLAN_TXT.format(query.from_user.mention),
@@ -2567,7 +2580,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
 
 
     elif query.data == "ref_point":
-        await query.answer(f'You Have: {referdb.get_refer_points(query.from_user.id)} Refferal points.', show_alert=True)
+        await query.answer(f'Vous avez : {referdb.get_refer_points(query.from_user.id)} points de parrainage.', show_alert=True)
     
    
     elif query.data == "disclaimer":
@@ -2785,7 +2798,8 @@ async def auto_filter(client, msg, spoll=False):
         btn.append(
             [InlineKeyboardButton(text="↭ ɴᴏ ᴍᴏʀᴇ ᴘᴀɢᴇꜱ ᴀᴠᴀɪʟᴀʙʟᴇ ↭",callback_data="pages")]
         )
-    imdb = await get_poster(search, file=(files[0]).file_name) if paramètres["imdb"] else None
+    # FIX: IMDB poster forcé — indépendant du toggle admin /paramètres
+    imdb = await get_poster(search, file=(files[0]).file_name)
     cur_time = datetime.now(pytz.timezone('Asia/Kolkata')).time()
     time_difference = timedelta(hours=cur_time.hour, minutes=cur_time.minute, seconds=(cur_time.second+(cur_time.microsecond/1000000))) - timedelta(hours=curr_time.hour, minutes=curr_time.minute, seconds=(curr_time.second+(curr_time.microsecond/1000000)))
     remaining_seconds = "{:.2f}".format(time_difference.total_seconds())
@@ -2820,18 +2834,19 @@ async def auto_filter(client, msg, spoll=False):
             plot=imdb['plot'],
             rating=imdb['rating'],
             url=imdb['url'],
-            **locals()
+            remaining_seconds=remaining_seconds,
+            user_mention=message.from_user.mention,
         )
         temp.IMDB_CAP[message.from_user.id] = cap
         if not paramètres["button"]:
-            cap+="\n\n<b>📚 <u>Your Requested Files</u> 👇\n\n</b>"
+            cap+="\n\n<b>📚 <u>Vos fichiers demandes</u> 👇\n\n</b>"
             for file in files:
                 cap += f"<b>\n<a href='https://telegram.me/{temp.U_NAME}?start=files_{file.file_id}'> 📁 {get_size(file.file_size)} ▷ {' '.join(filter(lambda x: not x.startswith('[') and not x.startswith('@') and not x.startswith('www.'), file.file_name.split()))}\n</a></b>"
     else:
         if paramètres["button"]:
-            cap = f"<b>›› ᴛɪᴛʟᴇ : <code>{search}</code>\n›› ᴛᴏᴛᴀʟ ꜰɪʟᴇꜱ : <code>{total_results}</code>\n›› ʀᴇǫᴜᴇsᴛᴇᴅ ʙʏ : {message.from_user.mention}\n›› ʀᴇsᴜʟᴛ ɪɴ : <code>{remaining_seconds} Sᴇᴄᴏɴᴅs</code>\n\n›› 𝑹𝒆𝒒𝒖𝒆𝒔𝒕𝒆𝒅 𝑭𝒊𝒍𝒆𝒔 👇 \n\n</b>"
+            cap = f"<b>›› ᴛɪᴛʀᴇ : <code>{search}</code>\n›› ꜰɪᴄʜɪᴇʀꜱ : <code>{total_results}</code>\n›› ᴅᴇᴍᴀɴᴅᴇ ᴘᴀʀ : {message.from_user.mention}\n›› ʀᴇꜱᴜʟᴛᴀᴛ ᴇɴ : <code>{remaining_seconds} ꜱᴇᴄᴏɴᴅᴇꜱ</code>\n\n›› ᴠᴏꜱ ꜰɪᴄʜɪᴇʀꜱ 👇 \n\n</b>"
         else:
-            cap = f"<b>›› ᴛɪᴛʟᴇ : <code>{search}</code>\n›› ᴛᴏᴛᴀʟ ꜰɪʟᴇꜱ : <code>{total_results}</code>\n›› ʀᴇǫᴜᴇsᴛᴇᴅ ʙʏ : {message.from_user.mention}\n›› ʀᴇsᴜʟᴛ ɪɴ : <code>{remaining_seconds} Sᴇᴄᴏɴᴅs</code>\n\n›› 𝑹𝒆𝒒𝒖𝒆𝒔𝒕𝒆𝒅 𝑭𝒊𝒍𝒆𝒔 👇 \n\n</b>"
+            cap = f"<b>›› ᴛɪᴛʀᴇ : <code>{search}</code>\n›› ꜰɪᴄʜɪᴇʀꜱ : <code>{total_results}</code>\n›› ᴅᴇᴍᴀɴᴅᴇ ᴘᴀʀ : {message.from_user.mention}\n›› ʀᴇꜱᴜʟᴛᴀᴛ ᴇɴ : <code>{remaining_seconds} ꜱᴇᴄᴏɴᴅᴇꜱ</code>\n\n›› ᴠᴏꜱ ꜰɪᴄʜɪᴇʀꜱ 👇 \n\n</b>"
             
             for file in files:
                 cap += f"<b><a href='https://telegram.me/{temp.U_NAME}?start=files_{file.file_id}'> 📁 {get_size(file.file_size)} ▷ {' '.join(filter(lambda x: not x.startswith('[') and not x.startswith('@') and not x.startswith('www.'), file.file_name.split()))}\n\n</a></b>"

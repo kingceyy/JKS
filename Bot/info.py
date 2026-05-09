@@ -62,7 +62,7 @@ MINI_APP_URL = environ.get('MINI_APP_URL', 'https://t.me/JessiKaSearchBot/app')
 
 #Auto approve 
 CHAT_ID = [int(app_chat_id) if id_pattern.search(app_chat_id) else app_chat_id for app_chat_id in environ.get('CHAT_ID', '').split()]
-TEXT = environ.get("APPROVED_WELCOME_TEXT", "<b>{mention},\n\nᴠᴏᴛʀᴇ ᴅᴇᴍᴀɴᴅᴇ ᴘᴏᴜʀ ʀᴇᴊᴏɪɴᴅʀᴇ {title} ᴀ ᴇ́ᴛᴇ́ ᴀᴄᴄᴇᴘᴛᴇ́ᴇ.\n\‣ ᴘᴏᴡᴇʀᴇᴅ ʙʏ @JessiKaDev</b>")
+TEXT = environ.get("APPROVED_WELCOME_TEXT", "<b>{mention},\n\nᴠᴏᴛʀᴇ ᴅᴇᴍᴀɴᴅᴇ ᴘᴏᴜʀ ʀᴇᴊᴏɪɴᴅʀᴇ {title} ᴀ ᴇ́ᴛᴇ́ ᴀᴄᴄᴇᴘᴛᴇ́ᴇ.\n\n‣ ᴘᴏᴡᴇʀᴇᴅ ʙʏ @JessiKaDev</b>")
 APPROVED = environ.get("APPROVED_WELCOME", "on").lower()
 
 
@@ -78,7 +78,8 @@ COLLECTION_NAME = environ.get('COLLECTION_NAME', 'Lucy_files')
 # Movie Notification & Update Settings
 # ============================
 MOVIE_UPDATE_NOTIFICATION = bool(environ.get('MOVIE_UPDATE_NOTIFICATION', True))
-IMAGE_FETCH = bool(environ.get('IMAGE_FETCH', True))
+# FIX: utilisait bool() qui retourne toujours True même si la valeur est "False"
+IMAGE_FETCH = is_enabled(environ.get('IMAGE_FETCH', "True"), True)
 CAPTION_LANGUAGES = ["fr", "French", "VF", "Vostfr", "Vo", "Français", "Vost", "Jp"]
 
 # ============================
