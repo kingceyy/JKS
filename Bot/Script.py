@@ -282,7 +282,7 @@ class script(object):
 ‣ ɢᴇɴʀᴇꜱ : {genres}
 ‣ ᴀɴɴᴇᴇ : <a href={url}/releaseinfo>{year}</a>
 ‣ ɴᴏᴛᴇ : <a href={url}/ratings>{rating}</a> / 10 (ꜱᴜʀ ʟᴀ ʙᴀꜱᴇ ᴅᴇ {votes} ᴇᴠᴀʟᴜᴀᴛɪᴏɴꜱ)
-‣ ʟᴀɴɢᴜᴇ : <code>{languages}</code></a>
+‣ ʟᴀɴɢᴜᴇ : <code>Français 🇫🇷</code></a>
 ‣ ᴅᴜʀᴇᴇ : {runtime} ᴍɪɴᴜᴛᴇꜱ</a>
 
 » ʀᴇꜱᴜʟᴛᴀᴛ ᴀꜰꜰɪᴄʜᴇ ᴇɴ: {remaining_seconds} <i>ꜱᴇᴄᴏɴᴅᴇꜱ</i>

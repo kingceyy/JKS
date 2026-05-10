@@ -1104,7 +1104,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
                         )],
                         [InlineKeyboardButton(
                             "Comment faire ?",
-                            url="https://t.me/JessiKaSearch/73"
+                            url="https://t.me/JessiKaSearch/70"
                         )]
                     ]),
                     parse_mode=enums.ParseMode.HTML
@@ -2691,6 +2691,7 @@ async def auto_filter(client, msg, spoll=False):
             except Exception:
                 pass
             m=await message.reply_text(f'**🔎 sᴇᴀʀᴄʜɪɴɢ** `{search}`')
+            original_search = search  # Garder la query originale
             find = search.split(" ")
             search = ""
             removes = ["in","upload", "series", "full", "horror", "thriller", "mystery", "print", "file"]
@@ -2699,25 +2700,36 @@ async def auto_filter(client, msg, spoll=False):
                     continue
                 else:
                     search = search + x + " "
-            #search = re.sub(r"\b(pl(i|e)*?(s|z+|ease|se|ese|(e+)s(e)?)|((send|snd|giv(e)?|gib)(\sme)?)|movie(s)?|new|latest|bro|bruh|broh|helo|that|find|dubbed|link|venum|iruka|pannunga|pannungga|anuppunga|anupunga|anuppungga|anupungga|film|undo|kitti|kitty|tharu|kittumo|kittum|movie|any(one)|with\ssubtitle(s)?)", "", search, flags=re.IGNORECASE)
-            #search = re.sub(r"\s+", " ", search).strip()
             search = search.replace("-", " ")
             search = search.replace(":","")
-            files, offset, total_results = await get_search_results(message.chat.id ,search, offset=0, filter=True)
+            search = search.strip()
+            files, offset, total_results = await get_search_results(message.chat.id, search, offset=0, filter=True)
+            # FIX: Si rien trouvé avec la query nettoyée, réessayer avec la query originale
+            if not files and search != original_search:
+                files, offset, total_results = await get_search_results(message.chat.id, original_search, offset=0, filter=True)
+                if files:
+                    search = original_search
             paramètres = await get_paramètres(message.chat.id)
             if not files:
-                #await m.delete()
                 if paramètres["spell_check"]:
-                    ai_sts = await m.edit('ᴘʟᴇᴀꜱᴇ ᴡᴀɪᴛ, ʟᴜᴄʏ ɪꜱ ᴄʜᴇᴄᴋɪɴɢ ʏᴏᴜʀ ꜱᴘᴇʟʟɪɴɢ...')
-                    is_misspelled = await ai_spell_check(chat_id = message.chat.id,wrong_name=search)
+                    ai_sts = await m.edit("🔎 ᴠᴇ́ʀɪꜰɪᴄᴀᴛɪᴏɴ ᴅᴇ ʟ'ᴏʀᴛʜᴏɢʀᴀᴘʜᴇ...")
+                    try:
+                        is_misspelled = await ai_spell_check(chat_id=message.chat.id, wrong_name=search)
+                    except Exception:
+                        is_misspelled = None
                     if is_misspelled:
-                        await ai_sts.edit(f'<b>✅ʟᴜᴄʏ sᴜɢɢᴇsᴛᴇᴅ <code> {is_misspelled}</code> \nsᴏ ɪᴍ sᴇᴀʀᴄʜɪɴɢ ғᴏᴛ <code>{is_misspelled}</code></b>')
+                        await ai_sts.edit(f'<b>✅ ꜱᴜɢɢᴇꜱᴛɪᴏɴ : <code>{is_misspelled}</code>\nʀᴇᴄʜᴇʀᴄʜᴇ ᴇɴ ᴄᴏᴜʀꜱ...</b>')
                         await asyncio.sleep(2)
                         message.text = is_misspelled
                         await ai_sts.delete()
                         return await auto_filter(client, message)
-                    await ai_sts.delete()
+                    try:
+                        await ai_sts.delete()
+                    except Exception:
+                        pass
                     return await advantage_spell_chok(client, message)
+                else:
+                    await m.delete()
         else:
             return
     else:
@@ -2911,22 +2923,38 @@ async def auto_filter(client, msg, spoll=False):
             await message.delete()
 
 async def ai_spell_check(chat_id, wrong_name):
-    async def search_movie(wrong_name):
-        search_results = imdb.search_movie(wrong_name)
-        movie_list = [movie['title'] for movie in search_results]
-        return movie_list
-    movie_list = await search_movie(wrong_name)
+    # FIX: utilise TMDB au lieu de Cinemagoer
+    import aiohttp
+    try:
+        async with aiohttp.ClientSession() as session:
+            async with session.get(
+                "https://api.themoviedb.org/3/search/multi",
+                params={"api_key": "f2bed62b5977bce26540055276d0046c", "query": wrong_name, "language": "fr-FR"},
+                timeout=aiohttp.ClientTimeout(total=8)
+            ) as r:
+                data = await r.json() if r.status == 200 else {}
+    except Exception:
+        return None
+    results = data.get("results", [])
+    if not results:
+        return None
+    movie_list = []
+    for r in results[:10]:
+        title = r.get("title") or r.get("name")
+        if title:
+            movie_list.append(title)
     if not movie_list:
-        return
+        return None
     for _ in range(5):
         closest_match = process.extractOne(wrong_name, movie_list)
-        if not closest_match or closest_match[1] <= 80:
-            return 
+        if not closest_match or closest_match[1] <= 60:
+            return None
         movie = closest_match[0]
         files, offset, total_results = await get_search_results(chat_id=chat_id, query=movie)
         if files:
             return movie
         movie_list.remove(movie)
+    return None
 
 async def advantage_spell_chok(client, message):
     mv_id = message.id
@@ -2963,7 +2991,7 @@ async def advantage_spell_chok(client, message):
         return
     user = message.from_user.id if message.from_user else 0
     buttons = [[
-        InlineKeyboardButton(text=movie.get('title'), callback_data=f"spol#{movie.movieID}#{user}")
+        InlineKeyboardButton(text=movie.get('title') or movie.get('name', 'N/A'), callback_data=f"spol#{movie.get('id')}#{user}")
     ]
         for movie in movies
     ]

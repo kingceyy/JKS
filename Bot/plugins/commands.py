@@ -13,7 +13,7 @@ from Script import script
 from datetime import datetime
 from database.refer import referdb
 from database.config_db import mdb
-from pyrogram import Client, filters, enums
+from pyrogram import Client, filters, enums, enums
 from pyrogram.errors import FloodWait
 from pyrogram.types import *
 from database.ia_filterdb import Media, Media2, get_file_details, unpack_new_file_id, get_bad_files
@@ -23,7 +23,15 @@ from utils import *
 from database.connections_mdb import active_connection
 
 # Set up logging
-logging.basicConfig(level=logging.ERROR)
+LOG_FILE = "telegram_bot.log"
+logging.basicConfig(
+    level=logging.ERROR,
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+    handlers=[
+        logging.FileHandler(LOG_FILE, encoding="utf-8"),
+        logging.StreamHandler()
+    ]
+)
 logger = logging.getLogger(__name__)
 
 TIMEZONE = "Asia/Kolkata"
@@ -634,9 +642,13 @@ async def channel_info(bot, message):
 async def log_file(bot, message):
     """Send log file"""
     try:
-        await message.reply_document('TELEGRAM BOT.LOG')
+        import os
+        if not os.path.exists(LOG_FILE) or os.path.getsize(LOG_FILE) == 0:
+            await message.reply("📭 <b>Aucun log disponible pour le moment.</b>\n\nLe fichier est vide ou n'a pas encore été créé.", parse_mode=enums.ParseMode.HTML)
+            return
+        await message.reply_document(LOG_FILE, caption="📋 <b>Derniers logs du bot</b>", parse_mode=enums.ParseMode.HTML)
     except Exception as e:
-        await message.reply(str(e))
+        await message.reply(f"Erreur lors de l'envoi des logs : {e}")
 
 @Client.on_message(filters.command('delete') & filters.user(ADMINS))
 async def delete(bot, message):
