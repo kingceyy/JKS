@@ -1,6 +1,4 @@
 
-# Clone Code Credit : YT - @Tech_VJ / TG - @VJ_Bots / GitHub - @VJBots
-
 import sys, glob, importlib, logging, logging.config, pytz, asyncio
 from pathlib import Path
 
@@ -19,7 +17,6 @@ from Script import script
 from datetime import date, datetime 
 from aiohttp import web
 from plugins import web_server
-from plugins.clone import restart_bots
 
 from TechVJ.bot import TechVJBot
 from TechVJ.util.keepalive import ping_server
