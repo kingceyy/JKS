@@ -566,3 +566,7 @@ async def get_secondes(time_string):
     else:
         return 0
 
+
+# Alias pour compatibilité avec les imports existants
+async def get_seconds(time_string):
+    return await get_secondes(time_string)

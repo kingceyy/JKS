@@ -68,7 +68,7 @@ async def give_filter(client, message):
         if total_results == 0:
             return
         else:
-            return await message.reply_text(f"<b>HEy {message.from_user.mention}, {str(total_results)} rEsults ArE founD in my DAtABAsE for your ǫuEry {search}. \n\nThis is A support group so thAt you CAn't gEt filEs from hErE...\n\nJoin AnD SEArCh HErE - {GRP_LNK}</b>")
+            return await message.reply_text(f"<b>Bonjour {message.from_user.mention}, {str(total_results)} fichier(s) trouvé(s) pour <code>{search}</code>.\n\nCe groupe est un groupe de support — les fichiers ne peuvent pas être récupérés ici.\n\nRecherchez ici : {GRP_LNK}</b>", parse_mode=enums.ParseMode.HTML)
 
 @Client.on_message(filters.private & filters.text & filters.incoming)
 async def pm_text(bot, message):
@@ -341,7 +341,7 @@ async def filter_yearss_cb_handler(client: Client, query: CallbackQuery):
 
     files, offset, total_results = await get_search_results(chat_id, search, offset=0, filter=True)
     if not files:
-        await query.answer("🚫 𝗡𝗼 𝗙𝗶𝗹𝗲 𝗪𝗲𝗿𝗲 𝗙𝗼𝘂𝗻𝗱 🚫", show_alert=1)
+        await query.answer("🚫 Aucun fichier trouvé.", show_alert=1)
         return
     temp.GETALL[key] = files
     settings = await get_settings(message.chat.id)
@@ -507,7 +507,7 @@ async def filter_episodes_cb_handler(client: Client, query: CallbackQuery):
 
     files, offset, total_results = await get_search_results(chat_id, search, offset=0, filter=True)
     if not files:
-        await query.answer("🚫 𝗡𝗼 𝗙𝗶𝗹𝗲 𝗪𝗲𝗿𝗲 𝗙𝗼𝘂𝗻𝗱 🚫", show_alert=1)
+        await query.answer("🚫 Aucun fichier trouvé.", show_alert=1)
         return
     temp.GETALL[key] = files
     settings = await get_settings(message.chat.id)
@@ -675,7 +675,7 @@ async def filter_languages_cb_handler(client: Client, query: CallbackQuery):
 
     files, offset, total_results = await get_search_results(chat_id, search, offset=0, filter=True)
     if not files:
-        await query.answer("🚫 𝗡𝗼 𝗙𝗶𝗹𝗲 𝗪𝗲𝗿𝗲 𝗙𝗼𝘂𝗻𝗱 🚫", show_alert=1)
+        await query.answer("🚫 Aucun fichier trouvé.", show_alert=1)
         return
     temp.GETALL[key] = files
     settings = await get_settings(message.chat.id)
@@ -872,7 +872,7 @@ async def filter_seasons_cb_handler(client: Client, query: CallbackQuery):
         files.extend(files2)
         
     if not files:
-        await query.answer("🚫 𝗡𝗼 𝗙𝗶𝗹𝗲 𝗪𝗲𝗿𝗲 𝗙𝗼𝘂𝗻𝗱 🚫", show_alert=1)
+        await query.answer("🚫 Aucun fichier trouvé.", show_alert=1)
         return
     temp.GETALL[key] = files
     settings = await get_settings(message.chat.id)
@@ -1010,7 +1010,7 @@ async def filter_qualities_cb_handler(client: Client, query: CallbackQuery):
     files, offset, total_results = await get_search_results(chat_id, search, offset=0, filter=True)
     # files = [file for file in files if re.search(lang, file["file_name"], re.IGNORECASE)]
     if not files:
-        await query.answer("🚫 𝗡𝗼 𝗙𝗶𝗹𝗲 𝗪𝗲𝗿𝗲 𝗙𝗼𝘂𝗻𝗱 🚫", show_alert=1)
+        await query.answer("🚫 Aucun fichier trouvé.", show_alert=1)
         return
     temp.GETALL[key] = files
     settings = await get_settings(message.chat.id)
@@ -1127,12 +1127,12 @@ async def cb_handler(client: Client, query: CallbackQuery):
         return 
     elif query.data == "gfiltersdeleteallconfirm":
         await del_allg(query.message, 'gfilters')
-        await query.answer("Done !")
+        await query.answer("Terminé ✅")
         return
     elif query.data == "gfiltersdeleteallcancel": 
         await query.message.reply_to_message.delete()
         await query.message.delete()
-        await query.answer("Process Cancelled !")
+        await query.answer("Annulé ✕")
         return
     elif query.data == "delallconfirm":
         userid = query.from_user.id
@@ -1146,7 +1146,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
                     chat = await client.get_chat(grpid)
                     title = chat.title
                 except:
-                    await query.message.edit_text("MAkE surE I'm prEsEnt in your group!!", quote=True)
+                    await query.message.edit_text("Assurez-vous que je suis bien présent dans votre groupe !", quote=True)
                     return await query.answer(MSG_ALRT)
             else:
                 await query.message.edit_text(
@@ -1166,7 +1166,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
         if (st.status == enums.ChatMemberStatus.OWNER) or (str(userid) in ADMINS):
             await del_all(query.message, grp_id, title)
         else:
-            await query.answer("You nEED to BE Group OwnEr or An Auth UsEr to Do thAt!", show_alert=True)
+            await query.answer("Vous devez être propriétaire du groupe ou utilisateur autorisé pour effectuer cette action.", show_alert=True)
     elif query.data == "delallcancel":
         userid = query.from_user.id
         chat_type = query.message.chat.type
@@ -1234,7 +1234,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
                 parse_mode=enums.ParseMode.MARKDOWN
             )
         else:
-            await query.message.edit_text('SomE Error oCCurrED!!', parse_mode=enums.ParseMode.MARKDOWN)
+            await query.message.edit_text("<b>Une erreur est survenue.</b>", parse_mode=enums.ParseMode.MARKDOWN)
         return await query.answer(MSG_ALRT)
     elif "disconnect" in query.data:
         await query.answer()
@@ -1255,7 +1255,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
             )
         else:
             await query.message.edit_text(
-                f"SomE Error oCCurrED!!",
+                "<b>Une erreur est survenue.</b>",
                 parse_mode=enums.ParseMode.MARKDOWN
             )
         return await query.answer(MSG_ALRT)
@@ -1273,7 +1273,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
             )
         else:
             await query.message.edit_text(
-                f"SomE Error oCCurrED!!",
+                "<b>Une erreur est survenue.</b>",
                 parse_mode=enums.ParseMode.MARKDOWN
             )
         return await query.answer(MSG_ALRT)
@@ -1678,9 +1678,9 @@ async def cb_handler(client: Client, query: CallbackQuery):
             await query.message.edit_reply_markup(reply_markup)
             await query.answer("SEt to UnAvAilABlE !")
             try:
-                await client.send_message(chat_id=int(from_user), text=f"<b>HEy {user.mention}, Sorry Your rEǫuEst is unAvAilABlE. So our moDErAtors CAn't uploAD it.</b>", reply_markup=InlineKeyboardMarkup(btn2))
+                await client.send_message(chat_id=int(from_user), text=f"<b>Bonjour {user.mention}, votre demande n'est pas disponible. Nos modérateurs ne peuvent pas la télécharger.</b>", reply_markup=InlineKeyboardMarkup(btn2), parse_mode=enums.ParseMode.HTML)
             except UserIsBlocked:
-                await client.send_message(chat_id=int(SUPPORT_CHAT_ID), text=f"<b>HEy {user.mention}, Sorry Your rEǫuEst is unAvAilABlE. So our moDErAtors CAn't uploAD it.\n\nNotE: This mEssAgE is sEnt to this group BECAusE you'vE BloCkED thE Bot. To sEnD this mEssAgE to your PM, Must unBloCk thE Bot.</b>", reply_markup=InlineKeyboardMarkup(btn2))
+                await client.send_message(chat_id=int(SUPPORT_CHAT_ID), text=f"<b>Bonjour {user.mention}, votre demande n'est pas disponible.\n\n<i>Ce message a été envoyé dans le groupe car vous avez bloqué le bot. Débloquez-le pour recevoir ces notifications en privé.</i></b>", reply_markup=InlineKeyboardMarkup(btn2), parse_mode=enums.ParseMode.HTML)
         else:
             await query.answer("You Don't hAvE suffiCiAnt rights to Do this !", show_alert=True)
 
@@ -1703,9 +1703,9 @@ async def cb_handler(client: Client, query: CallbackQuery):
             await query.message.edit_reply_markup(reply_markup)
             await query.answer("SEt to UploADED !")
             try:
-                await client.send_message(chat_id=int(from_user), text=f"<b>HEy {user.mention}, Your rEǫuEst hAs BEEn uploADED By our moDErAtors. KinDly sEArCh in our Group.</b>", reply_markup=InlineKeyboardMarkup(btn2))
+                await client.send_message(chat_id=int(from_user), text=f"<b>Bonjour {user.mention}, votre demande a été ajoutée par nos modérateurs. Lancez une recherche dans le groupe.</b>", reply_markup=InlineKeyboardMarkup(btn2), parse_mode=enums.ParseMode.HTML)
             except UserIsBlocked:
-                await client.send_message(chat_id=int(SUPPORT_CHAT_ID), text=f"<b>HEy {user.mention}, Your rEǫuEst hAs BEEn uploADED By our moDErAtors. KinDly sEArCh in our Group.\n\nNotE: This mEssAgE is sEnt to this group BECAusE you'vE BloCkED thE Bot. To sEnD this mEssAgE to your PM, Must unBloCk thE Bot.</b>", reply_markup=InlineKeyboardMarkup(btn2))
+                await client.send_message(chat_id=int(SUPPORT_CHAT_ID), text=f"<b>Bonjour {user.mention}, votre demande a été ajoutée.\n\n<i>Ce message a été envoyé dans le groupe car vous avez bloqué le bot. Débloquez-le pour recevoir ces notifications en privé.</i></b>", reply_markup=InlineKeyboardMarkup(btn2), parse_mode=enums.ParseMode.HTML)
         else:
             await query.answer("You Don't hAvE suffiCiAnt rigts to Do this !", show_alert=True)
 
@@ -1728,9 +1728,9 @@ async def cb_handler(client: Client, query: CallbackQuery):
             await query.message.edit_reply_markup(reply_markup)
             await query.answer("SEt to AlrEADy AvAilABlE !")
             try:
-                await client.send_message(chat_id=int(from_user), text=f"<b>HEy {user.mention}, Your rEǫuEst is AlrEADy AvAilABlE on our Bot's DAtABAsE. KinDly sEArCh in our Group.</b>", reply_markup=InlineKeyboardMarkup(btn2))
+                await client.send_message(chat_id=int(from_user), text=f"<b>Bonjour {user.mention}, votre demande est déjà disponible dans notre base de données. Lancez une recherche dans le groupe.</b>", reply_markup=InlineKeyboardMarkup(btn2), parse_mode=enums.ParseMode.HTML)
             except UserIsBlocked:
-                await client.send_message(chat_id=int(SUPPORT_CHAT_ID), text=f"<b>HEy {user.mention}, Your rEǫuEst is AlrEADy AvAilABlE on our Bot's DAtABAsE. KinDly sEArCh in our Group.\n\nNotE: This mEssAgE is sEnt to this group BECAusE you'vE BloCkED thE Bot. To sEnD this mEssAgE to your PM, Must unBloCk thE Bot.</b>", reply_markup=InlineKeyboardMarkup(btn2))
+                await client.send_message(chat_id=int(SUPPORT_CHAT_ID), text=f"<b>Bonjour {user.mention}, votre demande est déjà disponible.\n\n<i>Ce message a été envoyé dans le groupe car vous avez bloqué le bot. Débloquez-le pour recevoir ces notifications en privé.</i></b>", reply_markup=InlineKeyboardMarkup(btn2), parse_mode=enums.ParseMode.HTML)
         else:
             await query.answer("You Don't hAvE suffiCiAnt rigts to Do this !", show_alert=True)
 
@@ -1738,7 +1738,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
         ident, from_user = query.data.split("#")
         if int(query.from_user.id) == int(from_user):
             user = await client.get_users(from_user)
-            await query.answer(f"HEy {user.first_name}, Your REǫuEst is AlrEADy AvAilABlE !", show_alert=True)
+            await query.answer(f"Bonjour {user.first_name}, votre demande est déjà disponible !", show_alert=True)
         else:
             await query.answer("You Don't hAvE suffiCiAnt rigts to Do this !", show_alert=True)
 
@@ -1746,7 +1746,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
         ident, from_user = query.data.split("#")
         if int(query.from_user.id) == int(from_user):
             user = await client.get_users(from_user)
-            await query.answer(f"HEy {user.first_name}, Your REǫuEst is UploADED !", show_alert=True)
+            await query.answer(f"Bonjour {user.first_name}, votre demande a été ajoutée !", show_alert=True)
         else:
             await query.answer("You Don't hAvE suffiCiAnt rigts to Do this !", show_alert=True)
         
@@ -1754,7 +1754,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
         ident, from_user = query.data.split("#")
         if int(query.from_user.id) == int(from_user):
             user = await client.get_users(from_user)
-            await query.answer(f"HEy {user.first_name}, Your REǫuEst is UnAvAilABlE !", show_alert=True)
+            await query.answer(f"Bonjour {user.first_name}, votre demande n'est pas disponible.", show_alert=True)
         else:
             await query.answer("You Don't hAvE suffiCiAnt rigts to Do this !", show_alert=True)
 

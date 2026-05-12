@@ -319,7 +319,7 @@ async def start(client, message):
     elif data.startswith("files"):
         user = message.from_user.id
         if temp.SHORT.get(user)==None:
-            await message.reply_text(text="<b>Please Search Again in Group</b>")
+            await message.reply_text(text="<b>Veuillez relancer votre recherche dans le groupe.</b>")
         else:
             chat_id = temp.SHORT.get(user)
         settings = await get_settings(chat_id)
@@ -496,7 +496,7 @@ async def delete_all_index(bot, message):
 async def delete_all_index_confirm(bot, query):
     col.drop()
     sec_col.drop()
-    await query.answer('Piracy Is Crime')
+    await query.answer('Le piratage est un délit.')
     await query.message.edit('Succesfully Deleted All The Indexed Files.')
 
 
@@ -515,10 +515,10 @@ async def settings(client, message):
                 chat = await client.get_chat(grpid)
                 title = chat.title
             except:
-                await message.reply_text("Make sure I'm present in your group!!", quote=True)
+                await message.reply_text("Assurez-vous que je suis bien présent dans votre groupe !", quote=True)
                 return
         else:
-            await message.reply_text("I'm not connected to any groups!", quote=True)
+            await message.reply_text("Je ne suis connecté à aucun groupe !", quote=True)
             return
 
     elif chat_type in [enums.ChatType.GROUP, enums.ChatType.SUPERGROUP]:
@@ -668,10 +668,10 @@ async def save_template(client, message):
                 chat = await client.get_chat(grpid)
                 title = chat.title
             except:
-                await message.reply_text("Make sure I'm present in your group!!", quote=True)
+                await message.reply_text("Assurez-vous que je suis bien présent dans votre groupe !", quote=True)
                 return
         else:
-            await message.reply_text("I'm not connected to any groups!", quote=True)
+            await message.reply_text("Je ne suis connecté à aucun groupe !", quote=True)
             return
 
     elif chat_type in [enums.ChatType.GROUP, enums.ChatType.SUPERGROUP]:
@@ -711,7 +711,7 @@ async def requests(bot, message):
                     InlineKeyboardButton('View Request', url=f"{message.reply_to_message.link}"),
                     InlineKeyboardButton('Show Options', callback_data=f'show_option#{reporter}')
                 ]]
-                reported_post = await bot.send_message(chat_id=REQST_CHANNEL, text=f"<b>𝖱𝖾𝗉𝗈𝗋𝗍𝖾𝗋 : {mention} ({reporter})\n\n𝖬𝖾𝗌𝗌𝖺𝗀𝖾 : {content}</b>", reply_markup=InlineKeyboardMarkup(btn))
+                reported_post = await bot.send_message(chat_id=REQST_CHANNEL, text=f"<b>Demandeur :</b> {mention} (<code>{reporter}</code>)\n\n<b>Message :</b> {content}", reply_markup=InlineKeyboardMarkup(btn))
                 success = True
             elif len(content) >= 3:
                 for admin in ADMINS:
@@ -719,15 +719,15 @@ async def requests(bot, message):
                         InlineKeyboardButton('View Request', url=f"{message.reply_to_message.link}"),
                         InlineKeyboardButton('Show Options', callback_data=f'show_option#{reporter}')
                     ]]
-                    reported_post = await bot.send_message(chat_id=admin, text=f"<b>𝖱𝖾𝗉𝗈𝗋𝗍𝖾𝗋 : {mention} ({reporter})\n\n𝖬𝖾𝗌𝗌𝖺𝗀𝖾 : {content}</b>", reply_markup=InlineKeyboardMarkup(btn))
+                    reported_post = await bot.send_message(chat_id=admin, text=f"<b>Demandeur :</b> {mention} (<code>{reporter}</code>)\n\n<b>Message :</b> {content}", reply_markup=InlineKeyboardMarkup(btn))
                     success = True
             else:
                 if len(content) < 3:
-                    await message.reply_text("<b>You must type about your request [Minimum 3 Characters]. Requests can't be empty.</b>")
+                    await message.reply_text("<b>Votre demande doit contenir au moins 3 caractères et ne peut pas être vide.</b>")
             if len(content) < 3:
                 success = False
         except Exception as e:
-            await message.reply_text(f"Error: {e}")
+            await message.reply_text(f"<b>Erreur :</b> <code>{e}</code>")
             pass
         
     elif message.text:
@@ -746,7 +746,7 @@ async def requests(bot, message):
                     InlineKeyboardButton('View Request', url=f"{message.link}"),
                     InlineKeyboardButton('Show Options', callback_data=f'show_option#{reporter}')
                 ]]
-                reported_post = await bot.send_message(chat_id=REQST_CHANNEL, text=f"<b>𝖱𝖾𝗉𝗈𝗋𝗍𝖾𝗋 : {mention} ({reporter})\n\n𝖬𝖾𝗌𝗌𝖺𝗀𝖾 : {content}</b>", reply_markup=InlineKeyboardMarkup(btn))
+                reported_post = await bot.send_message(chat_id=REQST_CHANNEL, text=f"<b>Demandeur :</b> {mention} (<code>{reporter}</code>)\n\n<b>Message :</b> {content}", reply_markup=InlineKeyboardMarkup(btn))
                 success = True
             elif len(content) >= 3:
                 for admin in ADMINS:
@@ -754,15 +754,15 @@ async def requests(bot, message):
                         InlineKeyboardButton('View Request', url=f"{message.link}"),
                         InlineKeyboardButton('Show Options', callback_data=f'show_option#{reporter}')
                     ]]
-                    reported_post = await bot.send_message(chat_id=admin, text=f"<b>𝖱𝖾𝗉𝗈𝗋𝗍𝖾𝗋 : {mention} ({reporter})\n\n𝖬𝖾𝗌𝗌𝖺𝗀𝖾 : {content}</b>", reply_markup=InlineKeyboardMarkup(btn))
+                    reported_post = await bot.send_message(chat_id=admin, text=f"<b>Demandeur :</b> {mention} (<code>{reporter}</code>)\n\n<b>Message :</b> {content}", reply_markup=InlineKeyboardMarkup(btn))
                     success = True
             else:
                 if len(content) < 3:
-                    await message.reply_text("<b>You must type about your request [Minimum 3 Characters]. Requests can't be empty.</b>")
+                    await message.reply_text("<b>Votre demande doit contenir au moins 3 caractères et ne peut pas être vide.</b>")
             if len(content) < 3:
                 success = False
         except Exception as e:
-            await message.reply_text(f"Error: {e}")
+            await message.reply_text(f"<b>Erreur :</b> <code>{e}</code>")
             pass
 
     if success:
@@ -771,7 +771,7 @@ async def requests(bot, message):
             InlineKeyboardButton('Join Channel', url=link.invite_link),
             InlineKeyboardButton('View Request', url=f"{reported_post.link}")
         ]]
-        await message.reply_text("<b>Your request has been added! Please wait for some time.\n\nJoin Channel First & View Request</b>", reply_markup=InlineKeyboardMarkup(btn))
+        await message.reply_text("<b>Votre demande a été envoyée ! Veuillez patienter.\n\nRejoignez le canal pour suivre les demandes.</b>", reply_markup=InlineKeyboardMarkup(btn))
     
 @Client.on_message(filters.command("send") & filters.user(ADMINS))
 async def send_msg(bot, message):
@@ -791,26 +791,26 @@ async def send_msg(bot, message):
             else:
                 success = False
             if success:
-                await message.reply_text(f"<b>Your message has been successfully send to {user.mention}.</b>")
+                await message.reply_text(f"<b>Votre message a été envoyé avec succès à {user.mention}.</b>")
             else:
-                await message.reply_text("<b>This user didn't started this bot yet !</b>")
+                await message.reply_text("<b>Cet utilisateur n'a pas encore démarré le bot.</b>")
         except Exception as e:
-            await message.reply_text(f"<b>Error: {e}</b>")
+            await message.reply_text(f"<b>Erreur :</b> <code>{e}</code>")
     else:
-        await message.reply_text("<b>Use this command as a reply to any message using the target chat id. For eg: /send userid</b>")
+        await message.reply_text("<b>Utilisez cette commande en réponse à un message avec l'ID cible. Exemple : /send userid</b>")
 
 @Client.on_message(filters.command("deletefiles") & filters.user(ADMINS))
 async def deletemultiplefiles(bot, message):
     chat_type = message.chat.type
     if chat_type != enums.ChatType.PRIVATE:
-        return await message.reply_text(f"<b>Hey {message.from_user.mention}, This command won't work in groups. It only works on my PM !</b>")
+        return await message.reply_text(f"<b>Cette commande ne fonctionne pas dans les groupes. Utilisez-la en message privé.</b>")
     else:
         pass
     try:
         keyword = message.text.split(" ", 1)[1]
     except:
-        return await message.reply_text(f"<b>Hey {message.from_user.mention}, Give me a keyword along with the command to delete files.</b>")
-    k = await bot.send_message(chat_id=message.chat.id, text=f"<b>Fetching Files for your query {keyword} on DB... Please wait...</b>")
+        return await message.reply_text(f"<b>Veuillez fournir un mot-clé avec la commande pour supprimer des fichiers.</b>")
+    k = await bot.send_message(chat_id=message.chat.id, text=f"<b>Recherche des fichiers pour <code>{keyword}</code> en base de données... Veuillez patienter.</b>")
     files, total = await get_bad_files(keyword)
     await k.delete()
     #await k.edit_text(f"<b>Found {total} files for your query {keyword} !\n\nFile deletion process will start in 5 seconds !</b>")
@@ -828,7 +828,7 @@ async def deletemultiplefiles(bot, message):
 
 @Client.on_message(filters.command("restart") & filters.user(ADMINS))
 async def stop_button(bot, message):
-    msg = await bot.send_message(text="**🔄 𝙿𝚁𝙾𝙲𝙴𝚂𝚂𝙴𝚂 𝚂𝚃𝙾𝙿𝙴𝙳. 𝙱𝙾𝚃 𝙸𝚂 𝚁𝙴𝚂𝚃𝙰𝚁𝚃𝙸𝙽𝙶...**", chat_id=message.chat.id)       
+    msg = await bot.send_message(text="<b>🔄 Arrêt en cours... Le bot redémarre.</b>", chat_id=message.chat.id)       
     await asyncio.sleep(3)
     await msg.edit("**✅️ 𝙱𝙾𝚃 𝙸𝚂 𝚁𝙴𝚂𝚃𝙰𝚁𝚃𝙴𝙳. 𝙽𝙾𝚆 𝚈𝙾𝚄 𝙲𝙰𝙽 𝚄𝚂𝙴 𝙼𝙴**")
     os.execl(sys.executable, sys.executable, *sys.argv)
@@ -840,7 +840,7 @@ async def nofsub(client, message):
         return await message.reply(f"<b>Vous etes un administrateur anonyme. Desactivez le mode admin anonyme et reessayez</b>")
     chat_type = message.chat.type
     if chat_type == enums.ChatType.PRIVATE:
-        return await message.reply_text("<b>This Command Work Only in group\n\nTry it in your own group</b>")
+        return await message.reply_text("<b>Cette commande fonctionne uniquement dans un groupe.</b>")
     elif chat_type in [enums.ChatType.GROUP, enums.ChatType.SUPERGROUP]:
         grpid = message.chat.id
         title = message.chat.title
@@ -853,7 +853,7 @@ async def nofsub(client, message):
     else:
         pass
     await save_group_settings(grpid, 'fsub', None)
-    await message.reply_text(f"<b>Successfully removed force subscribe from {title}.</b>")
+    await message.reply_text(f"<b>Abonnement forcé retiré du groupe <code>{title}</code>.</b>")
 
 @Client.on_message(filters.command('fsub'))
 async def fsub(client, message):
@@ -862,7 +862,7 @@ async def fsub(client, message):
         return await message.reply(f"<b>Vous etes un administrateur anonyme. Desactivez le mode admin anonyme et reessayez</b>")
     chat_type = message.chat.type
     if chat_type == enums.ChatType.PRIVATE:
-        return await message.reply_text("<b>This Command Work Only in group\n\nTry it in your own group</b>")
+        return await message.reply_text("<b>Cette commande fonctionne uniquement dans un groupe.</b>")
     elif chat_type in [enums.ChatType.GROUP, enums.ChatType.SUPERGROUP]:
         grpid = message.chat.id
         title = message.chat.title
@@ -878,20 +878,20 @@ async def fsub(client, message):
         ids = message.text.split(" ", 1)[1]
         fsub_ids = [int(id) for id in ids.split()]
     except IndexError:
-        return await message.reply_text("<b>Command Incomplete!\n\nAdd Multiple Channel By Seperate Space. Like: /fsub id1 id2 id3</b>")
+        return await message.reply_text("<b>Commande incomplète.\n\nAjoutez plusieurs canaux séparés par un espace. Exemple : /fsub id1 id2 id3</b>")
     except ValueError:
-        return await message.reply_text('<b>Make Sure Ids are Integer.</b>')        
+        return await message.reply_text('<b>Assurez-vous que les IDs sont des nombres entiers.</b>')        
     channels = "Channels:\n"
     for id in fsub_ids:
         try:
             chat = await client.get_chat(id)
         except Exception as e:
-            return await message.reply_text(f"<b>{id} is invalid!\nMake sure this bot admin in that channel.\n\nError - {e}</b>")
+            return await message.reply_text(f"<b>L'ID <code>{id}</code> est invalide.\nAssurez-vous que le bot est administrateur de ce canal.\n\nErreur : {e}</b>")
         if chat.type != enums.ChatType.CHANNEL:
-            return await message.reply_text(f"<b>{id} is not channel.</b>")
+            return await message.reply_text(f"<b>L'ID <code>{id}</code> ne correspond pas à un canal.</b>")
         channels += f'{chat.title}\n'
     await save_group_settings(grpid, 'fsub', fsub_ids)
-    await message.reply_text(f"<b>Successfully set force channels for {title} to\n\n{channels}\n\nYou can remove it by /nofsub.</b>")
+    await message.reply_text(f"<b>Abonnement forcé configuré pour <code>{title}</code>.\n\nCanaux : {channels}\n\nPour le retirer : /nofsub</b>")
         
 
 @Client.on_message(filters.command("add_premium"))
@@ -910,15 +910,15 @@ async def give_premium_cmd_handler(client, message):
             expiry_time = datetime.datetime.now() + datetime.timedelta(seconds=seconds)
             user_data = {"id": user_id, "expiry_time": expiry_time} 
             await db.update_user(user_data)  # Use the update_user method to update or insert user data
-            await message.reply_text("Premium access added to the user.")            
+            await message.reply_text("<b>Accès premium accordé à l'utilisateur.</b>")            
             await client.send_message(
                 chat_id=user_id,
                 text=f"<b>prEmium ADDED to your ACCount For {time} Enjoy 😀\n</b>",                
             )
         else:
-            await message.reply_text("Invalid time format. Please use '1day for days', '1hour for hours', or '1min for minutes', or '1month for months' or '1year for year'")
+            await message.reply_text("<b>Format de durée invalide. Exemples : <code>10day</code>, <code>2hour</code>, <code>30min</code>, <code>1month</code>, <code>1year</code></b>")
     else:
-        await message.reply_text("<b>Usage: /add_premium user_id time \n\nExample /add_premium 1252789 10day \n\n(e.g. for time units '1day for days', '1hour for hours', or '1min for minutes', or '1month for months' or '1year for year')</b>")
+        await message.reply_text("<b>Utilisation : /add_premium user_id durée\n\nExemple : /add_premium 123456 10day\n\nUnités : day, hour, min, month, year</b>")
         
 @Client.on_message(filters.command("remove_premium"))
 async def remove_premium_cmd_handler(client, message):
@@ -937,15 +937,15 @@ async def remove_premium_cmd_handler(client, message):
             expiry_time = datetime.datetime.now() + datetime.timedelta(seconds=seconds)
             user_data = {"id": user_id, "expiry_time": expiry_time}  # Using "id" instead of "user_id"
             await db.update_user(user_data)  # Use the update_user method to update or insert user data
-            await message.reply_text("Premium access removed to the user.")
+            await message.reply_text("<b>Accès premium retiré à l'utilisateur.</b>")
             await client.send_message(
                 chat_id=user_id,
                 text="<b>premium removed by admins \n\n Contact Admin if this is mistake \n\n 👮 Admin : {} \n</b>".format(OWNER_LNK),                
             )
         else:
-            await message.reply_text("Invalid time format.'")
+            await message.reply_text("<b>Format de durée invalide.</b>")
     else:
-        await message.reply_text("Usage: /remove_premium user_id")
+        await message.reply_text("<b>Utilisation : /remove_premium user_id</b>")
         
 @Client.on_message(filters.command("plan"))
 async def plans_cmd_handler(client, message): 
@@ -970,7 +970,7 @@ async def check_plans_cmd(client, message):
     if await db.has_premium_access(user_id):         
         remaining_time = await db.check_remaining_uasge(user_id)             
         expiry_time = remaining_time + datetime.datetime.now()
-        await message.reply_text(f"**Your plans details are :\n\nRemaining Time : {remaining_time}\n\nExpirytime : {expiry_time}**")
+        await message.reply_text(f"<b>Votre plan premium</b>\n\n<b>Temps restant :</b> <code>{remaining_time}</code>\n<b>Expiration :</b> <code>{expiry_time}</code>")
     else:
         btn = [ 
             [InlineKeyboardButton("gEt frEE trAil for 𝟻 minutEs ☺️", callback_data="get_trail")],
@@ -979,7 +979,7 @@ async def check_plans_cmd(client, message):
         ]
         reply_markup = InlineKeyboardMarkup(btn)
         m=await message.reply_sticker("CAACAgIAAxkBAAIBTGVjQbHuhOiboQsDm35brLGyLQ28AAJ-GgACglXYSXgCrotQHjibHgQ")         
-        await message.reply_text(f"**😢 You Don't Have Any Premium Subscription.\n\n Check Out Our Premium /plan**",reply_markup=reply_markup)
+        await message.reply_text("<b>Vous n'avez pas d'abonnement premium actif.</b>",reply_markup=reply_markup)
         await asyncio.sleep(2)
         await m.delete()
 
