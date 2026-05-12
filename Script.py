@@ -386,3 +386,27 @@ Convertit un fichier PDF en fichier audio.
 Genere une image stylisee a partir de votre texte.
 
 <b>Utilisation :</b> /carbon — Repondez a un texte avec cette commande"""
+
+    # Logs channel
+    # Info shortlink (conservé pour compatibilité avec commands.py)
+    SINFO = """Aucune information disponible."""
+
+    CLONE_TXT = """Le mode clone a été désactivé."""
+
+    ENGLISH_INFO = """Information non disponible."""
+    HINDI_INFO = """Information non disponible."""
+    TAMIL_INFO = """Information non disponible."""
+    TELUGU_INFO = """Information non disponible."""
+    MALAYALAM_INFO = """Information non disponible."""
+    KANNADA_INFO = """Information non disponible."""
+    GUJARATI_INFO = """Information non disponible."""
+    URDU_INFO = """Information non disponible."""
+    BANGLADESH_INFO = """Information non disponible."""
+
+    LOGO = """
+   ╔══════════════════════════════════════╗
+   ║         JessiKa Search Bot           ║
+   ║      Développé par @kingcey          ║
+   ║   Canal : t.me/JessiKaSearch         ║
+   ╚══════════════════════════════════════╝
+"""
