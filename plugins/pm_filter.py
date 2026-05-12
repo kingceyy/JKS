@@ -126,7 +126,7 @@ async def next_page(bot, query):
             ]
         )
         btn.insert(0, [
-            InlineKeyboardButton("𝐒𝐞𝐧𝐝 𝐀𝐥𝐥", callback_data=f"sendfiles#{key}"),
+            InlineKeyboardButton("Tout envoyer 📨", callback_data=f"sendfiles#{key}"),
             InlineKeyboardButton("lAnguAgEs", callback_data=f"languages#{key}"),
             InlineKeyboardButton("yEArs", callback_data=f"years#{key}")
         ])
@@ -140,7 +140,7 @@ async def next_page(bot, query):
             ]
         )
         btn.insert(0, [
-            InlineKeyboardButton("𝐒𝐞𝐧𝐝 𝐀𝐥𝐥", callback_data=f"sendfiles#{key}"),
+            InlineKeyboardButton("Tout envoyer 📨", callback_data=f"sendfiles#{key}"),
             InlineKeyboardButton("lAnguAgEs", callback_data=f"languages#{key}"),
             InlineKeyboardButton("yEArs", callback_data=f"years#{key}")
         ])
@@ -341,7 +341,7 @@ async def filter_yearss_cb_handler(client: Client, query: CallbackQuery):
 
     files, offset, total_results = await get_search_results(chat_id, search, offset=0, filter=True)
     if not files:
-        await query.answer("🚫 Aucun fichier trouvé.", show_alert=1)
+        await query.answer("🚫 𝗡𝗼 𝗙𝗶𝗹𝗲 𝗪𝗲𝗿𝗲 𝗙𝗼𝘂𝗻𝗱 🚫", show_alert=1)
         return
     temp.GETALL[key] = files
     settings = await get_settings(message.chat.id)
@@ -363,7 +363,7 @@ async def filter_yearss_cb_handler(client: Client, query: CallbackQuery):
             ]
         )
         btn.insert(0, [
-            InlineKeyboardButton("𝐒𝐞𝐧𝐝 𝐀𝐥𝐥", callback_data=f"sendfiles#{key}"),
+            InlineKeyboardButton("Tout envoyer 📨", callback_data=f"sendfiles#{key}"),
             InlineKeyboardButton("lAnguAgEs", callback_data=f"languages#{key}"),
             InlineKeyboardButton("yEArs", callback_data=f"years#{key}")
         ])
@@ -377,7 +377,7 @@ async def filter_yearss_cb_handler(client: Client, query: CallbackQuery):
             ]
         )
         btn.insert(0, [
-            InlineKeyboardButton("𝐒𝐞𝐧𝐝 𝐀𝐥𝐥", callback_data=f"sendfiles#{key}"),
+            InlineKeyboardButton("Tout envoyer 📨", callback_data=f"sendfiles#{key}"),
             InlineKeyboardButton("lAnguAgEs", callback_data=f"languages#{key}"),
             InlineKeyboardButton("yEArs", callback_data=f"years#{key}")
         ])
@@ -507,7 +507,7 @@ async def filter_episodes_cb_handler(client: Client, query: CallbackQuery):
 
     files, offset, total_results = await get_search_results(chat_id, search, offset=0, filter=True)
     if not files:
-        await query.answer("🚫 Aucun fichier trouvé.", show_alert=1)
+        await query.answer("🚫 𝗡𝗼 𝗙𝗶𝗹𝗲 𝗪𝗲𝗿𝗲 𝗙𝗼𝘂𝗻𝗱 🚫", show_alert=1)
         return
     temp.GETALL[key] = files
     settings = await get_settings(message.chat.id)
@@ -529,7 +529,7 @@ async def filter_episodes_cb_handler(client: Client, query: CallbackQuery):
             ]
         )
         btn.insert(0, [
-            InlineKeyboardButton("𝐒𝐞𝐧𝐝 𝐀𝐥𝐥", callback_data=f"sendfiles#{key}"),
+            InlineKeyboardButton("Tout envoyer 📨", callback_data=f"sendfiles#{key}"),
             InlineKeyboardButton("lAnguAgEs", callback_data=f"languages#{key}"),
             InlineKeyboardButton("yEArs", callback_data=f"years#{key}")
         ])
@@ -543,7 +543,7 @@ async def filter_episodes_cb_handler(client: Client, query: CallbackQuery):
             ]
         )
         btn.insert(0, [
-            InlineKeyboardButton("𝐒𝐞𝐧𝐝 𝐀𝐥𝐥", callback_data=f"sendfiles#{key}"),
+            InlineKeyboardButton("Tout envoyer 📨", callback_data=f"sendfiles#{key}"),
             InlineKeyboardButton("lAnguAgEs", callback_data=f"languages#{key}"),
             InlineKeyboardButton("yEArs", callback_data=f"years#{key}")
         ])
@@ -675,7 +675,7 @@ async def filter_languages_cb_handler(client: Client, query: CallbackQuery):
 
     files, offset, total_results = await get_search_results(chat_id, search, offset=0, filter=True)
     if not files:
-        await query.answer("🚫 Aucun fichier trouvé.", show_alert=1)
+        await query.answer("🚫 𝗡𝗼 𝗙𝗶𝗹𝗲 𝗪𝗲𝗿𝗲 𝗙𝗼𝘂𝗻𝗱 🚫", show_alert=1)
         return
     temp.GETALL[key] = files
     settings = await get_settings(message.chat.id)
@@ -697,7 +697,7 @@ async def filter_languages_cb_handler(client: Client, query: CallbackQuery):
             ]
         )
         btn.insert(0, [
-            InlineKeyboardButton("𝐒𝐞𝐧𝐝 𝐀𝐥𝐥", callback_data=f"sendfiles#{key}"),
+            InlineKeyboardButton("Tout envoyer 📨", callback_data=f"sendfiles#{key}"),
             InlineKeyboardButton("lAnguAgEs", callback_data=f"languages#{key}"),
             InlineKeyboardButton("yEArs", callback_data=f"years#{key}")
         ])
@@ -711,7 +711,7 @@ async def filter_languages_cb_handler(client: Client, query: CallbackQuery):
             ]
         )
         btn.insert(0, [
-            InlineKeyboardButton("𝐒𝐞𝐧𝐝 𝐀𝐥𝐥", callback_data=f"sendfiles#{key}"),
+            InlineKeyboardButton("Tout envoyer 📨", callback_data=f"sendfiles#{key}"),
             InlineKeyboardButton("lAnguAgEs", callback_data=f"languages#{key}"),
             InlineKeyboardButton("yEArs", callback_data=f"years#{key}")
         ])
@@ -872,7 +872,7 @@ async def filter_seasons_cb_handler(client: Client, query: CallbackQuery):
         files.extend(files2)
         
     if not files:
-        await query.answer("🚫 Aucun fichier trouvé.", show_alert=1)
+        await query.answer("🚫 𝗡𝗼 𝗙𝗶𝗹𝗲 𝗪𝗲𝗿𝗲 𝗙𝗼𝘂𝗻𝗱 🚫", show_alert=1)
         return
     temp.GETALL[key] = files
     settings = await get_settings(message.chat.id)
@@ -894,7 +894,7 @@ async def filter_seasons_cb_handler(client: Client, query: CallbackQuery):
             ]
         )
         btn.insert(0, [
-            InlineKeyboardButton("𝐒𝐞𝐧𝐝 𝐀𝐥𝐥", callback_data=f"sendfiles#{key}"),
+            InlineKeyboardButton("Tout envoyer 📨", callback_data=f"sendfiles#{key}"),
             InlineKeyboardButton("lAnguAgEs", callback_data=f"languages#{key}"),
             InlineKeyboardButton("yEArs", callback_data=f"years#{key}")
         ])
@@ -908,7 +908,7 @@ async def filter_seasons_cb_handler(client: Client, query: CallbackQuery):
             ]
         )
         btn.insert(0, [
-            InlineKeyboardButton("𝐒𝐞𝐧𝐝 𝐀𝐥𝐥", callback_data=f"sendfiles#{key}"),
+            InlineKeyboardButton("Tout envoyer 📨", callback_data=f"sendfiles#{key}"),
             InlineKeyboardButton("lAnguAgEs", callback_data=f"languages#{key}"),
             InlineKeyboardButton("yEArs", callback_data=f"years#{key}")
         ])
@@ -1010,7 +1010,7 @@ async def filter_qualities_cb_handler(client: Client, query: CallbackQuery):
     files, offset, total_results = await get_search_results(chat_id, search, offset=0, filter=True)
     # files = [file for file in files if re.search(lang, file["file_name"], re.IGNORECASE)]
     if not files:
-        await query.answer("🚫 Aucun fichier trouvé.", show_alert=1)
+        await query.answer("🚫 𝗡𝗼 𝗙𝗶𝗹𝗲 𝗪𝗲𝗿𝗲 𝗙𝗼𝘂𝗻𝗱 🚫", show_alert=1)
         return
     temp.GETALL[key] = files
     settings = await get_settings(message.chat.id)
@@ -1032,7 +1032,7 @@ async def filter_qualities_cb_handler(client: Client, query: CallbackQuery):
             ]
         )
         btn.insert(0, [
-            InlineKeyboardButton("𝐒𝐞𝐧𝐝 𝐀𝐥𝐥", callback_data=f"sendfiles#{key}"),
+            InlineKeyboardButton("Tout envoyer 📨", callback_data=f"sendfiles#{key}"),
             InlineKeyboardButton("lAnguAgEs", callback_data=f"languages#{key}"),
             InlineKeyboardButton("yEArs", callback_data=f"years#{key}")
         ])
@@ -1046,7 +1046,7 @@ async def filter_qualities_cb_handler(client: Client, query: CallbackQuery):
             ]
         )
         btn.insert(0, [
-            InlineKeyboardButton("𝐒𝐞𝐧𝐝 𝐀𝐥𝐥", callback_data=f"sendfiles#{key}"),
+            InlineKeyboardButton("Tout envoyer 📨", callback_data=f"sendfiles#{key}"),
             InlineKeyboardButton("lAnguAgEs", callback_data=f"languages#{key}"),
             InlineKeyboardButton("yEArs", callback_data=f"years#{key}")
         ])
@@ -1127,12 +1127,12 @@ async def cb_handler(client: Client, query: CallbackQuery):
         return 
     elif query.data == "gfiltersdeleteallconfirm":
         await del_allg(query.message, 'gfilters')
-        await query.answer("Terminé ✅")
+        await query.answer("Done !")
         return
     elif query.data == "gfiltersdeleteallcancel": 
         await query.message.reply_to_message.delete()
         await query.message.delete()
-        await query.answer("Annulé ✕")
+        await query.answer("Process Cancelled !")
         return
     elif query.data == "delallconfirm":
         userid = query.from_user.id
@@ -1146,7 +1146,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
                     chat = await client.get_chat(grpid)
                     title = chat.title
                 except:
-                    await query.message.edit_text("Assurez-vous que je suis bien présent dans votre groupe !", quote=True)
+                    await query.message.edit_text("MAkE surE I'm prEsEnt in your group!!", quote=True)
                     return await query.answer(MSG_ALRT)
             else:
                 await query.message.edit_text(
@@ -1166,7 +1166,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
         if (st.status == enums.ChatMemberStatus.OWNER) or (str(userid) in ADMINS):
             await del_all(query.message, grp_id, title)
         else:
-            await query.answer("Vous devez être propriétaire du groupe ou utilisateur autorisé pour effectuer cette action.", show_alert=True)
+            await query.answer("You nEED to BE Group OwnEr or An Auth UsEr to Do thAt!", show_alert=True)
     elif query.data == "delallcancel":
         userid = query.from_user.id
         chat_type = query.message.chat.type
@@ -1234,7 +1234,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
                 parse_mode=enums.ParseMode.MARKDOWN
             )
         else:
-            await query.message.edit_text("<b>Une erreur est survenue.</b>", parse_mode=enums.ParseMode.MARKDOWN)
+            await query.message.edit_text('SomE Error oCCurrED!!', parse_mode=enums.ParseMode.MARKDOWN)
         return await query.answer(MSG_ALRT)
     elif "disconnect" in query.data:
         await query.answer()
@@ -1255,7 +1255,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
             )
         else:
             await query.message.edit_text(
-                "<b>Une erreur est survenue.</b>",
+                f"SomE Error oCCurrED!!",
                 parse_mode=enums.ParseMode.MARKDOWN
             )
         return await query.answer(MSG_ALRT)
@@ -1273,7 +1273,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
             )
         else:
             await query.message.edit_text(
-                "<b>Une erreur est survenue.</b>",
+                f"SomE Error oCCurrED!!",
                 parse_mode=enums.ParseMode.MARKDOWN
             )
         return await query.answer(MSG_ALRT)
@@ -1338,6 +1338,34 @@ async def cb_handler(client: Client, query: CallbackQuery):
         except:
             typed = query.from_user.id
         ident, file_id = query.data.split("#")
+        # Vérification de session avant envoi du fichier
+        access = await get_user_access(query.from_user.id)
+        if not access["has_access"]:
+            await query.answer(
+                "Vous n'avez pas de session active.\n\n"
+                "Regardez une publicité sur la Mini App pour obtenir 1 heure d'accès gratuit.",
+                show_alert=True
+            )
+            try:
+                grp_msg = await query.message.reply_text(
+                    f"{query.from_user.mention}\n\n"
+                    "<b>Accès refusé — aucune session active.</b>\n\n"
+                    "Pour accéder aux fichiers, regardez une publicité sur la Mini App "
+                    "afin d'obtenir <b>1 heure d'accès gratuit</b>.",
+                    reply_markup=InlineKeyboardMarkup([
+                        [InlineKeyboardButton("Ouvrir JessiKa Mini App", url=f"https://t.me/{temp.U_NAME}/app")],
+                        [InlineKeyboardButton("Comment faire ?", url="https://t.me/JessiKaSearch/70")]
+                    ]),
+                    parse_mode=enums.ParseMode.HTML
+                )
+                async def _del_later(msg):
+                    await asyncio.sleep(1800)
+                    try: await msg.delete()
+                    except: pass
+                asyncio.create_task(_del_later(grp_msg))
+            except Exception:
+                pass
+            return
         files_ = await get_file_details(file_id)
         if not files_:
             return await query.answer('Ce fichier n\'existe pas.')
@@ -1389,22 +1417,24 @@ async def cb_handler(client: Client, query: CallbackQuery):
         ident, userid = query.data.split("#")
         user_id = query.from_user.id
         settings = await get_settings(int(query.message.chat.id))
-        if userid == 0:
-            await query.answer("Vous etes un administrateur anonyme !", show_alert=True)
+        # FIX: userid est une string, pas un int
+        if userid == "0":
+            await query.answer("Vous êtes un administrateur anonyme !", show_alert=True)
             return
         try:
             btn = await pub_is_subscribed(client, query, settings['fsub'])
             if btn:
-                await query.answer("Veuillez rejoindre le canal indique puis cliquez sur le bouton Reactiver", show_alert=True)
+                await query.answer("Veuillez rejoindre le canal indiqué puis cliquez sur le bouton Me réactiver.", show_alert=True)
             else:
                 await client.unban_chat_member(query.message.chat.id, user_id)
-                await query.answer("Unmuted Successfully !", show_alert=True)
+                await query.answer("Vous avez été réactivé avec succès !", show_alert=True)
                 try:
                     await query.message.delete()
                 except:
                     return
-        except:
-            await query.answer("Not For Your My Dear", show_alert=True)
+        except Exception as e:
+            logger.exception(e)
+            await query.answer("Une erreur est survenue.", show_alert=True)
    
     elif query.data.startswith("del"):
         ident, file_id = query.data.split("#")
@@ -1430,7 +1460,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
     
     elif query.data.startswith("checksub"):
         if AUTH_CHANNEL and not await is_subscribed(client, query):
-            await query.answer("Join our BACk-up ChAnnEl mAhn! 😒", show_alert=True)
+            await query.answer("Rejoignez notre canal de sauvegarde !", show_alert=True)
             return
         ident, kk, file_id = query.data.split("#")
         await query.answer(url=f"https://t.me/{temp.U_NAME}?start={kk}_{file_id}")
@@ -1645,30 +1675,30 @@ async def cb_handler(client: Client, query: CallbackQuery):
     elif query.data.startswith("show_option"):
         ident, from_user = query.data.split("#")
         btn = [[
-                InlineKeyboardButton("UnAvAilABlE", callback_data=f"unavailable#{from_user}"),
-                InlineKeyboardButton("UploADED", callback_data=f"uploaded#{from_user}")
+                InlineKeyboardButton("Indisponible", callback_data=f"unavailable#{from_user}"),
+                InlineKeyboardButton("Ajouté", callback_data=f"uploaded#{from_user}")
              ],[
-                InlineKeyboardButton("AlrEADy AvAilABlE", callback_data=f"already_available#{from_user}")
+                InlineKeyboardButton("Déjà disponible", callback_data=f"already_available#{from_user}")
               ]]
         btn2 = [[
-                 InlineKeyboardButton("ViEw StAtus", url=f"{query.message.link}")
+                 InlineKeyboardButton("Voir le statut", url=f"{query.message.link}")
                ]]
         if query.from_user.id in ADMINS:
             user = await client.get_users(from_user)
             reply_markup = InlineKeyboardMarkup(btn)
             await query.message.edit_reply_markup(reply_markup)
-            await query.answer("HErE ArE thE options !")
+            await query.answer("Voici les options disponibles !")
         else:
-            await query.answer("You Don't hAvE suffiCiAnt rights to Do this !", show_alert=True)
+            await query.answer("Vous n'avez pas les droits suffisants.", show_alert=True)
         
     elif query.data.startswith("unavailable"):
         ident, from_user = query.data.split("#")
         btn = [[
-                InlineKeyboardButton("⚠️ UnAvAilABlE ⚠️", callback_data=f"unalert#{from_user}")
+                InlineKeyboardButton("⚠️ Indisponible ⚠️", callback_data=f"unalert#{from_user}")
               ]]
         btn2 = [[
-                 InlineKeyboardButton('Join ChAnnEl', url=link.invite_link),
-                 InlineKeyboardButton("ViEw StAtus", url=f"{query.message.link}")
+                 InlineKeyboardButton("Rejoindre le canal", url=link.invite_link),
+                 InlineKeyboardButton("Voir le statut", url=f"{query.message.link}")
                ]]
         if query.from_user.id in ADMINS:
             user = await client.get_users(from_user)
@@ -1676,22 +1706,22 @@ async def cb_handler(client: Client, query: CallbackQuery):
             content = query.message.text
             await query.message.edit_text(f"<b><strike>{content}</strike></b>")
             await query.message.edit_reply_markup(reply_markup)
-            await query.answer("SEt to UnAvAilABlE !")
+            await query.answer("Défini sur : Indisponible !")
             try:
                 await client.send_message(chat_id=int(from_user), text=f"<b>Bonjour {user.mention}, votre demande n'est pas disponible. Nos modérateurs ne peuvent pas la télécharger.</b>", reply_markup=InlineKeyboardMarkup(btn2), parse_mode=enums.ParseMode.HTML)
             except UserIsBlocked:
                 await client.send_message(chat_id=int(SUPPORT_CHAT_ID), text=f"<b>Bonjour {user.mention}, votre demande n'est pas disponible.\n\n<i>Ce message a été envoyé dans le groupe car vous avez bloqué le bot. Débloquez-le pour recevoir ces notifications en privé.</i></b>", reply_markup=InlineKeyboardMarkup(btn2), parse_mode=enums.ParseMode.HTML)
         else:
-            await query.answer("You Don't hAvE suffiCiAnt rights to Do this !", show_alert=True)
+            await query.answer("Vous n'avez pas les droits suffisants.", show_alert=True)
 
     elif query.data.startswith("uploaded"):
         ident, from_user = query.data.split("#")
         btn = [[
-                InlineKeyboardButton("✅ UploADED ✅", callback_data=f"upalert#{from_user}")
+                InlineKeyboardButton("✅ Ajouté ✅", callback_data=f"upalert#{from_user}")
               ]]
         btn2 = [[
-                 InlineKeyboardButton('Join ChAnnEl', url=link.invite_link),
-                 InlineKeyboardButton("ViEw StAtus", url=f"{query.message.link}")
+                 InlineKeyboardButton("Rejoindre le canal", url=link.invite_link),
+                 InlineKeyboardButton("Voir le statut", url=f"{query.message.link}")
                ],[
                  InlineKeyboardButton("REǫuEst Group Link", url="https://t.me/+KzbVzahVdqQ3MmM1")
                ]]
@@ -1701,22 +1731,22 @@ async def cb_handler(client: Client, query: CallbackQuery):
             content = query.message.text
             await query.message.edit_text(f"<b><strike>{content}</strike></b>")
             await query.message.edit_reply_markup(reply_markup)
-            await query.answer("SEt to UploADED !")
+            await query.answer("Défini sur : Ajouté !")
             try:
                 await client.send_message(chat_id=int(from_user), text=f"<b>Bonjour {user.mention}, votre demande a été ajoutée par nos modérateurs. Lancez une recherche dans le groupe.</b>", reply_markup=InlineKeyboardMarkup(btn2), parse_mode=enums.ParseMode.HTML)
             except UserIsBlocked:
                 await client.send_message(chat_id=int(SUPPORT_CHAT_ID), text=f"<b>Bonjour {user.mention}, votre demande a été ajoutée.\n\n<i>Ce message a été envoyé dans le groupe car vous avez bloqué le bot. Débloquez-le pour recevoir ces notifications en privé.</i></b>", reply_markup=InlineKeyboardMarkup(btn2), parse_mode=enums.ParseMode.HTML)
         else:
-            await query.answer("You Don't hAvE suffiCiAnt rigts to Do this !", show_alert=True)
+            await query.answer("Vous n'avez pas les droits suffisants.", show_alert=True)
 
     elif query.data.startswith("already_available"):
         ident, from_user = query.data.split("#")
         btn = [[
-            InlineKeyboardButton("🟢 AlrEADy AvAilABlE 🟢", callback_data=f"alalert#{from_user}")
+            InlineKeyboardButton("🟢 Déjà disponible 🟢", callback_data=f"alalert#{from_user}")
         ]]
         btn2 = [[
-            InlineKeyboardButton('Join ChAnnEl', url=link.invite_link),
-            InlineKeyboardButton("ViEw StAtus", url=f"{query.message.link}")
+            InlineKeyboardButton("Rejoindre le canal", url=link.invite_link),
+            InlineKeyboardButton("Voir le statut", url=f"{query.message.link}")
         ],[
             InlineKeyboardButton("REǫuEst Group Link", url="https://t.me/vj_bots")
         ]]
@@ -1726,13 +1756,13 @@ async def cb_handler(client: Client, query: CallbackQuery):
             content = query.message.text
             await query.message.edit_text(f"<b><strike>{content}</strike></b>")
             await query.message.edit_reply_markup(reply_markup)
-            await query.answer("SEt to AlrEADy AvAilABlE !")
+            await query.answer("Défini sur : Déjà disponible !")
             try:
                 await client.send_message(chat_id=int(from_user), text=f"<b>Bonjour {user.mention}, votre demande est déjà disponible dans notre base de données. Lancez une recherche dans le groupe.</b>", reply_markup=InlineKeyboardMarkup(btn2), parse_mode=enums.ParseMode.HTML)
             except UserIsBlocked:
-                await client.send_message(chat_id=int(SUPPORT_CHAT_ID), text=f"<b>Bonjour {user.mention}, votre demande est déjà disponible.\n\n<i>Ce message a été envoyé dans le groupe car vous avez bloqué le bot. Débloquez-le pour recevoir ces notifications en privé.</i></b>", reply_markup=InlineKeyboardMarkup(btn2), parse_mode=enums.ParseMode.HTML)
+                await client.send_message(chat_id=int(SUPPORT_CHAT_ID), text=f"<b>Bonjour {user.mention}, votre demande est déjà disponible.\n\n<i>Ce message a été envoyé dans le groupe car vous avez bloqué le bot.</i></b>", reply_markup=InlineKeyboardMarkup(btn2), parse_mode=enums.ParseMode.HTML)
         else:
-            await query.answer("You Don't hAvE suffiCiAnt rigts to Do this !", show_alert=True)
+            await query.answer("Vous n'avez pas les droits suffisants.", show_alert=True)
 
     elif query.data.startswith("alalert"):
         ident, from_user = query.data.split("#")
@@ -1740,7 +1770,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
             user = await client.get_users(from_user)
             await query.answer(f"Bonjour {user.first_name}, votre demande est déjà disponible !", show_alert=True)
         else:
-            await query.answer("You Don't hAvE suffiCiAnt rigts to Do this !", show_alert=True)
+            await query.answer("Vous n'avez pas les droits suffisants.", show_alert=True)
 
     elif query.data.startswith("upalert"):
         ident, from_user = query.data.split("#")
@@ -1748,7 +1778,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
             user = await client.get_users(from_user)
             await query.answer(f"Bonjour {user.first_name}, votre demande a été ajoutée !", show_alert=True)
         else:
-            await query.answer("You Don't hAvE suffiCiAnt rigts to Do this !", show_alert=True)
+            await query.answer("Vous n'avez pas les droits suffisants.", show_alert=True)
         
     elif query.data.startswith("unalert"):
         ident, from_user = query.data.split("#")
@@ -1756,7 +1786,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
             user = await client.get_users(from_user)
             await query.answer(f"Bonjour {user.first_name}, votre demande n'est pas disponible.", show_alert=True)
         else:
-            await query.answer("You Don't hAvE suffiCiAnt rigts to Do this !", show_alert=True)
+            await query.answer("Vous n'avez pas les droits suffisants.", show_alert=True)
 
     elif query.data.startswith("generate_stream_link"):
         _, file_id = query.data.split(":")
@@ -1787,19 +1817,25 @@ async def cb_handler(client: Client, query: CallbackQuery):
         await query.answer(text=script.SINFO, show_alert=True)
 
     elif query.data == "start":
+        # web_app interdit dans les groupes — bouton url en fallback
+        is_private = query.message.chat.type == enums.ChatType.PRIVATE
+        if is_private:
+            mini_btn = InlineKeyboardButton('Ouvrir la Mini App 🚀', web_app=WebAppInfo(url=MINI_APP_URL))
+        else:
+            mini_btn = InlineKeyboardButton('Mini App 🚀', url=f'https://t.me/{temp.U_NAME}?start=miniapp')
         buttons = [[
             InlineKeyboardButton('Aide 📖', callback_data='help'),
-            InlineKeyboardButton('A propos ℹ️', callback_data='about')
+            InlineKeyboardButton('À propos ℹ️', callback_data='about')
         ],[
             InlineKeyboardButton('Rejoindre le groupe 👥', url=GRP_LNK),
-            InlineKeyboardButton('Canal de mise a jour 📢', url=CHNL_LNK)
+            InlineKeyboardButton('Canal 📢', url=CHNL_LNK)
         ],[
-            InlineKeyboardButton('Ouvrir la Mini App 🚀', web_app=WebAppInfo(url=MINI_APP_URL))
+            mini_btn
         ]]
         reply_markup = InlineKeyboardMarkup(buttons)
         await client.edit_message_media(
-            query.message.chat.id, 
-            query.message.id, 
+            query.message.chat.id,
+            query.message.id,
             InputMediaPhoto(random.choice(PICS))
         )
         await query.message.edit_text(
@@ -2501,7 +2537,7 @@ async def auto_filter(client, name, msg, reply_msg, ai_search, spoll=False):
             ]
         )
         btn.insert(0, [
-            InlineKeyboardButton("𝐒𝐞𝐧𝐝 𝐀𝐥𝐥", callback_data=f"sendfiles#{key}"),
+            InlineKeyboardButton("Tout envoyer 📨", callback_data=f"sendfiles#{key}"),
             InlineKeyboardButton("lAnguAgEs", callback_data=f"languages#{key}"),
             InlineKeyboardButton("yEArs", callback_data=f"years#{key}")
         ])
@@ -2515,7 +2551,7 @@ async def auto_filter(client, name, msg, reply_msg, ai_search, spoll=False):
             ]
         )
         btn.insert(0, [
-            InlineKeyboardButton("𝐒𝐞𝐧𝐝 𝐀𝐥𝐥", callback_data=f"sendfiles#{key}"),
+            InlineKeyboardButton("Tout envoyer 📨", callback_data=f"sendfiles#{key}"),
             InlineKeyboardButton("lAnguAgEs", callback_data=f"languages#{key}"),
             InlineKeyboardButton("yEArs", callback_data=f"years#{key}")
         ])
@@ -2538,7 +2574,8 @@ async def auto_filter(client, name, msg, reply_msg, ai_search, spoll=False):
         btn.append(
             [InlineKeyboardButton(text="𝐍𝐎 𝐌𝐎𝐑𝐄 𝐏𝐀𝐆𝐄𝐒 𝐀𝐕𝐀𝐈𝐋𝐀𝐁𝐋𝐄",callback_data="pages")]
         )
-    imdb = await get_poster(search, file=(files[0])['file_name']) if settings["imdb"] else None
+    # FIX: IMDB poster toujours activé
+    imdb = await get_poster(search, file=(files[0])['file_name'])
     cur_time = datetime.now(pytz.timezone('Asia/Kolkata')).time()
     time_difference = timedelta(hours=cur_time.hour, minutes=cur_time.minute, seconds=(cur_time.second+(cur_time.microsecond/1000000))) - timedelta(hours=curr_time.hour, minutes=curr_time.minute, seconds=(curr_time.second+(curr_time.microsecond/1000000)))
     remaining_seconds = "{:.2f}".format(time_difference.total_seconds())
@@ -2582,9 +2619,9 @@ async def auto_filter(client, name, msg, reply_msg, ai_search, spoll=False):
                 cap += f"<b>\n📁 <a href='https://telegram.me/{temp.U_NAME}?start=files_{file['file_id']}'>[{get_size(file['file_size'])}] {' '.join(filter(lambda x: not x.startswith('[') and not x.startswith('@') and not x.startswith('www.'), file['file_name'].split()))}\n</a></b>"
     else:
         if settings["button"]:
-            cap = f"<b>ThE REsults For  {search}\n\nREquEstED By  {message.from_user.mention}\n\nrEsult show in  {remaining_seconds} sEConDs\n\npowErED By  : {message.chat.title} \n\n⚠️ AFtEr 5 minutEs this mEssAgE will BE AutomAtiCAlly DElEtED 🗑️\n\n</b>"
+            cap = f"<b>Résultats pour : {search}\n\nDemandé par : {message.from_user.mention}\n\nAffiché en : {remaining_seconds} secondes\n\nGroupe : {message.chat.title}\n\n⚠️ Ce message sera supprimé automatiquement dans 5 minutes.</b>\n\n"
         else:
-            cap = f"<b>ThE REsults For  {search}\n\nREquEstED By  {message.from_user.mention}\n\nrEsult show in  {remaining_seconds} sEConDs\n\npowErED By  : {message.chat.title} \n\n⚠️ AFtEr 5 minutEs this mEssAgE will BE AutomAtiCAlly DElEtED 🗑️\n\n</b>"
+            cap = f"<b>Résultats pour : {search}\n\nDemandé par : {message.from_user.mention}\n\nAffiché en : {remaining_seconds} secondes\n\nGroupe : {message.chat.title}\n\n⚠️ Ce message sera supprimé automatiquement dans 5 minutes.</b>\n\n"
             cap+="<b><u>🍿 Your Movie Files 👇</u></b>\n\n"
             for file in files:
                 cap += f"<b>📁 <a href='https://telegram.me/{temp.U_NAME}?start=files_{file['file_id']}'>[{get_size(file['file_size'])}] {' '.join(filter(lambda x: not x.startswith('[') and not x.startswith('@') and not x.startswith('www.'), file['file_name'].split()))}\n\n</a></b>"
