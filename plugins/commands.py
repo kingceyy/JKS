@@ -151,10 +151,8 @@ async def start(client, message):
 
                 if STREAM_MODE == True:
                     button = [[
-                        InlineKeyboardButton("• DownloAD •", url=download),
-                        InlineKeyboardButton('• Regarder •', url=stream)
-                    ],[
-                        InlineKeyboardButton("• Regarder in wEB App •", web_app=WebAppInfo(url=stream))
+                        InlineKeyboardButton("⬇️ Télécharger", url=download),
+                        InlineKeyboardButton("▶️ Regarder", url=stream)
                     ]]
                     reply_markup = InlineKeyboardMarkup(button)
                 else:
@@ -223,10 +221,8 @@ async def start(client, message):
  
                 if STREAM_MODE == True:
                     button = [[
-                        InlineKeyboardButton("• DownloAD •", url=download),
-                        InlineKeyboardButton('• Regarder •', url=stream)
-                    ],[
-                        InlineKeyboardButton("• Regarder in wEB App •", web_app=WebAppInfo(url=stream))
+                        InlineKeyboardButton("⬇️ Télécharger", url=download),
+                        InlineKeyboardButton("▶️ Regarder", url=stream)
                     ]]
                     reply_markup = InlineKeyboardMarkup(button)
                 else:

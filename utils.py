@@ -40,44 +40,61 @@ class temp(object):
     IMDB_CAP = {}
 
 
-async def pub_is_subscribed(bot, query, channel):
+async def pub_is_subscribed(bot, query, channels):
+    """
+    Vérifie si l'utilisateur est abonné à tous les canaux fsub du groupe.
+    Retourne une liste de boutons pour les canaux non rejoints.
+    Si la liste est vide → l'utilisateur est abonné à tout.
+    """
     btn = []
-    for id in channel:
-        chat = await bot.get_chat(int(id))
+    if not channels:
+        return btn
+    # channels peut être une liste ou un seul int
+    if not isinstance(channels, (list, tuple)):
+        channels = [channels]
+    for channel_id in channels:
+        is_member = False
+        chat = None
         try:
-            await bot.get_chat_member(id, query.from_user.id)
-        except UserNotParticipant:
-            btn.append(
-                [InlineKeyboardButton(f'Join {chat.title}', url=chat.invite_link)]
-            )
+            chat = await bot.get_chat(int(channel_id))
         except Exception as e:
-            pass
+            logger.warning(f"[FSUB] Impossible de récupérer le canal {channel_id}: {e}")
+            continue
+        try:
+            member = await bot.get_chat_member(int(channel_id), query.from_user.id)
+            if member.status not in [enums.ChatMemberStatus.BANNED, enums.ChatMemberStatus.LEFT]:
+                is_member = True
+        except UserNotParticipant:
+            is_member = False
+        except Exception as e:
+            logger.warning(f"[FSUB] Erreur get_chat_member pour {query.from_user.id} dans {channel_id}: {e}")
+            is_member = True  # ne pas bloquer en cas d'erreur inconnue
+
+        if not is_member:
+            try:
+                invite = chat.invite_link
+                if not invite:
+                    invite = await bot.export_chat_invite_link(int(channel_id))
+                btn.append([InlineKeyboardButton(f'Rejoindre {chat.title}', url=invite)])
+            except Exception as e:
+                logger.warning(f"[FSUB] Impossible de créer le lien d'invitation pour {channel_id}: {e}")
     return btn
 
+
 async def is_subscribed(bot, query):
-    if REQUEST_TO_JOIN_MODE == True and join_db().isActive():
-        try:
-            user = await join_db().get_user(query.from_user.id)
-            if user and user["user_id"] == query.from_user.id:
-                return True
-            else:
-                try:
-                    user_data = await bot.get_chat_member(AUTH_CHANNEL, query.from_user.id)
-                except UserNotParticipant:
-                    pass
-                except Exception as e:
-                    logger.exception(e)
-        except Exception as e:
-            logger.exception(e)
-            return False
-    else:
-        try:
-            user = await bot.get_chat_member(AUTH_CHANNEL, query.from_user.id)
-        except UserNotParticipant:
-            pass
-        except Exception as e:
-            logger.exception(e)
+    """
+    Vérifie si l'utilisateur est abonné au AUTH_CHANNEL global.
+    Retourne True si membre, False sinon.
+    """
+    if not AUTH_CHANNEL:
+        return True
+    try:
+        member = await bot.get_chat_member(AUTH_CHANNEL, query.from_user.id)
+        return member.status not in [enums.ChatMemberStatus.BANNED, enums.ChatMemberStatus.LEFT]
+    except UserNotParticipant:
         return False
+    except Exception:
+        return True  # En cas d'erreur inconnue, ne pas bloquer l'utilisateur
 
 async def get_poster(query, bulk=False, id=False, file=None):
     if not id:
@@ -489,6 +506,15 @@ async def send_all(bot, userid, files, ident, chat_id, user_name, query):
     except Exception as e:
         await query.answer('Demarrez le bot d\'abord puis cliquez sur Envoyer tout', show_alert=True)
         
+
+
+def clean_filename(file_name: str) -> str:
+    """Nettoie le nom de fichier pour l'affichage dans les boutons."""
+    name = re.sub(r'\[.*?\]', '', file_name)
+    name = re.sub(r'[\.\-]', ' ', name)
+    tokens = [x for x in name.split() if not x.startswith('@') and x.strip()]
+    return " ".join(tokens)
+
 async def get_cap(settings, remaining_secondes, files, query, total_results, search):
     if settings["imdb"]:
         IMDB_CAP = temp.IMDB_CAP.get(query.from_user.id)
@@ -496,9 +522,10 @@ async def get_cap(settings, remaining_secondes, files, query, total_results, sea
             cap = IMDB_CAP
             cap+="<b>\n\n<u>🍿 Vos fichiers 👇</u></b>\n\n"
             for file in files:
-                cap += f"<b>📁 <a href='https://telegram.me/{temp.U_NAME}?start=files_{file['file_id']}'>[{get_size(file['file_size'])}] {' '.join(filter(lambda x: not x.startswith('[') and not x.startswith('@') and not x.startswith('www.'), file['file_name'].split()))}\n\n</a></b>"
+                cap += f"<b>📁 <a href='https://telegram.me/{temp.U_NAME}?start=files_{file['file_id']}'>[{get_size(file['file_size'])}] {clean_filename(file['file_name'])}\n\n</a></b>"
         else:
-            imdb = await get_poster(search, file=(files[0])["file_name"]) if settings["imdb"] else None
+            # IMDB toujours activé
+            imdb = await get_poster(search, file=(files[0])["file_name"])
             if imdb:
                 TEMPLATE = script.IMDB_TEMPLATE_TXT
                 cap = TEMPLATE.format(
@@ -530,11 +557,12 @@ async def get_cap(settings, remaining_secondes, files, query, total_results, sea
                     plot=imdb['plot'],
                     rating=imdb['rating'],
                     url=imdb['url'],
-                    **locals()
+                    remaining_seconds=remaining_secondes,
+                    user_mention=query.from_user.mention,
                 )
                 cap+="<b>\n\n<u>🍿 Vos fichiers 👇</u></b>\n\n"
                 for file in files:
-                    cap += f"<b>📁 <a href='https://telegram.me/{temp.U_NAME}?start=files_{file['file_id']}'>[{get_size(file['file_size'])}] {' '.join(filter(lambda x: not x.startswith('[') and not x.startswith('@') and not x.startswith('www.'), file['file_name'].split()))}\n\n</a></b>"
+                    cap += f"<b>📁 <a href='https://telegram.me/{temp.U_NAME}?start=files_{file['file_id']}'>[{get_size(file['file_size'])}] {clean_filename(file['file_name'])}\n\n</a></b>"
     return cap
 
 
@@ -567,6 +595,6 @@ async def get_secondes(time_string):
         return 0
 
 
-# Alias pour compatibilité avec les imports existants
+
 async def get_seconds(time_string):
     return await get_secondes(time_string)

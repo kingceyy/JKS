@@ -5,7 +5,7 @@ from Script import script
 from info import *
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton, CallbackQuery, InputMediaPhoto, ChatPermissions, WebAppInfo
 from pyrogram import Client, filters, enums
-from pyrogram.errors import FloodWait, UserIsBlocked, MessageNotModified, PeerIdInvalid
+from pyrogram.errors import FloodWait, UserIsBlocked, MessageNotModified, PeerIdInvalid, UserNotParticipant
 from pyrogram.errors.exceptions.bad_request_400 import MediaEmpty, PhotoInvalidDimensions, WebpageMediaEmpty
 from utils import get_size, is_subscribed, pub_is_subscribed, get_poster, search_gagala, temp, get_settings, save_group_settings, send_all, get_cap
 from database.users_chats_db import db
@@ -13,6 +13,19 @@ from database.jks_db import get_user_access, log_search
 from database.ia_filterdb import col, sec_col, db as vjdb, sec_db, get_file_details, get_search_results, get_bad_files
 from database.filters_mdb import del_all, find_filter, get_filters
 from database.connections_mdb import mydb, active_connection, all_connections, delete_connection, if_active, make_active, make_inactive
+
+def clean_filename(file_name: str) -> str:
+    """Nettoie le nom de fichier pour l'affichage dans les boutons."""
+    import re as _re
+    # Retirer les blocs [xxx] (tags, canaux, sites)
+    name = _re.sub(r'\[.*?\]', '', file_name)
+    # Remplacer points et tirets par des espaces
+    name = _re.sub(r'[\.\-]', ' ', name)
+    # Retirer les tokens @xxx
+    tokens = [x for x in name.split() if not x.startswith('@') and x.strip()]
+    return " ".join(tokens)
+
+
 from database.gfilters_mdb import find_gfilter, get_gfilters, del_allg
 from urllib.parse import quote_plus
 from TechVJ.util.file_properties import get_name, get_hash, get_media_file_size
@@ -125,7 +138,7 @@ async def pm_text(bot, message):
 @Client.on_callback_query(filters.regex(r"^next"))
 async def next_page(bot, query):
     ident, req, key, offset = query.data.split("_")
-    curr_time = datetime.now(pytz.timezone('Africa/Lome')).time()
+    curr_time = datetime.now(pytz.timezone('Asia/Kolkata')).time()
     if int(req) not in [query.from_user.id, 0]:
         return await query.answer(script.ALRT_TXT.format(query.from_user.first_name), show_alert=True)
     try:
@@ -153,7 +166,7 @@ async def next_page(bot, query):
         btn = [
             [
                 InlineKeyboardButton(
-                    text=f"[{get_size(file['file_size'])}] {' '.join(filter(lambda x: not x.startswith('[') and not x.startswith('@') and not x.startswith('www.'), file['file_name'].split()))}", callback_data=f'{pre}#{file["file_id"]}'
+                    text=f"[{get_size(file['file_size'])}] {clean_filename(file['file_name'])}", callback_data=f'{pre}#{file["file_id"]}'
                 ),
             ]
             for file in files
@@ -161,29 +174,29 @@ async def next_page(bot, query):
 
         btn.insert(0, 
             [
-                InlineKeyboardButton('quAlity', callback_data=f"qualities#{key}"),
-                InlineKeyboardButton("EpisoDEs", callback_data=f"episodes#{key}"),
-                InlineKeyboardButton("sEAsons",  callback_data=f"seasons#{key}")
+                InlineKeyboardButton('Qualité', callback_data=f"qualities#{key}"),
+                InlineKeyboardButton("Épisodes", callback_data=f"episodes#{key}"),
+                InlineKeyboardButton("Saisons",  callback_data=f"seasons#{key}")
             ]
         )
         btn.insert(0, [
             InlineKeyboardButton("Tout envoyer 📨", callback_data=f"sendfiles#{key}"),
-            InlineKeyboardButton("lAnguAgEs", callback_data=f"languages#{key}"),
-            InlineKeyboardButton("yEArs", callback_data=f"years#{key}")
+            InlineKeyboardButton("Langues", callback_data=f"languages#{key}"),
+            InlineKeyboardButton("Années", callback_data=f"years#{key}")
         ])
     else:
         btn = []
         btn.insert(0, 
             [
-                InlineKeyboardButton('quAlity', callback_data=f"qualities#{key}"),
-                InlineKeyboardButton("EpisoDEs", callback_data=f"episodes#{key}"),
-                InlineKeyboardButton("sEAsons",  callback_data=f"seasons#{key}")
+                InlineKeyboardButton('Qualité', callback_data=f"qualities#{key}"),
+                InlineKeyboardButton("Épisodes", callback_data=f"episodes#{key}"),
+                InlineKeyboardButton("Saisons",  callback_data=f"seasons#{key}")
             ]
         )
         btn.insert(0, [
             InlineKeyboardButton("Tout envoyer 📨", callback_data=f"sendfiles#{key}"),
-            InlineKeyboardButton("lAnguAgEs", callback_data=f"languages#{key}"),
-            InlineKeyboardButton("yEArs", callback_data=f"years#{key}")
+            InlineKeyboardButton("Langues", callback_data=f"languages#{key}"),
+            InlineKeyboardButton("Années", callback_data=f"years#{key}")
         ])
     try:
         if settings['max_btn']:
@@ -251,7 +264,7 @@ async def next_page(bot, query):
                 ],
             )
     if not settings["button"]:
-        cur_time = datetime.now(pytz.timezone('Africa/Lome')).time()
+        cur_time = datetime.now(pytz.timezone('Asia/Kolkata')).time()
         time_difference = timedelta(hours=cur_time.hour, minutes=cur_time.minute, seconds=(cur_time.second+(cur_time.microsecond/1000000))) - timedelta(hours=curr_time.hour, minutes=curr_time.minute, seconds=(curr_time.second+(curr_time.microsecond/1000000)))
         remaining_seconds = "{:.2f}".format(time_difference.total_seconds())
         cap = await get_cap(settings, remaining_seconds, files, query, total, search)
@@ -354,7 +367,7 @@ async def years_cb_handler(client: Client, query: CallbackQuery):
 @Client.on_callback_query(filters.regex(r"^fy#"))
 async def filter_yearss_cb_handler(client: Client, query: CallbackQuery):
     _, lang, key = query.data.split("#")
-    curr_time = datetime.now(pytz.timezone('Africa/Lome')).time()
+    curr_time = datetime.now(pytz.timezone('Asia/Kolkata')).time()
     search = FRESH.get(key)
     try:
         search = search.replace(' ', '_')
@@ -391,36 +404,36 @@ async def filter_yearss_cb_handler(client: Client, query: CallbackQuery):
         btn = [
             [
                 InlineKeyboardButton(
-                    text=f"[{get_size(file['file_size'])}] {' '.join(filter(lambda x: not x.startswith('[') and not x.startswith('@') and not x.startswith('www.'), file['file_name'].split()))}", callback_data=f'{pre}#{file["file_id"]}'
+                    text=f"[{get_size(file['file_size'])}] {clean_filename(file['file_name'])}", callback_data=f'{pre}#{file["file_id"]}'
                 ),
             ]
             for file in files
         ]
         btn.insert(0, 
             [
-                InlineKeyboardButton(f'quAlity', callback_data=f"qualities#{key}"),
-                InlineKeyboardButton("EpisoDEs", callback_data=f"episodes#{key}"),
-                InlineKeyboardButton("sEAsons",  callback_data=f"seasons#{key}")
+                InlineKeyboardButton(f'Qualité', callback_data=f"qualities#{key}"),
+                InlineKeyboardButton("Épisodes", callback_data=f"episodes#{key}"),
+                InlineKeyboardButton("Saisons",  callback_data=f"seasons#{key}")
             ]
         )
         btn.insert(0, [
             InlineKeyboardButton("Tout envoyer 📨", callback_data=f"sendfiles#{key}"),
-            InlineKeyboardButton("lAnguAgEs", callback_data=f"languages#{key}"),
-            InlineKeyboardButton("yEArs", callback_data=f"years#{key}")
+            InlineKeyboardButton("Langues", callback_data=f"languages#{key}"),
+            InlineKeyboardButton("Années", callback_data=f"years#{key}")
         ])
     else:
         btn = []
         btn.insert(0, 
             [
-                InlineKeyboardButton(f'quAlity', callback_data=f"qualities#{key}"),
-                InlineKeyboardButton("EpisoDEs", callback_data=f"episodes#{key}"),
-                InlineKeyboardButton("sEAsons",  callback_data=f"seasons#{key}")
+                InlineKeyboardButton(f'Qualité', callback_data=f"qualities#{key}"),
+                InlineKeyboardButton("Épisodes", callback_data=f"episodes#{key}"),
+                InlineKeyboardButton("Saisons",  callback_data=f"seasons#{key}")
             ]
         )
         btn.insert(0, [
             InlineKeyboardButton("Tout envoyer 📨", callback_data=f"sendfiles#{key}"),
-            InlineKeyboardButton("lAnguAgEs", callback_data=f"languages#{key}"),
-            InlineKeyboardButton("yEArs", callback_data=f"years#{key}")
+            InlineKeyboardButton("Langues", callback_data=f"languages#{key}"),
+            InlineKeyboardButton("Années", callback_data=f"years#{key}")
         ])
 
     if offset != "":
@@ -449,7 +462,7 @@ async def filter_yearss_cb_handler(client: Client, query: CallbackQuery):
         btn.append([InlineKeyboardButton(text="↭ BACk to homE ↭", callback_data=f"fy#homepage#{key}")])
     
     if not settings["button"]:
-        cur_time = datetime.now(pytz.timezone('Africa/Lome')).time()
+        cur_time = datetime.now(pytz.timezone('Asia/Kolkata')).time()
         time_difference = timedelta(hours=cur_time.hour, minutes=cur_time.minute, seconds=(cur_time.second+(cur_time.microsecond/1000000))) - timedelta(hours=curr_time.hour, minutes=curr_time.minute, seconds=(curr_time.second+(curr_time.microsecond/1000000)))
         remaining_seconds = "{:.2f}".format(time_difference.total_seconds())
         cap = await get_cap(settings, remaining_seconds, files, query, total_results, search)
@@ -520,7 +533,7 @@ async def episodes_cb_handler(client: Client, query: CallbackQuery):
 @Client.on_callback_query(filters.regex(r"^fe#"))
 async def filter_episodes_cb_handler(client: Client, query: CallbackQuery):
     _, lang, key = query.data.split("#")
-    curr_time = datetime.now(pytz.timezone('Africa/Lome')).time()
+    curr_time = datetime.now(pytz.timezone('Asia/Kolkata')).time()
     search = FRESH.get(key)
     try:
         search = search.replace(' ', '_')
@@ -557,36 +570,36 @@ async def filter_episodes_cb_handler(client: Client, query: CallbackQuery):
         btn = [
             [
                 InlineKeyboardButton(
-                    text=f"[{get_size(file['file_size'])}] {' '.join(filter(lambda x: not x.startswith('[') and not x.startswith('@') and not x.startswith('www.'), file['file_name'].split()))}", callback_data=f'{pre}#{file["file_id"]}'
+                    text=f"[{get_size(file['file_size'])}] {clean_filename(file['file_name'])}", callback_data=f'{pre}#{file["file_id"]}'
                 ),
             ]
             for file in files
         ]
         btn.insert(0, 
             [
-                InlineKeyboardButton(f'quAlity', callback_data=f"qualities#{key}"),
-                InlineKeyboardButton("EpisoDEs", callback_data=f"episodes#{key}"),
-                InlineKeyboardButton("sEAsons",  callback_data=f"seasons#{key}")
+                InlineKeyboardButton(f'Qualité', callback_data=f"qualities#{key}"),
+                InlineKeyboardButton("Épisodes", callback_data=f"episodes#{key}"),
+                InlineKeyboardButton("Saisons",  callback_data=f"seasons#{key}")
             ]
         )
         btn.insert(0, [
             InlineKeyboardButton("Tout envoyer 📨", callback_data=f"sendfiles#{key}"),
-            InlineKeyboardButton("lAnguAgEs", callback_data=f"languages#{key}"),
-            InlineKeyboardButton("yEArs", callback_data=f"years#{key}")
+            InlineKeyboardButton("Langues", callback_data=f"languages#{key}"),
+            InlineKeyboardButton("Années", callback_data=f"years#{key}")
         ])
     else:
         btn = []
         btn.insert(0, 
             [
-                InlineKeyboardButton(f'quAlity', callback_data=f"qualities#{key}"),
-                InlineKeyboardButton("EpisoDEs", callback_data=f"episodes#{key}"),
-                InlineKeyboardButton("sEAsons",  callback_data=f"seasons#{key}")
+                InlineKeyboardButton(f'Qualité', callback_data=f"qualities#{key}"),
+                InlineKeyboardButton("Épisodes", callback_data=f"episodes#{key}"),
+                InlineKeyboardButton("Saisons",  callback_data=f"seasons#{key}")
             ]
         )
         btn.insert(0, [
             InlineKeyboardButton("Tout envoyer 📨", callback_data=f"sendfiles#{key}"),
-            InlineKeyboardButton("lAnguAgEs", callback_data=f"languages#{key}"),
-            InlineKeyboardButton("yEArs", callback_data=f"years#{key}")
+            InlineKeyboardButton("Langues", callback_data=f"languages#{key}"),
+            InlineKeyboardButton("Années", callback_data=f"years#{key}")
         ])
 
     if offset != "":
@@ -615,7 +628,7 @@ async def filter_episodes_cb_handler(client: Client, query: CallbackQuery):
         btn.append([InlineKeyboardButton(text="↭ BACk to homE ↭", callback_data=f"fe#homepage#{key}")])
     
     if not settings["button"]:
-        cur_time = datetime.now(pytz.timezone('Africa/Lome')).time()
+        cur_time = datetime.now(pytz.timezone('Asia/Kolkata')).time()
         time_difference = timedelta(hours=cur_time.hour, minutes=cur_time.minute, seconds=(cur_time.second+(cur_time.microsecond/1000000))) - timedelta(hours=curr_time.hour, minutes=curr_time.minute, seconds=(curr_time.second+(curr_time.microsecond/1000000)))
         remaining_seconds = "{:.2f}".format(time_difference.total_seconds())
         cap = await get_cap(settings, remaining_seconds, files, query, total_results, search)
@@ -688,7 +701,7 @@ async def languages_cb_handler(client: Client, query: CallbackQuery):
 @Client.on_callback_query(filters.regex(r"^fl#"))
 async def filter_languages_cb_handler(client: Client, query: CallbackQuery):
     _, lang, key = query.data.split("#")
-    curr_time = datetime.now(pytz.timezone('Africa/Lome')).time()
+    curr_time = datetime.now(pytz.timezone('Asia/Kolkata')).time()
     search = FRESH.get(key)
     try:
         search = search.replace(' ', '_')
@@ -725,36 +738,36 @@ async def filter_languages_cb_handler(client: Client, query: CallbackQuery):
         btn = [
             [
                 InlineKeyboardButton(
-                    text=f"[{get_size(file['file_size'])}] {' '.join(filter(lambda x: not x.startswith('[') and not x.startswith('@') and not x.startswith('www.'), file['file_name'].split()))}", callback_data=f'{pre}#{file["file_id"]}'
+                    text=f"[{get_size(file['file_size'])}] {clean_filename(file['file_name'])}", callback_data=f'{pre}#{file["file_id"]}'
                 ),
             ]
             for file in files
         ]
         btn.insert(0, 
             [
-                InlineKeyboardButton(f'quAlity', callback_data=f"qualities#{key}"),
-                InlineKeyboardButton("EpisoDEs", callback_data=f"episodes#{key}"),
-                InlineKeyboardButton("sEAsons",  callback_data=f"seasons#{key}")
+                InlineKeyboardButton(f'Qualité', callback_data=f"qualities#{key}"),
+                InlineKeyboardButton("Épisodes", callback_data=f"episodes#{key}"),
+                InlineKeyboardButton("Saisons",  callback_data=f"seasons#{key}")
             ]
         )
         btn.insert(0, [
             InlineKeyboardButton("Tout envoyer 📨", callback_data=f"sendfiles#{key}"),
-            InlineKeyboardButton("lAnguAgEs", callback_data=f"languages#{key}"),
-            InlineKeyboardButton("yEArs", callback_data=f"years#{key}")
+            InlineKeyboardButton("Langues", callback_data=f"languages#{key}"),
+            InlineKeyboardButton("Années", callback_data=f"years#{key}")
         ])
     else:
         btn = []
         btn.insert(0, 
             [
-                InlineKeyboardButton(f'quAlity', callback_data=f"qualities#{key}"),
-                InlineKeyboardButton("EpisoDEs", callback_data=f"episodes#{key}"),
-                InlineKeyboardButton("sEAsons",  callback_data=f"seasons#{key}")
+                InlineKeyboardButton(f'Qualité', callback_data=f"qualities#{key}"),
+                InlineKeyboardButton("Épisodes", callback_data=f"episodes#{key}"),
+                InlineKeyboardButton("Saisons",  callback_data=f"seasons#{key}")
             ]
         )
         btn.insert(0, [
             InlineKeyboardButton("Tout envoyer 📨", callback_data=f"sendfiles#{key}"),
-            InlineKeyboardButton("lAnguAgEs", callback_data=f"languages#{key}"),
-            InlineKeyboardButton("yEArs", callback_data=f"years#{key}")
+            InlineKeyboardButton("Langues", callback_data=f"languages#{key}"),
+            InlineKeyboardButton("Années", callback_data=f"years#{key}")
         ])
 
     if offset != "":
@@ -783,7 +796,7 @@ async def filter_languages_cb_handler(client: Client, query: CallbackQuery):
         btn.append([InlineKeyboardButton(text="↭ BACk to homE ↭", callback_data=f"fl#homepage#{key}")])
     
     if not settings["button"]:
-        cur_time = datetime.now(pytz.timezone('Africa/Lome')).time()
+        cur_time = datetime.now(pytz.timezone('Asia/Kolkata')).time()
         time_difference = timedelta(hours=cur_time.hour, minutes=cur_time.minute, seconds=(cur_time.second+(cur_time.microsecond/1000000))) - timedelta(hours=curr_time.hour, minutes=curr_time.minute, seconds=(curr_time.second+(curr_time.microsecond/1000000)))
         remaining_seconds = "{:.2f}".format(time_difference.total_seconds())
         cap = await get_cap(settings, remaining_seconds, files, query, total_results, search)
@@ -856,7 +869,7 @@ async def seasons_cb_handler(client: Client, query: CallbackQuery):
 @Client.on_callback_query(filters.regex(r"^fs#"))
 async def filter_seasons_cb_handler(client: Client, query: CallbackQuery):
     _, seas, key = query.data.split("#")
-    curr_time = datetime.now(pytz.timezone('Africa/Lome')).time()
+    curr_time = datetime.now(pytz.timezone('Asia/Kolkata')).time()
     search = FRESH.get(key)
     try:
         search = search.replace(' ', '_')
@@ -922,36 +935,36 @@ async def filter_seasons_cb_handler(client: Client, query: CallbackQuery):
         btn = [
             [
                 InlineKeyboardButton(
-                    text=f"[{get_size(file['file_size'])}] {' '.join(filter(lambda x: not x.startswith('[') and not x.startswith('@') and not x.startswith('www.'), file['file_name'].split()))}", callback_data=f'{pre}#{file["file_id"]}'
+                    text=f"[{get_size(file['file_size'])}] {clean_filename(file['file_name'])}", callback_data=f'{pre}#{file["file_id"]}'
                 ),
             ]
             for file in files
         ]
         btn.insert(0, 
             [
-                InlineKeyboardButton(f'quAlity', callback_data=f"qualities#{key}"),
-                InlineKeyboardButton("EpisoDEs", callback_data=f"episodes#{key}"),
-                InlineKeyboardButton("sEAsons",  callback_data=f"seasons#{key}")
+                InlineKeyboardButton(f'Qualité', callback_data=f"qualities#{key}"),
+                InlineKeyboardButton("Épisodes", callback_data=f"episodes#{key}"),
+                InlineKeyboardButton("Saisons",  callback_data=f"seasons#{key}")
             ]
         )
         btn.insert(0, [
             InlineKeyboardButton("Tout envoyer 📨", callback_data=f"sendfiles#{key}"),
-            InlineKeyboardButton("lAnguAgEs", callback_data=f"languages#{key}"),
-            InlineKeyboardButton("yEArs", callback_data=f"years#{key}")
+            InlineKeyboardButton("Langues", callback_data=f"languages#{key}"),
+            InlineKeyboardButton("Années", callback_data=f"years#{key}")
         ])
     else:
         btn = []
         btn.insert(0, 
             [
-                InlineKeyboardButton(f'quAlity', callback_data=f"qualities#{key}"),
-                InlineKeyboardButton("EpisoDEs", callback_data=f"episodes#{key}"),
-                InlineKeyboardButton("sEAsons",  callback_data=f"seasons#{key}")
+                InlineKeyboardButton(f'Qualité', callback_data=f"qualities#{key}"),
+                InlineKeyboardButton("Épisodes", callback_data=f"episodes#{key}"),
+                InlineKeyboardButton("Saisons",  callback_data=f"seasons#{key}")
             ]
         )
         btn.insert(0, [
             InlineKeyboardButton("Tout envoyer 📨", callback_data=f"sendfiles#{key}"),
-            InlineKeyboardButton("lAnguAgEs", callback_data=f"languages#{key}"),
-            InlineKeyboardButton("yEArs", callback_data=f"years#{key}")
+            InlineKeyboardButton("Langues", callback_data=f"languages#{key}"),
+            InlineKeyboardButton("Années", callback_data=f"years#{key}")
         ])
     if lang != "homepage":
         req = query.from_user.id
@@ -959,7 +972,7 @@ async def filter_seasons_cb_handler(client: Client, query: CallbackQuery):
         btn.append([InlineKeyboardButton(text="↭ BACk to homE ↭", callback_data=f"next_{req}_{key}_{offset}")])
     
     if not settings["button"]:
-        cur_time = datetime.now(pytz.timezone('Africa/Lome')).time()
+        cur_time = datetime.now(pytz.timezone('Asia/Kolkata')).time()
         time_difference = timedelta(hours=cur_time.hour, minutes=cur_time.minute, seconds=(cur_time.second+(cur_time.microsecond/1000000))) - timedelta(hours=curr_time.hour, minutes=curr_time.minute, seconds=(curr_time.second+(curr_time.microsecond/1000000)))
         remaining_seconds = "{:.2f}".format(time_difference.total_seconds())
         total_results = len(files)
@@ -1060,36 +1073,36 @@ async def filter_qualities_cb_handler(client: Client, query: CallbackQuery):
         btn = [
             [
                 InlineKeyboardButton(
-                    text=f"[{get_size(file['file_size'])}] {' '.join(filter(lambda x: not x.startswith('[') and not x.startswith('@') and not x.startswith('www.'), file['file_name'].split()))}", callback_data=f'{pre}#{file["file_id"]}'
+                    text=f"[{get_size(file['file_size'])}] {clean_filename(file['file_name'])}", callback_data=f'{pre}#{file["file_id"]}'
                 ),
             ]
             for file in files
         ]
         btn.insert(0, 
             [
-                InlineKeyboardButton(f'quAlity', callback_data=f"qualities#{key}"),
-                InlineKeyboardButton("EpisoDEs", callback_data=f"episodes#{key}"),
-                InlineKeyboardButton("sEAsons",  callback_data=f"seasons#{key}")
+                InlineKeyboardButton(f'Qualité', callback_data=f"qualities#{key}"),
+                InlineKeyboardButton("Épisodes", callback_data=f"episodes#{key}"),
+                InlineKeyboardButton("Saisons",  callback_data=f"seasons#{key}")
             ]
         )
         btn.insert(0, [
             InlineKeyboardButton("Tout envoyer 📨", callback_data=f"sendfiles#{key}"),
-            InlineKeyboardButton("lAnguAgEs", callback_data=f"languages#{key}"),
-            InlineKeyboardButton("yEArs", callback_data=f"years#{key}")
+            InlineKeyboardButton("Langues", callback_data=f"languages#{key}"),
+            InlineKeyboardButton("Années", callback_data=f"years#{key}")
         ])
     else:
         btn = []
         btn.insert(0, 
             [
-                InlineKeyboardButton(f'quAlity', callback_data=f"qualities#{key}"),
-                InlineKeyboardButton("EpisoDEs", callback_data=f"episodes#{key}"),
-                InlineKeyboardButton("sEAsons",  callback_data=f"seasons#{key}")
+                InlineKeyboardButton(f'Qualité', callback_data=f"qualities#{key}"),
+                InlineKeyboardButton("Épisodes", callback_data=f"episodes#{key}"),
+                InlineKeyboardButton("Saisons",  callback_data=f"seasons#{key}")
             ]
         )
         btn.insert(0, [
             InlineKeyboardButton("Tout envoyer 📨", callback_data=f"sendfiles#{key}"),
-            InlineKeyboardButton("lAnguAgEs", callback_data=f"languages#{key}"),
-            InlineKeyboardButton("yEArs", callback_data=f"years#{key}")
+            InlineKeyboardButton("Langues", callback_data=f"languages#{key}"),
+            InlineKeyboardButton("Années", callback_data=f"years#{key}")
         ])
 
     if offset != "":
@@ -1118,7 +1131,7 @@ async def filter_qualities_cb_handler(client: Client, query: CallbackQuery):
         btn.append([InlineKeyboardButton(text="↭ BACk to homE ↭", callback_data=f"next_{req}_{key}_{offset}")])
     
     if not settings["button"]:
-        cur_time = datetime.now(pytz.timezone('Africa/Lome')).time()
+        cur_time = datetime.now(pytz.timezone('Asia/Kolkata')).time()
         time_difference = timedelta(hours=cur_time.hour, minutes=cur_time.minute, seconds=(cur_time.second+(cur_time.microsecond/1000000))) - timedelta(hours=curr_time.hour, minutes=curr_time.minute, seconds=(curr_time.second+(curr_time.microsecond/1000000)))
         remaining_seconds = "{:.2f}".format(time_difference.total_seconds())
         total_results = len(files)
@@ -1616,35 +1629,35 @@ async def cb_handler(client: Client, query: CallbackQuery):
                 [
                     InlineKeyboardButton('ProtECt ContEnt',
                                          callback_data=f'setgs#file_secure#{settings["file_secure"]}#{str(grp_id)}'),
-                    InlineKeyboardButton('✔ Active' if settings["file_secure"] else '✘ Inactif',
+                    InlineKeyboardButton('✅ Actif' if settings["file_secure"] else '❌ Inactif',
                                          callback_data=f'setgs#file_secure#{settings["file_secure"]}#{str(grp_id)}')
                 ],
                 [
                     InlineKeyboardButton('ImDB', callback_data=f'setgs#imdb#{settings["imdb"]}#{str(grp_id)}'),
-                    InlineKeyboardButton('✔ Active' if settings["imdb"] else '✘ Inactif',
+                    InlineKeyboardButton('✅ Actif' if settings["imdb"] else '❌ Inactif',
                                          callback_data=f'setgs#imdb#{settings["imdb"]}#{str(grp_id)}')
                 ],
                 [
                     InlineKeyboardButton('Correcteur ortho.',
                                          callback_data=f'setgs#spell_check#{settings["spell_check"]}#{str(grp_id)}'),
-                    InlineKeyboardButton('✔ Active' if settings["spell_check"] else '✘ Inactif',
+                    InlineKeyboardButton('✅ Actif' if settings["spell_check"] else '❌ Inactif',
                                          callback_data=f'setgs#spell_check#{settings["spell_check"]}#{str(grp_id)}')
                 ],
                 [
                     InlineKeyboardButton('WElComE Msg', callback_data=f'setgs#welcome#{settings["welcome"]}#{str(grp_id)}'),
-                    InlineKeyboardButton('✔ Active' if settings["welcome"] else '✘ Inactif',
+                    InlineKeyboardButton('✅ Actif' if settings["welcome"] else '❌ Inactif',
                                          callback_data=f'setgs#welcome#{settings["welcome"]}#{str(grp_id)}')
                 ],
                 [
                     InlineKeyboardButton('Auto-DElEtE',
                                          callback_data=f'setgs#auto_delete#{settings["auto_delete"]}#{str(grp_id)}'),
-                    InlineKeyboardButton('5 Min' if settings["auto_delete"] else '✘ Inactif',
+                    InlineKeyboardButton('5 min' if settings["auto_delete"] else '❌ Inactif',
                                          callback_data=f'setgs#auto_delete#{settings["auto_delete"]}#{str(grp_id)}')
                 ],
                 [
                     InlineKeyboardButton('Auto-FiltEr',
                                          callback_data=f'setgs#auto_ffilter#{settings["auto_ffilter"]}#{str(grp_id)}'),
-                    InlineKeyboardButton('✔ Active' if settings["auto_ffilter"] else '✘ Inactif',
+                    InlineKeyboardButton('✅ Actif' if settings["auto_ffilter"] else '❌ Inactif',
                                          callback_data=f'setgs#auto_ffilter#{settings["auto_ffilter"]}#{str(grp_id)}')
                 ],
                 [
@@ -1692,35 +1705,35 @@ async def cb_handler(client: Client, query: CallbackQuery):
                 [
                     InlineKeyboardButton('ProtECt ContEnt',
                                          callback_data=f'setgs#file_secure#{settings["file_secure"]}#{str(grp_id)}'),
-                    InlineKeyboardButton('✔ Active' if settings["file_secure"] else '✘ Inactif',
+                    InlineKeyboardButton('✅ Actif' if settings["file_secure"] else '❌ Inactif',
                                          callback_data=f'setgs#file_secure#{settings["file_secure"]}#{str(grp_id)}')
                 ],
                 [
                     InlineKeyboardButton('ImDB', callback_data=f'setgs#imdb#{settings["imdb"]}#{str(grp_id)}'),
-                    InlineKeyboardButton('✔ Active' if settings["imdb"] else '✘ Inactif',
+                    InlineKeyboardButton('✅ Actif' if settings["imdb"] else '❌ Inactif',
                                          callback_data=f'setgs#imdb#{settings["imdb"]}#{str(grp_id)}')
                 ],
                 [
                     InlineKeyboardButton('Correcteur ortho.',
                                          callback_data=f'setgs#spell_check#{settings["spell_check"]}#{str(grp_id)}'),
-                    InlineKeyboardButton('✔ Active' if settings["spell_check"] else '✘ Inactif',
+                    InlineKeyboardButton('✅ Actif' if settings["spell_check"] else '❌ Inactif',
                                          callback_data=f'setgs#spell_check#{settings["spell_check"]}#{str(grp_id)}')
                 ],
                 [
                     InlineKeyboardButton('WElComE Msg', callback_data=f'setgs#welcome#{settings["welcome"]}#{str(grp_id)}'),
-                    InlineKeyboardButton('✔ Active' if settings["welcome"] else '✘ Inactif',
+                    InlineKeyboardButton('✅ Actif' if settings["welcome"] else '❌ Inactif',
                                          callback_data=f'setgs#welcome#{settings["welcome"]}#{str(grp_id)}')
                 ],
                 [
                     InlineKeyboardButton('Auto-DElEtE',
                                          callback_data=f'setgs#auto_delete#{settings["auto_delete"]}#{str(grp_id)}'),
-                    InlineKeyboardButton('5 Min' if settings["auto_delete"] else '✘ Inactif',
+                    InlineKeyboardButton('5 min' if settings["auto_delete"] else '❌ Inactif',
                                          callback_data=f'setgs#auto_delete#{settings["auto_delete"]}#{str(grp_id)}')
                 ],
                 [
                     InlineKeyboardButton('Auto-FiltEr',
                                          callback_data=f'setgs#auto_ffilter#{settings["auto_ffilter"]}#{str(grp_id)}'),
-                    InlineKeyboardButton('✔ Active' if settings["auto_ffilter"] else '✘ Inactif',
+                    InlineKeyboardButton('✅ Actif' if settings["auto_ffilter"] else '❌ Inactif',
                                          callback_data=f'setgs#auto_ffilter#{settings["auto_ffilter"]}#{str(grp_id)}')
                 ],
                 [
@@ -2503,35 +2516,35 @@ async def cb_handler(client: Client, query: CallbackQuery):
                 [
                     InlineKeyboardButton('ProtECt ContEnt',
                                          callback_data=f'setgs#file_secure#{settings["file_secure"]}#{str(grp_id)}'),
-                    InlineKeyboardButton('✔ Active' if settings["file_secure"] else '✘ Inactif',
+                    InlineKeyboardButton('✅ Actif' if settings["file_secure"] else '❌ Inactif',
                                          callback_data=f'setgs#file_secure#{settings["file_secure"]}#{str(grp_id)}')
                 ],
                 [
                     InlineKeyboardButton('ImDB', callback_data=f'setgs#imdb#{settings["imdb"]}#{str(grp_id)}'),
-                    InlineKeyboardButton('✔ Active' if settings["imdb"] else '✘ Inactif',
+                    InlineKeyboardButton('✅ Actif' if settings["imdb"] else '❌ Inactif',
                                          callback_data=f'setgs#imdb#{settings["imdb"]}#{str(grp_id)}')
                 ],
                 [
                     InlineKeyboardButton('Correcteur ortho.',
                                          callback_data=f'setgs#spell_check#{settings["spell_check"]}#{str(grp_id)}'),
-                    InlineKeyboardButton('✔ Active' if settings["spell_check"] else '✘ Inactif',
+                    InlineKeyboardButton('✅ Actif' if settings["spell_check"] else '❌ Inactif',
                                          callback_data=f'setgs#spell_check#{settings["spell_check"]}#{str(grp_id)}')
                 ],
                 [
                     InlineKeyboardButton('WElComE Msg', callback_data=f'setgs#welcome#{settings["welcome"]}#{str(grp_id)}'),
-                    InlineKeyboardButton('✔ Active' if settings["welcome"] else '✘ Inactif',
+                    InlineKeyboardButton('✅ Actif' if settings["welcome"] else '❌ Inactif',
                                          callback_data=f'setgs#welcome#{settings["welcome"]}#{str(grp_id)}')
                 ],
                 [
                     InlineKeyboardButton('Auto-DElEtE',
                                          callback_data=f'setgs#auto_delete#{settings["auto_delete"]}#{str(grp_id)}'),
-                    InlineKeyboardButton('5 Min' if settings["auto_delete"] else '✘ Inactif',
+                    InlineKeyboardButton('5 min' if settings["auto_delete"] else '❌ Inactif',
                                          callback_data=f'setgs#auto_delete#{settings["auto_delete"]}#{str(grp_id)}')
                 ],
                 [
                     InlineKeyboardButton('Auto-FiltEr',
                                          callback_data=f'setgs#auto_ffilter#{settings["auto_ffilter"]}#{str(grp_id)}'),
-                    InlineKeyboardButton('✔ Active' if settings["auto_ffilter"] else '✘ Inactif',
+                    InlineKeyboardButton('✅ Actif' if settings["auto_ffilter"] else '❌ Inactif',
                                          callback_data=f'setgs#auto_ffilter#{settings["auto_ffilter"]}#{str(grp_id)}')
                 ],
                 [
@@ -2546,7 +2559,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
     await query.answer(MSG_ALRT)
 
 async def auto_filter(client, name, msg, reply_msg, ai_search, spoll=False):
-    curr_time = datetime.now(pytz.timezone('Africa/Lome')).time()
+    curr_time = datetime.now(pytz.timezone('Asia/Kolkata')).time()
     if not spoll:
         message = msg
         if message.text.startswith("/"): return  # ignore commands
@@ -2592,36 +2605,36 @@ async def auto_filter(client, name, msg, reply_msg, ai_search, spoll=False):
         btn = [
             [
                 InlineKeyboardButton(
-                    text=f"[{get_size(file['file_size'])}] {' '.join(filter(lambda x: not x.startswith('[') and not x.startswith('@') and not x.startswith('www.'), file['file_name'].split()))}", callback_data=f'{pre}#{file["file_id"]}'
+                    text=f"[{get_size(file['file_size'])}] {clean_filename(file['file_name'])}", callback_data=f'{pre}#{file["file_id"]}'
                 ),
             ]
             for file in files
         ]
         btn.insert(0, 
             [
-                InlineKeyboardButton(f'quAlity', callback_data=f"qualities#{key}"),
-                InlineKeyboardButton("EpisoDEs", callback_data=f"episodes#{key}"),
-                InlineKeyboardButton("sEAsons",  callback_data=f"seasons#{key}")
+                InlineKeyboardButton(f'Qualité', callback_data=f"qualities#{key}"),
+                InlineKeyboardButton("Épisodes", callback_data=f"episodes#{key}"),
+                InlineKeyboardButton("Saisons",  callback_data=f"seasons#{key}")
             ]
         )
         btn.insert(0, [
             InlineKeyboardButton("Tout envoyer 📨", callback_data=f"sendfiles#{key}"),
-            InlineKeyboardButton("lAnguAgEs", callback_data=f"languages#{key}"),
-            InlineKeyboardButton("yEArs", callback_data=f"years#{key}")
+            InlineKeyboardButton("Langues", callback_data=f"languages#{key}"),
+            InlineKeyboardButton("Années", callback_data=f"years#{key}")
         ])
     else:
         btn = []
         btn.insert(0, 
             [
-                InlineKeyboardButton(f'quAlity', callback_data=f"qualities#{key}"),
-                InlineKeyboardButton("EpisoDEs", callback_data=f"episodes#{key}"),
-                InlineKeyboardButton("sEAsons",  callback_data=f"seasons#{key}")
+                InlineKeyboardButton(f'Qualité', callback_data=f"qualities#{key}"),
+                InlineKeyboardButton("Épisodes", callback_data=f"episodes#{key}"),
+                InlineKeyboardButton("Saisons",  callback_data=f"seasons#{key}")
             ]
         )
         btn.insert(0, [
             InlineKeyboardButton("Tout envoyer 📨", callback_data=f"sendfiles#{key}"),
-            InlineKeyboardButton("lAnguAgEs", callback_data=f"languages#{key}"),
-            InlineKeyboardButton("yEArs", callback_data=f"years#{key}")
+            InlineKeyboardButton("Langues", callback_data=f"languages#{key}"),
+            InlineKeyboardButton("Années", callback_data=f"years#{key}")
         ])
     if offset != "":
         try:
@@ -2644,7 +2657,7 @@ async def auto_filter(client, name, msg, reply_msg, ai_search, spoll=False):
         )
     # FIX: IMDB poster toujours activé
     imdb = await get_poster(search, file=(files[0])['file_name'])
-    cur_time = datetime.now(pytz.timezone('Africa/Lome')).time()
+    cur_time = datetime.now(pytz.timezone('Asia/Kolkata')).time()
     time_difference = timedelta(hours=cur_time.hour, minutes=cur_time.minute, seconds=(cur_time.second+(cur_time.microsecond/1000000))) - timedelta(hours=curr_time.hour, minutes=curr_time.minute, seconds=(curr_time.second+(curr_time.microsecond/1000000)))
     remaining_seconds = "{:.2f}".format(time_difference.total_seconds())
     TEMPLATE = script.IMDB_TEMPLATE_TXT
@@ -2684,7 +2697,7 @@ async def auto_filter(client, name, msg, reply_msg, ai_search, spoll=False):
         if not settings["button"]:
             cap+="<b>\n\n<u>🍿 Your Movie Files 👇</u></b>\n"
             for file in files:
-                cap += f"<b>\n📁 <a href='https://telegram.me/{temp.U_NAME}?start=files_{file['file_id']}'>[{get_size(file['file_size'])}] {' '.join(filter(lambda x: not x.startswith('[') and not x.startswith('@') and not x.startswith('www.'), file['file_name'].split()))}\n</a></b>"
+                cap += f"<b>\n📁 <a href='https://telegram.me/{temp.U_NAME}?start=files_{file['file_id']}'>[{get_size(file['file_size'])}] {clean_filename(file['file_name'])}\n</a></b>"
     else:
         if settings["button"]:
             cap = f"<b>Résultats pour : {search}\n\nDemandé par : {message.from_user.mention}\n\nAffiché en : {remaining_seconds} secondes\n\nGroupe : {message.chat.title}\n\n⚠️ Ce message sera supprimé automatiquement dans 5 minutes.</b>\n\n"
@@ -2692,7 +2705,7 @@ async def auto_filter(client, name, msg, reply_msg, ai_search, spoll=False):
             cap = f"<b>Résultats pour : {search}\n\nDemandé par : {message.from_user.mention}\n\nAffiché en : {remaining_seconds} secondes\n\nGroupe : {message.chat.title}\n\n⚠️ Ce message sera supprimé automatiquement dans 5 minutes.</b>\n\n"
             cap+="<b><u>🍿 Your Movie Files 👇</u></b>\n\n"
             for file in files:
-                cap += f"<b>📁 <a href='https://telegram.me/{temp.U_NAME}?start=files_{file['file_id']}'>[{get_size(file['file_size'])}] {' '.join(filter(lambda x: not x.startswith('[') and not x.startswith('@') and not x.startswith('www.'), file['file_name'].split()))}\n\n</a></b>"
+                cap += f"<b>📁 <a href='https://telegram.me/{temp.U_NAME}?start=files_{file['file_id']}'>[{get_size(file['file_size'])}] {clean_filename(file['file_name'])}\n\n</a></b>"
 
     if imdb and imdb.get('poster'):
         try:
@@ -2766,7 +2779,7 @@ async def advantage_spell_chok(client, name, msg, reply_msg, vj_search):
         logger.exception(e)
         reqst_gle = mv_rqst.replace(" ", "+")
         button = [[
-            InlineKeyboardButton("GooglE", url=f"https://www.google.com/search?q={reqst_gle}")
+            InlineKeyboardButton("Rechercher sur Google", url=f"https://www.google.com/search?q={reqst_gle}")
         ]]
         if NO_RESULTS_MSG:
             await client.send_message(chat_id=LOG_CHANNEL, text=(script.NORSLTS.format(reqstr.id, reqstr.mention, mv_rqst)))
@@ -2778,7 +2791,7 @@ async def advantage_spell_chok(client, name, msg, reply_msg, vj_search):
     if not movies:
         reqst_gle = mv_rqst.replace(" ", "+")
         button = [[
-            InlineKeyboardButton("GooglE", url=f"https://www.google.com/search?q={reqst_gle}")
+            InlineKeyboardButton("Rechercher sur Google", url=f"https://www.google.com/search?q={reqst_gle}")
         ]]
         if NO_RESULTS_MSG:
             await client.send_message(chat_id=LOG_CHANNEL, text=(script.NORSLTS.format(reqstr.id, reqstr.mention, mv_rqst)))
@@ -2804,7 +2817,7 @@ async def advantage_spell_chok(client, name, msg, reply_msg, vj_search):
                 break
         reqst_gle = mv_rqst.replace(" ", "+")
         button = [[
-            InlineKeyboardButton("GooglE", url=f"https://www.google.com/search?q={reqst_gle}")
+            InlineKeyboardButton("Rechercher sur Google", url=f"https://www.google.com/search?q={reqst_gle}")
         ]]
         if NO_RESULTS_MSG:
             await client.send_message(chat_id=LOG_CHANNEL, text=(script.NORSLTS.format(reqstr.id, reqstr.mention, mv_rqst)))
