@@ -25,7 +25,7 @@ async def save_file(media):
     
     file_id = unpack_new_file_id(media.file_id)
     file_name = clean_file_name(media.file_name)
-    new_file_name = f"@VJ_Bots {file_name}"
+    new_file_name = file_name  # FIX: suppression du préfixe @VJ_Bots
     
     file = {
         'file_id': file_id,
@@ -69,9 +69,8 @@ def clean_file_name(file_name):
     return new_file_name
 
 def add_space_between_e_and_number(input_string):
-    # Use regex to find 'e' or 'E' followed by a digit and add a space
-    output_string = re.sub(r'(e|E)([0-9])', r'1 2', input_string)
-    return output_string
+    # FIX: fonction désactivée — ne plus modifier S01E24 etc.
+    return input_string
     
 def is_file_already_saved(file_id, file_name):
     """Check if the file is already saved in either collection."""
