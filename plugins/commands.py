@@ -50,7 +50,7 @@ async def start(client, message):
             await client.send_message(LOG_CHANNEL, script.LOG_TEXT_G.format(message.chat.title, message.chat.id, total, "Unknown"))       
             await db.add_chat(message.chat.id, message.chat.title)
         return 
-    if not await db.is_user_exist(message.from_user.id):
+    if message.from_user and not await db.is_user_exist(message.from_user.id):
         await db.add_user(message.from_user.id, message.from_user.first_name)
         await client.send_message(LOG_CHANNEL, script.LOG_TEXT_P.format(message.from_user.id, message.from_user.mention))
     if len(message.command) != 2:
@@ -79,12 +79,17 @@ async def start(client, message):
         reply_markup = InlineKeyboardMarkup(buttons)
         await message.reply_photo(
             photo=random.choice(PICS),
-            caption=script.START_TXT.format(message.from_user.mention if message.from_user else message.chat.title),
+            caption=script.START_TXT.format(message.from_user.mention if message.from_user else ""),  # from_user peut être None en groupe
             reply_markup=reply_markup,
             parse_mode=enums.ParseMode.HTML
         )
         return
-    if AUTH_CHANNEL and not await is_subscribed(client, message):
+    # Si l'user vient récupérer un fichier (session déjà vérifiée dans le groupe),
+    # on saute la vérification AUTH_CHANNEL pour ne pas bloquer l'envoi
+    _data_preview = message.command[1] if len(message.command) == 2 else ""
+    _skip_fsub = any(_data_preview.startswith(p) for p in ["file_", "filep_", "allfiles_", "allfilesp_"])
+
+    if AUTH_CHANNEL and not _skip_fsub and not await is_subscribed(client, message):
         try:
             if REQUEST_TO_JOIN_MODE == True:
                 invite_link = await client.create_chat_invite_link(chat_id=(int(AUTH_CHANNEL)), creates_join_request=True)
@@ -130,6 +135,15 @@ async def start(client, message):
             return await message.reply_text("un probleme est survenu avec l\'abonnement force.")
             
     data = message.command[1] if len(message.command) == 2 else ""
+    # Extraction centrale de pre et file_id depuis data (ex: "file_XXXXX", "sendfiles_CHATID-MSGID")
+    pre = ""
+    file_id = ""
+    if "_" in data:
+        try:
+            pre, file_id = data.split("_", 1)
+        except ValueError:
+            pre = data
+            file_id = ""
     if len(message.command) == 2 and message.command[1] in ["subscribe", "error", "okay", "help"]:
         filesarr = []
         for msg in msgs:
@@ -142,7 +156,7 @@ async def start(client, message):
                 except:
                     f_caption=f_caption
             if f_caption is None:
-                f_caption = f"@VJ_Bots {title}"
+                f_caption = f"{title}"
             try:
                 if STREAM_MODE == True:
                     log_msg = await client.send_cached_media(chat_id=LOG_CHANNEL, file_id=msg.get("file_id"))
@@ -266,7 +280,7 @@ async def start(client, message):
         btn = [[
             InlineKeyboardButton('Telecharger maintenant', url=g)
         ]]
-        text = "<b>✅ your filE rEADy CliCk on Telecharger maintenant Button thEn opEn link to gEt filE\n\n</b>"
+        text = "<b>✅ Vos fichiers sont prêts. Cliquez sur le bouton ci-dessous pour les obtenir.</b>\n\n"
         k = await client.send_message(chat_id=message.from_user.id, text=text, reply_markup=InlineKeyboardMarkup(btn))
         await asyncio.sleep(300)
         await k.edit("<b>✅ Votre message a ete supprime avec succes</b>")
@@ -282,7 +296,7 @@ async def start(client, message):
         btn = [[
             InlineKeyboardButton('Telecharger maintenant', url=g)
         ]]
-        text = "<b>✅ your filE rEADy CliCk on Telecharger maintenant Button thEn opEn link to gEt filE\n\n</b>"
+        text = "<b>✅ Vos fichiers sont prêts. Cliquez sur le bouton ci-dessous pour les obtenir.</b>\n\n"
         k = await client.send_message(chat_id=user, text=text, reply_markup=InlineKeyboardMarkup(btn))
         await asyncio.sleep(1200)
         await k.edit("<b>✅ Votre message a ete supprime avec succes</b>")
@@ -305,7 +319,7 @@ async def start(client, message):
                 except:
                     f_caption=f_caption
             if f_caption is None:
-                f_caption = f"{' '.join(filter(lambda x: not x.startswith('[') and not x.startswith('@'), files1['file_name'].split()))}"
+                f_caption = f"{clean_filename(files1['file_name'])}"
             if STREAM_MODE == True:
                 button = [[InlineKeyboardButton('Streaming et telechargement', callback_data=f'generate_stream_link:{file_id}')]]
                 reply_markup = InlineKeyboardMarkup(button)
@@ -328,13 +342,24 @@ async def start(client, message):
         
     elif data.startswith("files"):
         user = message.from_user.id
-        if temp.SHORT.get(user)==None:
-            await message.reply_text(text="<b>Please Search Again in Group</b>")
-        else:
-            chat_id = temp.SHORT.get(user)
+        chat_id = temp.SHORT.get(user)
+        if not chat_id:
+            return await message.reply_text(text="<b>Veuillez relancer votre recherche dans le groupe.</b>")
         settings = await get_settings(chat_id)
         pre = 'filep' if settings['file_secure'] else 'file'
+        # Rediriger vers le lien de téléchargement direct
+        g = f"https://telegram.me/{temp.U_NAME}?start={pre}_{file_id}"
+        await message.reply_text(
+            "<b>Cliquez ci-dessous pour récupérer votre fichier.</b>",
+            reply_markup=InlineKeyboardMarkup([[
+                InlineKeyboardButton("⬇️ Obtenir le fichier", url=g)
+            ]])
+        )
+        return
+    # Envoi du fichier principal (data = file_XXXX ou filep_XXXX)
     user = message.from_user.id
+    if not file_id:
+        return await message.reply("<b>Lien invalide. Veuillez refaire une recherche dans le groupe.</b>")
     files_ = await get_file_details(file_id)           
     if not files_:
         pre, file_id = ((base64.urlsafe_b64decode(data + "=" * (-len(data) % 4))).decode("ascii")).split("_", 1)
@@ -352,7 +377,7 @@ async def start(client, message):
             file = getattr(msg, filetype.value)
             title = file.file_name
             size=get_size(file.file_size)
-            f_caption = f"@VJ_Bots <code>{title}</code>"
+            f_caption = f"<code>{title}</code>"
             if CUSTOM_FILE_CAPTION:
                 try:
                     f_caption=CUSTOM_FILE_CAPTION.format(file_name= '' if title is None else title, file_size='' if size is None else size, file_caption='')
@@ -378,7 +403,7 @@ async def start(client, message):
         except:
             f_caption=f_caption
     if f_caption is None:
-        f_caption = f"@VJ_Bots {' '.join(filter(lambda x: not x.startswith('[') and not x.startswith('@'), files['file_name'].split()))}"
+        f_caption = clean_filename(files['file_name'])
     if STREAM_MODE == True:
         button = [[InlineKeyboardButton('Streaming et telechargement', callback_data=f'generate_stream_link:{file_id}')]]
         reply_markup=InlineKeyboardMarkup(button)
@@ -397,6 +422,118 @@ async def start(client, message):
     await msg.delete()
     await k.edit_text("<b>✅ Votre message a ete supprime avec succes si vous le souhaitez a nouveau, cliquez sur le bouton ci-dessous</b>",reply_markup=InlineKeyboardMarkup(btn))
     return   
+
+
+
+@Client.on_message(filters.command('add_premium') & filters.user(ADMINS))
+async def add_premium_cmd(client, message):
+    from database.jks_db import grant_premium_plan, PLAN_LABELS, PLAN_DURATIONS
+    args = message.text.split()
+    if len(args) < 3:
+        plans_text = "\n".join(f"• <code>{k}</code> — {v}" for k, v in PLAN_LABELS.items())
+        return await message.reply_text(
+            f"<b>Utilisation :</b> <code>/add_premium user_id plan</code>\n\n"
+            f"<b>Plans disponibles :</b>\n{plans_text}",
+            parse_mode=enums.ParseMode.HTML
+        )
+    try:
+        user_id = int(args[1])
+        plan = args[2].lower()
+        if plan not in PLAN_DURATIONS:
+            return await message.reply_text(f"<b>Plan inconnu :</b> <code>{plan}</code>", parse_mode=enums.ParseMode.HTML)
+        expiry = await grant_premium_plan(user_id, plan)
+        await message.reply_text(
+            f"<b>✅ Plan premium activé.</b>\n\n"
+            f"<b>Utilisateur :</b> <code>{user_id}</code>\n"
+            f"<b>Plan :</b> <b>{PLAN_LABELS[plan]}</b>\n"
+            f"<b>Expiration :</b> <code>{expiry.strftime('%d %b %Y à %H:%M UTC')}</code>",
+            parse_mode=enums.ParseMode.HTML
+        )
+        try:
+            await client.send_message(
+                chat_id=user_id,
+                text=(
+                    f"<b>🎉 Votre plan premium a été activé !</b>\n\n"
+                    f"<b>Plan :</b> {PLAN_LABELS[plan]}\n"
+                    f"<b>Expiration :</b> <code>{expiry.strftime('%d %b %Y à %H:%M UTC')}</code>\n\n"
+                    "Vous bénéficiez maintenant d'un accès illimité sans publicité."
+                ),
+                parse_mode=enums.ParseMode.HTML
+            )
+        except Exception:
+            pass
+    except ValueError:
+        await message.reply_text("<b>ID utilisateur invalide.</b>", parse_mode=enums.ParseMode.HTML)
+    except Exception as e:
+        await message.reply_text(f"<b>Erreur :</b> <code>{e}</code>", parse_mode=enums.ParseMode.HTML)
+
+
+@Client.on_message(filters.command('remove_premium') & filters.user(ADMINS))
+async def remove_premium_cmd(client, message):
+    from database.jks_db import revoke_premium
+    args = message.text.split()
+    if len(args) < 2:
+        return await message.reply_text("<b>Utilisation :</b> <code>/remove_premium user_id</code>", parse_mode=enums.ParseMode.HTML)
+    try:
+        user_id = int(args[1])
+        await revoke_premium(user_id)
+        await message.reply_text(
+            f"<b>✅ Plan premium retiré pour l'utilisateur</b> <code>{user_id}</code>.",
+            parse_mode=enums.ParseMode.HTML
+        )
+    except Exception as e:
+        await message.reply_text(f"<b>Erreur :</b> <code>{e}</code>", parse_mode=enums.ParseMode.HTML)
+
+
+@Client.on_message(filters.command('premium_users') & filters.user(ADMINS))
+async def premium_users_cmd(client, message):
+    from database.jks_db import get_all_premium_users, PLAN_LABELS
+    users = await get_all_premium_users()
+    if not users:
+        return await message.reply_text("<b>Aucun utilisateur premium actif.</b>", parse_mode=enums.ParseMode.HTML)
+    text = "<b>Utilisateurs premium actifs :</b>\n\n"
+    for u in users[:25]:
+        expiry = u.get("premium_expiry")
+        plan = u.get("premium_plan", "?")
+        expiry_str = expiry.strftime("%d/%m/%Y") if expiry else "N/A"
+        text += f"• <code>{u['id']}</code> — {PLAN_LABELS.get(plan, plan)} — expire le {expiry_str}\n"
+    if len(users) > 25:
+        text += f"\n<i>... et {len(users) - 25} autres.</i>"
+    await message.reply_text(text, parse_mode=enums.ParseMode.HTML)
+
+
+@Client.on_message(filters.command('myplan'))
+async def myplan_cmd(client, message):
+    from database.jks_db import get_user_access, PLAN_LABELS, time_remaining, format_expiry
+    access = await get_user_access(message.from_user.id)
+    if access["access_type"] == "premium":
+        plan = access.get("plan", "free")
+        expiry = access.get("premium_expiry")
+        await message.reply_text(
+            f"<b>👑 Votre plan premium</b>\n\n"
+            f"<b>Plan :</b> {PLAN_LABELS.get(plan, plan)}\n"
+            f"<b>Expiration :</b> <code>{format_expiry(expiry)}</code>\n"
+            f"<b>Temps restant :</b> <code>{time_remaining(expiry)}</code>",
+            parse_mode=enums.ParseMode.HTML
+        )
+    elif access["access_type"] == "session":
+        expiry = access.get("session_expiry")
+        await message.reply_text(
+            f"<b>⏱ Session gratuite active</b>\n\n"
+            f"<b>Expiration :</b> <code>{format_expiry(expiry)}</code>\n"
+            f"<b>Temps restant :</b> <code>{time_remaining(expiry)}</code>\n\n"
+            "Pour un accès illimité, ouvrez la Mini App et souscrivez à un plan premium.",
+            parse_mode=enums.ParseMode.HTML
+        )
+    else:
+        await message.reply_text(
+            "<b>Vous n'avez pas de session active.</b>\n\n"
+            "Ouvrez la Mini App pour regarder une publicité et obtenir 1 heure d'accès gratuit.",
+            reply_markup=InlineKeyboardMarkup([[
+                InlineKeyboardButton("Ouvrir la Mini App 🚀", web_app=WebAppInfo(url=MINI_APP_URL))
+            ]]),
+            parse_mode=enums.ParseMode.HTML
+        )
 
 @Client.on_message(filters.command('channel') & filters.user(ADMINS))
 async def channel_info(bot, message):
