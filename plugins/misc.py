@@ -161,6 +161,8 @@ async def imdb_callback(bot: Client, quer_y: CallbackQuery):
             ]
         ]
     message = quer_y.message.reply_to_message or quer_y.message
+    user_mention = quer_y.from_user.mention
+    remaining_seconds = "0.00"
     if imdb:
         caption = IMDB_TEMPLATE.format(
             query = imdb['title'],
