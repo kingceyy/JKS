@@ -23,7 +23,7 @@ function getTelegramInitData(): string {
 // Ex: VITE_BOT_API_URL=https://ton-bot.koyeb.app
 const BOT_API_BASE =
   import.meta.env.VITE_BOT_API_URL ??
-  "https://experienced-marnie-imbd-db361783.koyeb.app";
+  "https://mayuribot.koyeb.app";
 
 // ── Fetch données utilisateur depuis le bot ────────────────────────────────────
 
