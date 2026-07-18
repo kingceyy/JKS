@@ -16,7 +16,7 @@ API_HASH = environ.get('API_HASH', '9bce1167e828939f39452795e56202a9')
 BOT_TOKEN = environ.get('BOT_TOKEN', "8330516294:AAGoXGZ1_mO50GfZgaAWLUoqR35BI54-6_o")
 
 # Images
-PICS = (environ.get('PICS', 'https://i.ibb.co/mfbQNfq/80395be46a7c.jpg')).split()
+PICS = (environ.get('PICS', 'https://i.ibb.co/fdXx6d1w/x.jpg')).split()
 
 # TMDB (remplace Cinemagoer/IMDb, casse depuis avril 2026)
 TMDB_API_KEY = environ.get('TMDB_API_KEY', 'f2bed62b5977bce26540055276d0046c')
@@ -28,11 +28,11 @@ AUTH_USERS = (auth_users + ADMINS) if auth_users else []
 
 # Canaux et groupes
 LOG_CHANNEL = int(environ.get('LOG_CHANNEL', '-1003665809003'))
-CHANNELS = [int(ch) if id_pattern.search(ch) else ch for ch in environ.get('CHANNELS', '-1003723207523').split()]
+CHANNELS = [int(ch) if id_pattern.search(ch) else ch for ch in environ.get('CHANNELS', '-1002794593683').split()]
 
 # Force subscribe
 REQUEST_TO_JOIN_MODE = is_enabled(environ.get('REQUEST_TO_JOIN_MODE', 'False'), False)
-TRY_AGAIN_BTN = is_enabled(environ.get('TRY_AGAIN_BTN', 'False'), False)
+TRY_AGAIN_BTN = is_enabled(environ.get('TRY_AGAIN_BTN', 'True'), False)
 auth_channel = environ.get('AUTH_CHANNEL', '-1003062493614')
 AUTH_CHANNEL = int(auth_channel) if auth_channel and id_pattern.search(auth_channel) else None
 
@@ -66,13 +66,13 @@ else:
     SEC_FILE_DB_URI = S_DB_URI
 
 # Mini App et URLs
-MINI_APP_URL = environ.get('MINI_APP_URL', 'https://t.me/JessiKaSearchBot/app')
-MINI_APP_TUTORIAL_URL = environ.get('MINI_APP_TUTORIAL_URL', 'https://t.me/JessiKaSearch/70')
+MINI_APP_URL = environ.get('MINI_APP_URL', 'https://t.me/MayumiXBot/app')
+MINI_APP_TUTORIAL_URL = environ.get('MINI_APP_TUTORIAL_URL', 'https://t.me/ZFlixTeam/3')
 
 # Liens
-GRP_LNK = environ.get('GRP_LNK', 'https://t.me/JessiKaSearchGrp')
-CHNL_LNK = environ.get('CHNL_LNK', 'https://t.me/JessiKaSearch')
-SUPPORT_CHAT = environ.get('SUPPORT_CHAT', 'JessiKaSearchGrp')
+GRP_LNK = environ.get('GRP_LNK', 'https://t.me/+oEaqvXJYSnAwZTU0')
+CHNL_LNK = environ.get('CHNL_LNK', 'https://t.me/ZFlixTeam')
+SUPPORT_CHAT = environ.get('SUPPORT_CHAT', 'https://t.me/itz_kingcey')
 OWNER_LNK = environ.get('OWNER_LNK', 'https://t.me/kingcey')
 
 # Options
@@ -82,7 +82,7 @@ BUTTON_MODE = is_enabled(environ.get('BUTTON_MODE', 'True'), True)
 MAX_BTN = is_enabled(environ.get('MAX_BTN', 'True'), True)
 IMDB = is_enabled(environ.get('IMDB', 'True'), True)
 AUTO_FFILTER = is_enabled(environ.get('AUTO_FFILTER', 'True'), True)
-AUTO_DELETE = is_enabled(environ.get('AUTO_DELETE', 'False'), False)
+AUTO_DELETE = is_enabled(environ.get('AUTO_DELETE', 'True'), False)
 LONG_IMDB_DESCRIPTION = is_enabled(environ.get('LONG_IMDB_DESCRIPTION', 'False'), False)
 SPELL_CHECK_REPLY = is_enabled(environ.get('SPELL_CHECK_REPLY', 'True'), True)
 MELCOW_NEW_USERS = is_enabled(environ.get('MELCOW_NEW_USERS', 'True'), True)

@@ -1,16 +1,16 @@
 class script(object):
 
-    START_TXT = """<blockquote>Bonjour {} ! 👋</blockquote>
+    START_TXT = """<blockquote>Hey {} ! 👋</blockquote>
 
-<b>Je suis JessiKa Search</b>, votre assistant de recherche de fichiers sur Telegram.
+<b>Mayumi</b> à votre service — je déniche vos films et séries en un clin d'œil.
 
-Tapez simplement le nom d'un film ou d'une serie dans votre groupe pour trouver les fichiers disponibles.
+Tapez un titre dans le groupe, et je vous trouve les fichiers disponibles.
 
-Pour acceder aux fichiers, vous avez besoin d'une <b>session active</b>. Regardez une courte publicite sur la Mini App pour obtenir <b>1 heure d'acces gratuit</b>, ou souscrivez a un plan premium pour un acces illimite.
+<b>Accès :</b> regardez une pub sur la Mini App → <b>1h gratuite</b>, ou passez en <b>Premium</b> pour un accès illimité, sans limites.
 
-<i>Utilisez /help pour voir toutes les fonctionnalites disponibles.</i>"""
+<i>/help pour tout découvrir.</i>"""
 
-    HELP_TXT = """<b>Aide — JessiKa Search</b>
+    HELP_TXT = """<b>Aide — Mayumi</b>
 
 Bonjour {} ! Voici les fonctionnalites disponibles."""
 
@@ -48,7 +48,7 @@ Ce bot supporte les boutons URL et les boutons d'alerte inline.
 - Les boutons doivent etre correctement formates en Markdown.
 
 <b>Boutons URL :</b>
-<code>[Texte du bouton](buttonurl:https://t.me/JessiKaSearch)</code>
+<code>[Texte du bouton](buttonurl:https://t.me/ZFlixTeam)</code>
 
 <b>Boutons d'alerte :</b>
 <code>[Texte du bouton](buttonalert:Ceci est un message d'alerte)</code>"""
@@ -81,7 +81,7 @@ Permet de connecter le bot en message prive pour gerer les filtres sans spammer 
     EXTRAMOD_TXT = """<b>Aide — Modules supplementaires</b>
 
 <b>Mainteneur :</b> <a href="{}">Proprietaire</a>
-<b>Canal de mise a jour :</b> <a href="{}">JessiKa Search</a>
+<b>Canal de mise a jour :</b> <a href="{}">Mayumi</a>
 
 <b>Commandes disponibles :</b>
 • /id — <code>Obtenir l'ID d'un utilisateur specifique</code>
@@ -405,8 +405,8 @@ Genere une image stylisee a partir de votre texte.
 
     LOGO = """
    ╔══════════════════════════════════════╗
-   ║         JessiKa Search Bot           ║
+   ║         Mayumi Bot           ║
    ║      Développé par @kingcey          ║
-   ║   Canal : t.me/JessiKaSearch         ║
+   ║   Canal : t.me/ZFlixTeam         ║
    ╚══════════════════════════════════════╝
 """
