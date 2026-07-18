@@ -6,9 +6,7 @@ class script(object):
 
 Tapez un titre dans le groupe, et je vous trouve les fichiers disponibles.
 
-<b>Accès :</b> regardez une pub sur la Mini App → <b>1h gratuite</b>, ou passez en <b>Premium</b> pour un accès illimité, sans limites.
-
-<i>/help pour tout découvrir.</i>"""
+<blockquote expandable><b>Accès :</b> regardez une pub sur la Mini App → <b>1h gratuite</b>, ou passez en <b>Premium</b> pour un accès illimité, sans limites.</blockquote>"""
 
     HELP_TXT = """<b>Aide — Mayumi</b>
 
