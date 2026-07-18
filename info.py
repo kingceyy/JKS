@@ -66,7 +66,7 @@ else:
     SEC_FILE_DB_URI = S_DB_URI
 
 # Mini App et URLs
-MINI_APP_URL = environ.get('MINI_APP_URL', 'https://t.me/MayumiXBot/app')
+MINI_APP_URL = environ.get('MINI_APP_URL', 'https://mayumixtg.vercel.app/')
 MINI_APP_TUTORIAL_URL = environ.get('MINI_APP_TUTORIAL_URL', 'https://t.me/ZFlixTeam/3')
 
 # Liens
