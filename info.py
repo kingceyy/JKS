@@ -18,6 +18,9 @@ BOT_TOKEN = environ.get('BOT_TOKEN', "8330516294:AAGoXGZ1_mO50GfZgaAWLUoqR35BI54
 # Images
 PICS = (environ.get('PICS', 'https://i.ibb.co/mfbQNfq/80395be46a7c.jpg')).split()
 
+# TMDB (remplace Cinemagoer/IMDb, casse depuis avril 2026)
+TMDB_API_KEY = environ.get('TMDB_API_KEY', 'f2bed62b5977bce26540055276d0046c')
+
 # Admins et utilisateurs
 ADMINS = [int(admin) if id_pattern.search(admin) else admin for admin in environ.get('ADMINS', '8467461906').split()]
 auth_users = [int(user) if id_pattern.search(user) else user for user in environ.get('AUTH_USERS', '').split()]
