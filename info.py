@@ -72,7 +72,7 @@ MINI_APP_TUTORIAL_URL = environ.get('MINI_APP_TUTORIAL_URL', 'https://t.me/ZFlix
 # Liens
 GRP_LNK = environ.get('GRP_LNK', 'https://t.me/+oEaqvXJYSnAwZTU0')
 CHNL_LNK = environ.get('CHNL_LNK', 'https://t.me/ZFlixTeam')
-SUPPORT_CHAT = environ.get('SUPPORT_CHAT', 'https://t.me/itz_kingcey')
+SUPPORT_CHAT = environ.get('SUPPORT_CHAT', 'itz_kingcey')
 OWNER_LNK = environ.get('OWNER_LNK', 'https://t.me/kingcey')
 
 # Options
